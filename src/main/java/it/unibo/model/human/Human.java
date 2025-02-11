@@ -17,13 +17,13 @@ public interface Human {
 
     /**
      * 
-     * @return the current position of the human
+     * @return the current position of the human.
      */
     Position getPosition();
 
     /**
      * 
-     * @return the relative sprite
+     * @return the relative sprite.
      */
     Sprite getSprite();
 }

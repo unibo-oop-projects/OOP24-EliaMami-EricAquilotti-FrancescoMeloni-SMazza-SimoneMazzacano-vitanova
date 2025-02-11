@@ -22,8 +22,8 @@ public final class PlayerImpl implements Player {
 
     /**
      * 
-     * @param x the starting x coordinate
-     * @param y the starting y coordinate
+     * @param x the starting x coordinate.
+     * @param y the starting y coordinate.
      */
     public PlayerImpl(final int x, final int y) {
         this.x = x;

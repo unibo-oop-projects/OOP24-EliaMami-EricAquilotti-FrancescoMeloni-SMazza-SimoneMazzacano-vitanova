@@ -15,35 +15,35 @@ public enum Sprite {
     /**
      * Male uman facing up.
      */
-    PLAYER_UP_1("male_up_1.png"),
+    PLAYER_UP_1("human/male_up_1.png"),
     /**
      * Male uman facing up.
      */
-    PLAYER_UP_2("male_up_2.png"),
+    PLAYER_UP_2("human/male_up_2.png"),
     /**
      * Male uman facing right.
      */
-    PLAYER_RIGHT_1("male_right_1.png"),
+    PLAYER_RIGHT_1("human/male_right_1.png"),
     /**
      * Male uman facing right.
      */
-    PLAYER_RIGHT_2("male_right_2.png"),
+    PLAYER_RIGHT_2("human/male_right_2.png"),
     /**
      * Male uman facing down.
      */
-    PLAYER_DOWN_1("male_down_1.png"),
+    PLAYER_DOWN_1("human/male_down_1.png"),
     /**
      * Male uman facing down.
      */
-    PLAYER_DOWN_2("male_down_2.png"),
+    PLAYER_DOWN_2("human/male_down_2.png"),
     /**
      * Male uman facing left.
      */
-    PLAYER_LEFT_1("male_left_1.png"),
+    PLAYER_LEFT_1("human/male_left_1.png"),
     /**
      * Male uman facing left.
      */
-    PLAYER_LEFT_2("male_left_2.png");
+    PLAYER_LEFT_2("human/male_left_2.png");
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
