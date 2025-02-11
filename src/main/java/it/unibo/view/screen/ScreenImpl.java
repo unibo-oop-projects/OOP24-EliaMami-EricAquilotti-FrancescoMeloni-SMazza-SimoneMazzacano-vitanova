@@ -24,8 +24,11 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
-    private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
     private static final int TEXT_SIZE = 50;
+    /**
+     * The pixel size of a tile scaled.
+     */
+    public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
     /**
      * Number of tiles in a row.
      */
@@ -44,6 +47,11 @@ public final class ScreenImpl extends JPanel implements Screen {
      * tiles in a column.
      */
     public static final int SCREEN_HEIGHT = TILE_SIZE * SCREEN_ROW;
+    private static final int CENTER_X = SCREEN_WIDTH / 2 - TILE_SIZE / 2;
+    private static final int CENTER_Y = SCREEN_HEIGHT / 2 - TILE_SIZE / 2;
+
+    private int xOffset;
+    private int yOffset;
 
     // Marked as transient because they don't need to be serialized.
     private transient Optional<Human> humanToDraw = Optional.empty();
@@ -97,25 +105,31 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         if (mapToDraw.isPresent()) {
             final Map map = mapToDraw.get();
-            int x = 0;
-            int y = 0;
-            for (final int[] row : map.getTileIds()) {
-                for (final int num : row) {
-                    final BufferedImage image = TileManager.getTile(num).getSprite().getImage();
-                    g2.drawImage(image, x, y, TILE_SIZE, TILE_SIZE, null);
-                    x += TILE_SIZE;
-                    if (x == SCREEN_WIDTH) {
-                        x = 0;
-                        y += TILE_SIZE;
+            final int[][] tileIds = map.getTileIds();
+            for (int r = 0; r < map.getTileIds().length; r++) {
+                final int[] row = tileIds[r];
+                for (int c = 0; c < row.length; c++) {
+                    final int num = row[c];
+                    final int mapX = r * TILE_SIZE;
+                    final int mapY = c * TILE_SIZE;
+                    final int screenX = mapX - xOffset + CENTER_X;
+                    final int screenY = mapY - yOffset + CENTER_Y;
+
+                    // Draw only what's visible.
+                    if (screenX + TILE_SIZE >= 0
+                        && screenX - TILE_SIZE < SCREEN_WIDTH
+                        && screenY + TILE_SIZE >= 0
+                        && screenY - TILE_SIZE < SCREEN_HEIGHT) {
+
+                        final BufferedImage image = TileManager.getTile(num).getSprite().getImage();
+                        g2.drawImage(image, screenX, screenY, TILE_SIZE, TILE_SIZE, null);
                     }
                 }
             }
         }
         if (humanToDraw.isPresent()) {
             final Human human = humanToDraw.get();
-            final int x = human.getPosition().x();
-            final int y = human.getPosition().y();
-            g2.drawImage(human.getSprite().getImage(), x, y, TILE_SIZE, TILE_SIZE, null);
+            g2.drawImage(human.getSprite().getImage(), CENTER_X, CENTER_Y, TILE_SIZE, TILE_SIZE, null);
         }
         if (textToDraw.isPresent()) {
             final String text = textToDraw.get();
@@ -130,7 +144,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     @Override
     public void setOffset(final int xOffset, final int yOffset) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setOffset'");
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
     }
 }

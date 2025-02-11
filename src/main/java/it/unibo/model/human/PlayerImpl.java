@@ -15,7 +15,7 @@ public final class PlayerImpl implements Player {
     private int x;
     private int y;
     private Direction direction = new Direction(false, false, false, false);
-    private static final double SPEED = 1.0;
+    private static final double SPEED = 3.0;
     private Sprite sprite = Sprite.PLAYER_DOWN_1;
     private int spriteCounter;
     private int numSprite = 1;

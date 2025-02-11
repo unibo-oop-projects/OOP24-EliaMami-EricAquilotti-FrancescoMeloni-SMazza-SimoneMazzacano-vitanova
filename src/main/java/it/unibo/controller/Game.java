@@ -25,7 +25,9 @@ public final class Game implements Runnable {
      */
     public Game() {
         inputHandler = new InputHandlerImpl();
-        player = new PlayerImpl(ScreenImpl.SCREEN_WIDTH / 2, ScreenImpl.SCREEN_HEIGHT / 2);
+        final int centerX = (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2;
+        final int centerY = (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2;
+        player = new PlayerImpl(centerX, centerY);
         screen = new ScreenImpl(inputHandler);
         map = new MapImpl();
         gameThread = new Thread(this);
@@ -55,6 +57,7 @@ public final class Game implements Runnable {
     private void update() {
         player.setDirection(inputHandler.getDirection());
         player.move();
+        screen.setOffset(player.getPosition().x(), player.getPosition().y());
     }
 
     private void draw() {

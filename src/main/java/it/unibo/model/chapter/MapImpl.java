@@ -7,12 +7,18 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import it.unibo.view.screen.ScreenImpl;
-
 /**
  * Implementation of a game map.
  */
 public final class MapImpl implements Map {
+    /**
+     * Number of tiles in a map row.
+     */
+    public static final int MAP_COL = 32;
+    /**
+     * Number of tiles in a map column.
+     */
+    public static final int MAP_ROW = 32;
     private static final String ROOT_MAP = "it/unibo/view/maps/";
     private final int[][] tileIds;
 
@@ -20,7 +26,7 @@ public final class MapImpl implements Map {
      * Initialize tileIds and loads the map from a file.
      */
     public MapImpl() {
-        this.tileIds = new int[ScreenImpl.SCREEN_ROW][ScreenImpl.SCREEN_COL];
+        this.tileIds = new int[MAP_ROW][MAP_COL];
         loadMap("test.txt");
     }
 
