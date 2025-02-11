@@ -13,37 +13,45 @@ import javax.imageio.ImageIO;
 public enum Sprite {
 
     /**
-     * Male uman facing up.
+     * Male human facing up.
      */
     PLAYER_UP_1("human/male_up_1.png"),
     /**
-     * Male uman facing up.
+     * Male human facing up.
      */
     PLAYER_UP_2("human/male_up_2.png"),
     /**
-     * Male uman facing right.
+     * Male human facing right.
      */
     PLAYER_RIGHT_1("human/male_right_1.png"),
     /**
-     * Male uman facing right.
+     * Male human facing right.
      */
     PLAYER_RIGHT_2("human/male_right_2.png"),
     /**
-     * Male uman facing down.
+     * Male human facing down.
      */
     PLAYER_DOWN_1("human/male_down_1.png"),
     /**
-     * Male uman facing down.
+     * Male human facing down.
      */
     PLAYER_DOWN_2("human/male_down_2.png"),
     /**
-     * Male uman facing left.
+     * Male human facing left.
      */
     PLAYER_LEFT_1("human/male_left_1.png"),
     /**
-     * Male uman facing left.
+     * Male human facing left.
      */
-    PLAYER_LEFT_2("human/male_left_2.png");
+    PLAYER_LEFT_2("human/male_left_2.png"),
+    /**
+     * Grass tile.
+     */
+    TILE_GRASS("tile/grass.png"),
+    /**
+     * Water tile.
+     */
+    TILE_WATER("tile/water.png");
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
