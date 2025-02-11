@@ -5,15 +5,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
+import it.unibo.model.chapter.Map;
 import it.unibo.model.human.Human;
-import it.unibo.model.tile.Tile;
+import it.unibo.model.tile.TileManager;
 
 /**
  * Class that handles all the rendering on the screen.
@@ -24,9 +25,15 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
-    private static final int SCREEN_COL = 16;
-    private static final int SCREEN_ROW = 12;
     private static final int TEXT_SIZE = 50;
+    /**
+     * Number of tiles in a row.
+     */
+    public static final int SCREEN_COL = 16;
+    /**
+     * Number of tiles in a column.
+     */
+    public static final int SCREEN_ROW = 12;
     /**
      * Width of the screen obtained by the size of a tile and the amount of
      * tiles in a row.
@@ -41,6 +48,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     // Marked as transient because they don't need to be serialized.
     private transient Optional<Human> humanToDraw = Optional.empty();
     private transient Optional<String> textToDraw = Optional.empty();
+    private transient Optional<Map> mapToDraw = Optional.empty();
 
     /**
      * 
@@ -64,9 +72,9 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void renderTile(final Position position, final Tile tile) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'renderTile'");
+    public void renderMap(final Map map) {
+        mapToDraw = Optional.of(map);
+        repaint();
     }
 
     @Override
@@ -87,6 +95,22 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         final Graphics2D g2 = (Graphics2D) g;
 
+        if (mapToDraw.isPresent()) {
+            final Map map = mapToDraw.get();
+            int x = 0;
+            int y = 0;
+            for (final int[] row : map.getTileIds()) {
+                for (final int num : row) {
+                    final BufferedImage image = TileManager.getTile(num).getSprite().getImage();
+                    g2.drawImage(image, x, y, TILE_SIZE, TILE_SIZE, null);
+                    x += TILE_SIZE;
+                    if (x == SCREEN_WIDTH) {
+                        x = 0;
+                        y += TILE_SIZE;
+                    }
+                }
+            }
+        }
         if (humanToDraw.isPresent()) {
             final Human human = humanToDraw.get();
             final int x = human.getPosition().x();

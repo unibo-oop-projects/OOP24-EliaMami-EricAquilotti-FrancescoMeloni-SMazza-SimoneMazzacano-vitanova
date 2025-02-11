@@ -2,7 +2,10 @@ package it.unibo.model.tile;
 
 import it.unibo.view.sprite.Sprite;
 
-public class TileGrass implements Tile {
+/**
+ * Implementation of a walkable grass tile.
+ */
+public final class TileGrass implements Tile {
 
     @Override
     public boolean isWalkable() {
@@ -13,5 +16,5 @@ public class TileGrass implements Tile {
     public Sprite getSprite() {
         return Sprite.TILE_GRASS;
     }
-    
+
 }

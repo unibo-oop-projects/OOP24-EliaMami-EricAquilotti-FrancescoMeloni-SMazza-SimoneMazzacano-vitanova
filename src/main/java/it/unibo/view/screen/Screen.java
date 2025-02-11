@@ -1,8 +1,7 @@
 package it.unibo.view.screen;
 
-import it.unibo.common.Position;
+import it.unibo.model.chapter.Map;
 import it.unibo.model.human.Human;
-import it.unibo.model.tile.Tile;
 
 /**
  * Models an Object that can render things on the screen.
@@ -22,10 +21,9 @@ public interface Screen {
 
     /**
      * 
-     * @param position position where to render.
-     * @param tile the tile to render.
+     * @param map the map to render.
      */
-    void renderTile(Position position, Tile tile);
+    void renderMap(Map map);
 
     /**
      * Sets the offset for the rendering.

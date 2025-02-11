@@ -1,5 +1,7 @@
 package it.unibo.controller;
 
+import it.unibo.model.chapter.Map;
+import it.unibo.model.chapter.MapImpl;
 import it.unibo.model.human.Player;
 import it.unibo.model.human.PlayerImpl;
 import it.unibo.view.screen.Screen;
@@ -16,6 +18,7 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler;
     private final Screen screen;
     private final Player player;
+    private final Map map;
 
     /**
      * Sets up all the parameters.
@@ -24,6 +27,7 @@ public final class Game implements Runnable {
         inputHandler = new InputHandlerImpl();
         player = new PlayerImpl(ScreenImpl.SCREEN_WIDTH / 2, ScreenImpl.SCREEN_HEIGHT / 2);
         screen = new ScreenImpl(inputHandler);
+        map = new MapImpl();
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -54,6 +58,7 @@ public final class Game implements Runnable {
     }
 
     private void draw() {
+        screen.renderMap(map);
         screen.renderHuman(player);
     }
 }
