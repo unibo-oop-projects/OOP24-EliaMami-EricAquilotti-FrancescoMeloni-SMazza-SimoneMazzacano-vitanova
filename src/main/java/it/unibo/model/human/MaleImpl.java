@@ -41,19 +41,17 @@ public final class MaleImpl implements Male {
             directionCounter = 0;
             direction = randomDirection();
         }
-        if (direction.up()) {
+        if (direction.up() && !direction.down()) {
             sprite = getSpriteFromDirection("UP");
             y -= SPEED;
-        }
-        if (direction.down()) {
+        } else if (direction.down()) {
             sprite = getSpriteFromDirection("DOWN");
             y += SPEED;
         }
-        if (direction.left()) {
+        if (direction.left() && !direction.right()) {
             sprite = getSpriteFromDirection("LEFT");
             x -= SPEED;
-        }
-        if (direction.right()) {
+        } else if (direction.right()) {
             sprite = getSpriteFromDirection("RIGHT");
             x += SPEED;
         }
