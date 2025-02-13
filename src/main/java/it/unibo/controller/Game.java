@@ -3,7 +3,6 @@ package it.unibo.controller;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
-import it.unibo.model.human.Human;
 import it.unibo.view.screen.Screen;
 import it.unibo.view.screen.ScreenImpl;
 

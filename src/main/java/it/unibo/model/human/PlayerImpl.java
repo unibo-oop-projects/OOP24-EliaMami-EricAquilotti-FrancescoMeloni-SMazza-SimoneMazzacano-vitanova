@@ -2,6 +2,8 @@ package it.unibo.model.human;
 
 import java.util.Arrays;
 
+import it.unibo.common.Circle;
+import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
@@ -12,6 +14,11 @@ import it.unibo.view.sprite.Sprite;
 public final class PlayerImpl implements Player {
 
     private static final int CHANGE_SPRITE_THRESHOLD = 20;
+    // I want the center to be around the legs of the human.
+    private static final int CIRCLE_X_OFFSET = 8;
+    private static final int CIRCLE_Y_OFFSET = 12;
+    private static final int CIRCLE_RADIOUS = 6;
+    private final Circle reproductionArea;
     private int x;
     private int y;
     private Direction direction = new Direction(false, false, false, false);
@@ -19,6 +26,7 @@ public final class PlayerImpl implements Player {
     private Sprite sprite = Sprite.PLAYER_DOWN_1;
     private int spriteCounter;
     private int numSprite = 1;
+    private boolean canReproduce = true;
 
     /**
      * 
@@ -28,6 +36,7 @@ public final class PlayerImpl implements Player {
     public PlayerImpl(final int x, final int y) {
         this.x = x;
         this.y = y;
+        this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
     }
 
     private Sprite getSpriteFromDirection(final String direction) {
@@ -54,6 +63,8 @@ public final class PlayerImpl implements Player {
             sprite = getSpriteFromDirection("RIGHT");
             x += SPEED;
         }
+        reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
+
         spriteCounter++;
         if (spriteCounter > CHANGE_SPRITE_THRESHOLD) {
             spriteCounter = 0;
@@ -86,6 +97,20 @@ public final class PlayerImpl implements Player {
     @Override
     public Sprite getSprite() {
         return sprite;
+    }
+
+    @Override
+    public boolean collide(final Human other) {
+        if (this.canReproduce && this.reproductionArea.intersects(other.getReproductionArea())) {
+            this.canReproduce = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Circle getReproductionArea() {
+        return new CircleImpl(this.reproductionArea);
     }
 
 }
