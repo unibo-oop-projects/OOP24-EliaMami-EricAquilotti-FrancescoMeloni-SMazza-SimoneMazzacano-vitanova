@@ -1,9 +1,9 @@
 package it.unibo.controller;
 
-import it.unibo.model.chapter.Map;
-import it.unibo.model.chapter.MapImpl;
-import it.unibo.model.human.Player;
-import it.unibo.model.human.PlayerImpl;
+import it.unibo.common.Position;
+import it.unibo.model.chapter.Chapter;
+import it.unibo.model.chapter.ChapterImpl;
+import it.unibo.model.human.Human;
 import it.unibo.view.screen.Screen;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -17,19 +17,15 @@ public final class Game implements Runnable {
     private final Thread gameThread;
     private final InputHandler inputHandler;
     private final Screen screen;
-    private final Player player;
-    private final Map map;
+    private final Chapter chapter;
 
     /**
      * Sets up all the parameters.
      */
     public Game() {
         inputHandler = new InputHandlerImpl();
-        final int centerX = (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2;
-        final int centerY = (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2;
-        player = new PlayerImpl(centerX, centerY);
+        chapter = new ChapterImpl(inputHandler);
         screen = new ScreenImpl(inputHandler);
-        map = new MapImpl();
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -55,13 +51,15 @@ public final class Game implements Runnable {
     }
 
     private void update() {
-        player.setDirection(inputHandler.getDirection());
-        player.move();
-        screen.setOffset(player.getPosition().x(), player.getPosition().y());
+        chapter.update();
+        final Position playerPosition = chapter.getPlayer().getPosition();
+        screen.setOffset(playerPosition.x(), playerPosition.y());
     }
 
     private void draw() {
-        screen.renderMap(map);
-        screen.renderHuman(player);
+        screen.renderMap(chapter.getMap());
+        for (Human human : chapter.getHumans()) {
+            screen.renderHuman(human);
+        }
     }
 }
