@@ -11,7 +11,7 @@ import it.unibo.view.screen.ScreenImpl;
  * Implementation of the Game engine.
  */
 public final class Game implements Runnable {
-    private static final int FPS = 120;
+    private static final int FPS = 60;
     private static final int NANO_IN_SEC = 1_000_000_000;
 
     private final Thread gameThread;

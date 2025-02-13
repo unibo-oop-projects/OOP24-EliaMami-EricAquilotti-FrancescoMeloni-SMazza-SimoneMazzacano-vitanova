@@ -1,22 +1,26 @@
 package it.unibo.model.human;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
 /**
- * Implementation of a player that is moved by the user.
+ * Implementation of a male human that moves randomly on the map.
  */
-public final class PlayerImpl implements Player {
+public final class MaleImpl implements Male {
 
     private static final int CHANGE_SPRITE_THRESHOLD = 20;
+    private static final int CHANGE_DIRECTION_THRESHOLD = 40;
+    private final Random random = new Random();
     private int x;
     private int y;
     private Direction direction = new Direction(false, false, false, false);
-    private static final double SPEED = 5.0;
-    private Sprite sprite = Sprite.PLAYER_DOWN_1;
+    private static final double SPEED = 3.0;
+    private Sprite sprite = Sprite.MALE_DOWN_1;
+    private int directionCounter;
     private int spriteCounter;
     private int numSprite = 1;
 
@@ -25,21 +29,18 @@ public final class PlayerImpl implements Player {
      * @param x the starting x coordinate.
      * @param y the starting y coordinate.
      */
-    public PlayerImpl(final int x, final int y) {
+    public MaleImpl(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
 
-    private Sprite getSpriteFromDirection(final String direction) {
-        return Arrays.stream(Sprite.values())
-                .filter(s -> s.name().startsWith("PLAYER_"))
-                .filter(s -> s.name().endsWith(direction + "_" + numSprite))
-                .findFirst()
-                .orElse(null);
-    }
-
     @Override
     public void move() {
+        directionCounter++;
+        if (directionCounter > CHANGE_DIRECTION_THRESHOLD) {
+            directionCounter = 0;
+            direction = randomDirection();
+        }
         if (direction.up()) {
             sprite = getSpriteFromDirection("UP");
             y -= SPEED;
@@ -64,23 +65,6 @@ public final class PlayerImpl implements Player {
     }
 
     @Override
-    public void setDirection(final Direction newDirection) {
-        this.direction = newDirection;
-    }
-
-    @Override
-    public void setSpeedMultiplier(final float speedMult) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSpeedMultiplier'");
-    }
-
-    @Override
-    public void setHitRadiousMultiplier(final float hitRadiousMult) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setHitRadiousMultiplier'");
-    }
-
-    @Override
     public Position getPosition() {
         return new Position(x, y);
     }
@@ -90,4 +74,15 @@ public final class PlayerImpl implements Player {
         return sprite;
     }
 
+    private Sprite getSpriteFromDirection(final String direction) {
+        return Arrays.stream(Sprite.values())
+                .filter(s -> s.name().startsWith("MALE_"))
+                .filter(s -> s.name().endsWith(direction + "_" + numSprite))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Direction randomDirection() {
+        return new Direction(random.nextBoolean(), random.nextBoolean(), random.nextBoolean(), random.nextBoolean());
+    }
 }
