@@ -18,7 +18,7 @@ public final class MaleImpl implements Male {
     private int x;
     private int y;
     private Direction direction = new Direction(false, false, false, false);
-    private static final double SPEED = 3.0;
+    private static final double SPEED = 1.0;
     private Sprite sprite = Sprite.MALE_DOWN_1;
     private int directionCounter;
     private int spriteCounter;

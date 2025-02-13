@@ -58,8 +58,6 @@ public final class Game implements Runnable {
 
     private void draw() {
         screen.renderMap(chapter.getMap());
-        for (Human human : chapter.getHumans()) {
-            screen.renderHuman(human);
-        }
+        screen.renderHumans(chapter.getHumans());
     }
 }

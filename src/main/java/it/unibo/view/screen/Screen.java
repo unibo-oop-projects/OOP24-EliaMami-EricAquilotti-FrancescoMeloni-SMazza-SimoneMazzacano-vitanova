@@ -1,5 +1,7 @@
 package it.unibo.view.screen;
 
+import java.util.List;
+
 import it.unibo.model.chapter.Map;
 import it.unibo.model.human.Human;
 
@@ -15,9 +17,9 @@ public interface Screen {
 
     /**
      * 
-     * @param human the human to render.
+     * @param humans the humans to render.
      */
-    void renderHuman(Human human);
+    void renderHumans(List<Human> humans);
 
     /**
      * 

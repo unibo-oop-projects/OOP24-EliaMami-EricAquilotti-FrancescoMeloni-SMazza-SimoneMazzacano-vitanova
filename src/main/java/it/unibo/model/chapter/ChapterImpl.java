@@ -6,6 +6,7 @@ import java.util.List;
 
 import it.unibo.controller.InputHandler;
 import it.unibo.model.human.Human;
+import it.unibo.model.human.MaleImpl;
 import it.unibo.model.human.Player;
 import it.unibo.model.human.PlayerImpl;
 import it.unibo.view.screen.ScreenImpl;
@@ -30,14 +31,18 @@ public final class ChapterImpl implements Chapter {
         final int centerX = (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2;
         final int centerY = (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2;
         this.humans.add(new PlayerImpl(centerX, centerY));
+        this.humans.add(new MaleImpl(centerX, centerY));
+        this.humans.add(new MaleImpl(centerX, centerY));
         this.map = new MapImpl();
     }
 
     @Override
     public void update() {
-        final Player player = (Player) humans.get(0);
+        final Player player = (Player) getPlayer();
         player.setDirection(inputHandler.getDirection());
-        player.move();
+        for (Human human : humans) {
+            human.move();
+        }
     }
 
     @Override

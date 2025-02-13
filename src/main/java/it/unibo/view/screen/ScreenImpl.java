@@ -6,14 +6,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.Map;
 import it.unibo.model.human.Human;
+import it.unibo.model.human.Player;
 import it.unibo.model.tile.TileManager;
 
 /**
@@ -54,7 +57,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private int yOffset;
 
     // Marked as transient because they don't need to be serialized.
-    private transient Optional<Human> humanToDraw = Optional.empty();
+    private transient Optional<List<Human>> humansToDraw = Optional.empty();
     private transient Optional<String> textToDraw = Optional.empty();
     private transient Optional<Map> mapToDraw = Optional.empty();
 
@@ -86,8 +89,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void renderHuman(final Human human) {
-        humanToDraw = Optional.of(human);
+    public void renderHumans(final List<Human> humans) {
+        humansToDraw = Optional.of(humans);
         repaint();
     }
 
@@ -127,9 +130,14 @@ public final class ScreenImpl extends JPanel implements Screen {
                 }
             }
         }
-        if (humanToDraw.isPresent()) {
-            final Human human = humanToDraw.get();
-            g2.drawImage(human.getSprite().getImage(), CENTER_X, CENTER_Y, TILE_SIZE, TILE_SIZE, null);
+        if (humansToDraw.isPresent()) {
+            for (Human human : humansToDraw.get()) {
+                if (human instanceof Player) {
+                    drawPlayer(g2, human);
+                } else {
+                    drawHuman(g2, human);
+                }
+            }
         }
         if (textToDraw.isPresent()) {
             final String text = textToDraw.get();
@@ -146,5 +154,16 @@ public final class ScreenImpl extends JPanel implements Screen {
     public void setOffset(final int xOffset, final int yOffset) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
+    }
+
+    private void drawHuman(Graphics2D g2, Human human) {
+        final Position humanPosition = human.getPosition();
+        final int screenX = humanPosition.x() - xOffset + CENTER_X;
+        final int screenY = humanPosition.y() - yOffset + CENTER_Y;
+        g2.drawImage(human.getSprite().getImage(), screenX, screenY, TILE_SIZE, TILE_SIZE, null);
+    }
+
+    private void drawPlayer(Graphics2D g2, Human player) {
+        g2.drawImage(player.getSprite().getImage(), CENTER_X, CENTER_Y, TILE_SIZE, TILE_SIZE, null);
     }
 }
