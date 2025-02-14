@@ -15,67 +15,67 @@ public enum Sprite {
     /**
      * Player facing up.
      */
-    PLAYER_UP_1("human/male_up_1.png"),
+    PLAYER_UP_1("human/male/up_1.png"),
     /**
      * Player facing up.
      */
-    PLAYER_UP_2("human/male_up_2.png"),
+    PLAYER_UP_2("human/male/up_2.png"),
     /**
      * Player facing right.
      */
-    PLAYER_RIGHT_1("human/male_right_1.png"),
+    PLAYER_RIGHT_1("human/male/right_1.png"),
     /**
      * Player facing right.
      */
-    PLAYER_RIGHT_2("human/male_right_2.png"),
+    PLAYER_RIGHT_2("human/male/right_2.png"),
     /**
      * Player facing down.
      */
-    PLAYER_DOWN_1("human/male_down_1.png"),
+    PLAYER_DOWN_1("human/male/down_1.png"),
     /**
      * Player facing down.
      */
-    PLAYER_DOWN_2("human/male_down_2.png"),
+    PLAYER_DOWN_2("human/male/down_2.png"),
     /**
      * Player facing left.
      */
-    PLAYER_LEFT_1("human/male_left_1.png"),
+    PLAYER_LEFT_1("human/male/left_1.png"),
     /**
      * Player facing left.
      */
-    PLAYER_LEFT_2("human/male_left_2.png"),
+    PLAYER_LEFT_2("human/male/left_2.png"),
     /**
      * Male human facing up.
      */
-    MALE_UP_1("human/male_up_1.png"),
+    MALE_UP_1("human/male/up_1.png"),
     /**
      * Male human facing up.
      */
-    MALE_UP_2("human/male_up_2.png"),
+    MALE_UP_2("human/male/up_2.png"),
     /**
      * Male human facing right.
      */
-    MALE_RIGHT_1("human/male_right_1.png"),
+    MALE_RIGHT_1("human/male/right_1.png"),
     /**
      * Male human facing right.
      */
-    MALE_RIGHT_2("human/male_right_2.png"),
+    MALE_RIGHT_2("human/male/right_2.png"),
     /**
      * Male human facing down.
      */
-    MALE_DOWN_1("human/male_down_1.png"),
+    MALE_DOWN_1("human/male/down_1.png"),
     /**
      * Male human facing down.
      */
-    MALE_DOWN_2("human/male_down_2.png"),
+    MALE_DOWN_2("human/male/down_2.png"),
     /**
      * Male human facing left.
      */
-    MALE_LEFT_1("human/male_left_1.png"),
+    MALE_LEFT_1("human/male/left_1.png"),
     /**
      * Male human facing left.
      */
-    MALE_LEFT_2("human/male_left_2.png"),
+    MALE_LEFT_2("human/male/left_2.png"),
     /**
      * Grass tile.
      */
