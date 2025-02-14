@@ -21,7 +21,7 @@ public final class PlayerImpl extends BasicHuman implements Player {
      * @param y the starting y coordinate.
      */
     public PlayerImpl(final int x, final int y) {
-        super(x, y);
+        super(x, y, Sprite.PLAYER_DOWN_1);
     }
 
     @Override

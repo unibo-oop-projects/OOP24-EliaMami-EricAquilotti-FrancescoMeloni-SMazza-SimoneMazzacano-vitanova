@@ -8,25 +8,29 @@ import it.unibo.common.Direction;
 import it.unibo.view.sprite.Sprite;
 
 /**
- * Implementation of a male human that moves randomly on the map.
+ * Implementation of a female human that moves randomly around the map and
+ * produces new humans.
  */
-public final class MaleImpl extends BasicHuman implements Male {
+public final class FemaleImpl extends BasicHuman implements Female {
 
     private static final List<Sprite> VALID_SPRITES =
         Arrays.stream(Sprite.values())
-                .filter(s -> s.name().startsWith("MALE_"))
+                .filter(s -> s.name().startsWith("FEMALE_"))
                 .toList();
     private static final int CHANGE_DIRECTION_THRESHOLD = 40;
+    private static final int REPRODUCTION_COOLDOWN = 100;
     private final Random random = new Random();
     private int directionCounter;
+    private int reproductionCounter;
 
     /**
      * 
      * @param x the starting x coordinate.
      * @param y the starting y coordinate.
      */
-    public MaleImpl(final int x, final int y) {
-        super(x, y, Sprite.MALE_DOWN_1);
+    public FemaleImpl(final int x, final int y) {
+        super(x, y, Sprite.FEMALE_DOWN_1);
+        setCanReproduce(true);
     }
 
     @Override
@@ -36,12 +40,28 @@ public final class MaleImpl extends BasicHuman implements Male {
             directionCounter = 0;
             setDirection(randomDirection());
         }
+        if (!canReproduce()) {
+            reproductionCounter++;
+            if (reproductionCounter > REPRODUCTION_COOLDOWN) {
+                reproductionCounter = 0;
+                setCanReproduce(true);
+            }
+        }
         super.move();
         updateSprite(VALID_SPRITES);
     }
+
 
     private Direction randomDirection() {
         return new Direction(random.nextBoolean(), random.nextBoolean(), random.nextBoolean(), random.nextBoolean());
     }
 
+    @Override
+    public boolean collide(final Male other) {
+        if (canReproduce() && reproductionArea().intersects(other.reproductionArea())) {
+            setCanReproduce(false);
+            return true;
+        }
+        return false;
+    }
 }

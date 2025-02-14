@@ -26,14 +26,14 @@ public abstract class BasicHuman implements Human {
     /**
      * Base radious of the reproduction circle.
      */
-    private static final int CIRCLE_RADIOUS = 6;
+    private static final int CIRCLE_RADIOUS = 12;
     private static final int CHANGE_SPRITE_THRESHOLD = 20;
     private static final double SPEED = 1.0;
     private boolean canReproduce = true;
     private final Circle reproductionArea;
     private int x;
     private int y;
-    private Sprite sprite = Sprite.MALE_DOWN_1;
+    private Sprite sprite;
     private Direction direction = new Direction(false, false, false, false);
     private int numSprite = 1;
     private int spriteCounter;
@@ -42,10 +42,12 @@ public abstract class BasicHuman implements Human {
      * 
      * @param x the x position of the human.
      * @param y the y position of the human.
+     * @param startingSprite the fist sprite to show.
      */
-    protected BasicHuman(final int x, final int y) {
+    protected BasicHuman(final int x, final int y, final Sprite startingSprite) {
         this.x = x;
         this.y = y;
+        this.sprite = startingSprite;
         this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
     }
 
@@ -86,16 +88,7 @@ public abstract class BasicHuman implements Human {
     }
 
     @Override
-    public final boolean collide(final Human other) {
-        if (this.canReproduce && this.reproductionArea.intersects(other.getReproductionArea())) {
-            this.canReproduce = false;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public final Circle getReproductionArea() {
+    public final Circle reproductionArea() {
         return new CircleImpl(this.reproductionArea);
     }
 
@@ -105,6 +98,14 @@ public abstract class BasicHuman implements Human {
      */
     protected final void setCanReproduce(final boolean canReproduce) {
         this.canReproduce = canReproduce;
+    }
+
+    /**
+     * 
+     * @return if human can reproduce.
+     */
+    protected final boolean canReproduce() {
+        return this.canReproduce;
     }
 
     /**

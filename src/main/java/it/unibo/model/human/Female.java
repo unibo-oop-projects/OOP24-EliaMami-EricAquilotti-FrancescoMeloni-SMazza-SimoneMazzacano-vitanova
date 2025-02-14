@@ -5,5 +5,10 @@ package it.unibo.model.human;
  * male happens.
  */
 public interface Female extends Human {
-
+    /**
+     * 
+     * @param other the male to collide with.
+     * @return true if the collision happens.
+     */
+    boolean collide(Male other);
 }

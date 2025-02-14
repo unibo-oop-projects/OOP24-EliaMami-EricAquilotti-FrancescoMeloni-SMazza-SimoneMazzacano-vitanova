@@ -133,7 +133,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         if (humansToDraw.isPresent()) {
             for (final Human human : humansToDraw.get()) {
                 if (human instanceof Player) {
-                    drawPlayer(g2, human);
+                    drawPlayer(g2, (Player) human);
                 } else {
                     drawHuman(g2, human);
                 }
@@ -163,7 +163,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         g2.drawImage(human.getSprite().getImage(), screenX, screenY, TILE_SIZE, TILE_SIZE, null);
     }
 
-    private void drawPlayer(final Graphics2D g2, final Human player) {
+    private void drawPlayer(final Graphics2D g2, final Player player) {
         g2.drawImage(player.getSprite().getImage(), CENTER_X, CENTER_Y, TILE_SIZE, TILE_SIZE, null);
     }
 }

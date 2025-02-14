@@ -30,14 +30,7 @@ public interface Human {
 
     /**
      * 
-     * @param other the human to collide with.
-     * @return if the collision happens.
-     */
-    boolean collide(Human other);
-
-    /**
-     * 
      * @return the circle representing the reproduction area.
      */
-    Circle getReproductionArea();
+    Circle reproductionArea();
 }

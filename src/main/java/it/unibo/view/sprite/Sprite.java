@@ -77,6 +77,38 @@ public enum Sprite {
      */
     MALE_LEFT_2("human/male/left_2.png"),
     /**
+     * Female human facing up.
+     */
+    FEMALE_UP_1("human/female/up_1.png"),
+    /**
+     * Female human facing up.
+     */
+    FEMALE_UP_2("human/female/up_2.png"),
+    /**
+     * Female human facing right.
+     */
+    FEMALE_RIGHT_1("human/female/right_1.png"),
+    /**
+     * Female human facing right.
+     */
+    FEMALE_RIGHT_2("human/female/right_2.png"),
+    /**
+     * Female human facing down.
+     */
+    FEMALE_DOWN_1("human/female/down_1.png"),
+    /**
+     * Female human facing down.
+     */
+    FEMALE_DOWN_2("human/female/down_2.png"),
+    /**
+     * Female human facing left.
+     */
+    FEMALE_LEFT_1("human/female/left_1.png"),
+    /**
+     * Female human facing left.
+     */
+    FEMALE_LEFT_2("human/female/left_2.png"),
+    /**
      * Grass tile.
      */
     TILE_GRASS("tile/grass.png"),
