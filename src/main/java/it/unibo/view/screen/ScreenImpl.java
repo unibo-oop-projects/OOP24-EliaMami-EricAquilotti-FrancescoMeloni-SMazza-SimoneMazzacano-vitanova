@@ -60,6 +60,9 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient Optional<List<Human>> humansToDraw = Optional.empty();
     private transient Optional<String> textToDraw = Optional.empty();
     private transient Optional<Map> mapToDraw = Optional.empty();
+    // Buffered Image for optimized rendering
+    private transient BufferedImage bufferedImage;
+    private transient Graphics2D bufferGraphics;
 
     /**
      * 
@@ -80,6 +83,13 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        initializeBuffer();
+    }
+
+    private void initializeBuffer() {
+        bufferedImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        bufferGraphics = bufferedImage.createGraphics();
     }
 
     @Override
@@ -100,53 +110,61 @@ public final class ScreenImpl extends JPanel implements Screen {
         repaint();
     }
 
-    @Override
-    protected void paintComponent(final Graphics g) {
-        super.paintComponent(g);
+    private void clearBuffer() {
+        bufferGraphics.setColor(Color.BLACK);
+        bufferGraphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
 
-        final Graphics2D g2 = (Graphics2D) g;
+    private void redrawBuffer() {
+        if (bufferGraphics == null) {
+            initializeBuffer();
+        }
 
-        if (mapToDraw.isPresent()) {
-            final Map map = mapToDraw.get();
+        clearBuffer();
+
+        mapToDraw.ifPresent(map -> {
             final int[][] tileIds = map.getTileIds();
-            for (int r = 0; r < map.getTileIds().length; r++) {
-                final int[] row = tileIds[r];
-                for (int c = 0; c < row.length; c++) {
-                    final int num = row[c];
+            for (int r = 0; r < tileIds.length; r++) {
+                for (int c = 0; c < tileIds[r].length; c++) {
+                    final int num = tileIds[r][c];
                     final int mapX = r * TILE_SIZE;
                     final int mapY = c * TILE_SIZE;
                     final int screenX = mapX - xOffset + CENTER_X;
                     final int screenY = mapY - yOffset + CENTER_Y;
 
-                    // Draw only what's visible.
-                    if (screenX + TILE_SIZE >= 0
-                        && screenX - TILE_SIZE < SCREEN_WIDTH
-                        && screenY + TILE_SIZE >= 0
-                        && screenY - TILE_SIZE < SCREEN_HEIGHT) {
-
+                    if (screenX + TILE_SIZE >= 0 && screenX - TILE_SIZE < SCREEN_WIDTH
+                        && screenY + TILE_SIZE >= 0 && screenY - TILE_SIZE < SCREEN_HEIGHT) {
                         final BufferedImage image = TileManager.getTile(num).getSprite().getImage();
-                        g2.drawImage(image, screenX, screenY, TILE_SIZE, TILE_SIZE, null);
+                        bufferGraphics.drawImage(image, screenX, screenY, TILE_SIZE, TILE_SIZE, null);
                     }
                 }
             }
-        }
-        if (humansToDraw.isPresent()) {
-            for (final Human human : humansToDraw.get()) {
+        });
+
+        humansToDraw.ifPresent(humans -> {
+            for (final Human human : humans) {
                 if (human instanceof Player) {
-                    drawPlayer(g2, (Player) human);
+                    drawPlayer(bufferGraphics, (Player) human);
                 } else {
-                    drawHuman(g2, human);
+                    drawHuman(bufferGraphics, human);
                 }
             }
-        }
-        if (textToDraw.isPresent()) {
-            final String text = textToDraw.get();
-            final Font f = new Font("Verdana", 1, 32);
-            g2.setColor(Color.RED);
-            g2.setFont(f);
-            g2.drawString(text, TEXT_SIZE, TEXT_SIZE);
-        }
+        });
 
+        textToDraw.ifPresent(text -> {
+            final Font f = new Font("Verdana", Font.BOLD, 32);
+            bufferGraphics.setColor(Color.RED);
+            bufferGraphics.setFont(f);
+            bufferGraphics.drawString(text, TEXT_SIZE, TEXT_SIZE);
+        });
+    }
+
+    @Override
+    protected void paintComponent(final Graphics g) {
+        super.paintComponent(g);
+        redrawBuffer();
+        final Graphics2D g2 = (Graphics2D) g;
+        g2.drawImage(bufferedImage, 0, 0, null);
         g2.dispose();
     }
 

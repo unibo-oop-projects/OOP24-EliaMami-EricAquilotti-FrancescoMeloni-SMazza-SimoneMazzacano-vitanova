@@ -22,6 +22,7 @@ import it.unibo.view.screen.ScreenImpl;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
+    private static final int STARTING_FEMALES = 20;
     private final Map map = new MapImpl();
     private final InputHandler inputHandler;
     // The first human is the player.
@@ -40,7 +41,9 @@ public final class ChapterImpl implements Chapter {
             (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2
         );
         this.humans.add(new PlayerImpl(centerPosition));
-        this.humans.add(new FemaleImpl(randomPosition(centerPosition)));
+        for (int i = 0; i < STARTING_FEMALES; i++) {
+            this.humans.add(new FemaleImpl(randomPosition(centerPosition)));
+        }
     }
 
     @Override
