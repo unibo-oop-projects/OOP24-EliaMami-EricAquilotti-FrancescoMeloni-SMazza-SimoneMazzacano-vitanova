@@ -52,7 +52,7 @@ public abstract class BasicHuman implements Human {
     }
 
     /**
-     * Moves the human in the direction they are currently facing.
+     * Moves the human in the currently facing direction.
      * Subclasses can override this method to modify movement behavior,
      * but they should ensure to update the reproduction area and sprite state.
      */
