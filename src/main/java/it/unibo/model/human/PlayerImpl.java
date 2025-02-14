@@ -1,32 +1,19 @@
 package it.unibo.model.human;
 
 import java.util.Arrays;
+import java.util.List;
 
-import it.unibo.common.Circle;
-import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
-import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
 /**
  * Implementation of a player that is moved by the user.
  */
-public final class PlayerImpl implements Player {
-
-    private static final int CHANGE_SPRITE_THRESHOLD = 20;
-    // I want the center to be around the legs of the human.
-    private static final int CIRCLE_X_OFFSET = 8;
-    private static final int CIRCLE_Y_OFFSET = 12;
-    private static final int CIRCLE_RADIOUS = 6;
-    private final Circle reproductionArea;
-    private int x;
-    private int y;
-    private Direction direction = new Direction(false, false, false, false);
-    private static final double SPEED = 5.0;
-    private Sprite sprite = Sprite.PLAYER_DOWN_1;
-    private int spriteCounter;
-    private int numSprite = 1;
-    private boolean canReproduce = true;
+public final class PlayerImpl extends BasicHuman implements Player {
+    private static final List<Sprite> VALID_SPRITES =
+        Arrays.stream(Sprite.values())
+                .filter(s -> s.name().startsWith("PLAYER_"))
+                .toList();
 
     /**
      * 
@@ -34,47 +21,18 @@ public final class PlayerImpl implements Player {
      * @param y the starting y coordinate.
      */
     public PlayerImpl(final int x, final int y) {
-        this.x = x;
-        this.y = y;
-        this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
-    }
-
-    private Sprite getSpriteFromDirection(final String direction) {
-        return Arrays.stream(Sprite.values())
-                .filter(s -> s.name().startsWith("PLAYER_"))
-                .filter(s -> s.name().endsWith(direction + "_" + numSprite))
-                .findFirst()
-                .orElse(null);
+        super(x, y);
     }
 
     @Override
     public void move() {
-        if (direction.up() && !direction.down()) {
-            sprite = getSpriteFromDirection("UP");
-            y -= SPEED;
-        } else if (direction.down()) {
-            sprite = getSpriteFromDirection("DOWN");
-            y += SPEED;
-        }
-        if (direction.left() && !direction.right()) {
-            sprite = getSpriteFromDirection("LEFT");
-            x -= SPEED;
-        } else if (direction.right()) {
-            sprite = getSpriteFromDirection("RIGHT");
-            x += SPEED;
-        }
-        reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
-
-        spriteCounter++;
-        if (spriteCounter > CHANGE_SPRITE_THRESHOLD) {
-            spriteCounter = 0;
-            numSprite = numSprite == 1 ? 2 : 1;
-        }
+        super.move();
+        updateSprite(VALID_SPRITES);
     }
 
     @Override
     public void setDirection(final Direction newDirection) {
-        this.direction = newDirection;
+        super.setDirection(newDirection);
     }
 
     @Override
@@ -87,30 +45,6 @@ public final class PlayerImpl implements Player {
     public void setHitRadiousMultiplier(final float hitRadiousMult) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setHitRadiousMultiplier'");
-    }
-
-    @Override
-    public Position getPosition() {
-        return new Position(x, y);
-    }
-
-    @Override
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    @Override
-    public boolean collide(final Human other) {
-        if (this.canReproduce && this.reproductionArea.intersects(other.getReproductionArea())) {
-            this.canReproduce = false;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Circle getReproductionArea() {
-        return new CircleImpl(this.reproductionArea);
     }
 
 }

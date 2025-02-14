@@ -54,7 +54,7 @@ public final class ChapterImpl implements Chapter {
                 if (h1.collide(h2)) {
                     final Position position = h1.getPosition();
                     // needs to get mutex
-                    synchronized(new Object()) {
+                    synchronized (humans) {
                         this.humans.add(new MaleImpl(position.x() - ScreenImpl.TILE_SIZE * 2,
                         position.y() - ScreenImpl.TILE_SIZE * 2));
                     }
