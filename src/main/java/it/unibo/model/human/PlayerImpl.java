@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.unibo.common.Direction;
+import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -17,11 +18,10 @@ public final class PlayerImpl extends BasicHuman implements Player {
 
     /**
      * 
-     * @param x the starting x coordinate.
-     * @param y the starting y coordinate.
+     * @param startingPosition the initial position.
      */
-    public PlayerImpl(final int x, final int y) {
-        super(x, y, Sprite.PLAYER_DOWN_1);
+    public PlayerImpl(final Position startingPosition) {
+        super(startingPosition, Sprite.PLAYER_DOWN_1);
     }
 
     @Override

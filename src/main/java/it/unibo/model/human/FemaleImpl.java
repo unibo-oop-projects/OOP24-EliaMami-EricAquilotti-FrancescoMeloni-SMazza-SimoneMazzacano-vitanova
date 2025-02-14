@@ -3,6 +3,7 @@ package it.unibo.model.human;
 import java.util.Arrays;
 import java.util.List;
 
+import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -20,11 +21,10 @@ public final class FemaleImpl extends BasicNPC implements Female {
 
     /**
      * 
-     * @param x the starting x coordinate.
-     * @param y the starting y coordinate.
+     * @param startingPosition the initial position.
      */
-    public FemaleImpl(final int x, final int y) {
-        super(x, y, Sprite.FEMALE_DOWN_1);
+    public FemaleImpl(final Position startingPosition) {
+        super(startingPosition, Sprite.FEMALE_DOWN_1);
         setCanReproduce(true);
     }
 

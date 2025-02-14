@@ -3,6 +3,7 @@ package it.unibo.model.human;
 import java.util.Random;
 
 import it.unibo.common.Direction;
+import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -15,12 +16,11 @@ public abstract class BasicNPC extends BasicHuman {
 
     /**
      * 
-     * @param x the x position of the human.
-     * @param y the y position of the human.
+     * @param startingPosition the initial position.
      * @param startingSprite the fist sprite to show.
      */
-    protected BasicNPC(final int x, final int y, final Sprite startingSprite) {
-        super(x, y, startingSprite);
+    protected BasicNPC(final Position startingPosition, final Sprite startingSprite) {
+        super(startingPosition, startingSprite);
     }
 
     /**

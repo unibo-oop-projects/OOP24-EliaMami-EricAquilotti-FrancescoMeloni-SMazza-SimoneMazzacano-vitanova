@@ -40,13 +40,12 @@ public abstract class BasicHuman implements Human {
 
     /**
      * 
-     * @param x the x position of the human.
-     * @param y the y position of the human.
+     * @param startingPosition the initial position.
      * @param startingSprite the fist sprite to show.
      */
-    protected BasicHuman(final int x, final int y, final Sprite startingSprite) {
-        this.x = x;
-        this.y = y;
+    protected BasicHuman(final Position startingPosition, final Sprite startingSprite) {
+        this.x = startingPosition.x();
+        this.y = startingPosition.y();
         this.sprite = startingSprite;
         this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
     }

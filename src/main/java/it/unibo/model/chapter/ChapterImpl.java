@@ -3,6 +3,7 @@ package it.unibo.model.chapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import it.unibo.common.Position;
@@ -26,6 +27,7 @@ public final class ChapterImpl implements Chapter {
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
+    private final Random random = new Random();
 
     /**
      * Sets up all the parameters.
@@ -33,11 +35,12 @@ public final class ChapterImpl implements Chapter {
      */
     public ChapterImpl(final InputHandler inputHandler) {
         this.inputHandler = inputHandler;
-        final int centerX = (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2;
-        final int centerY = (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2;
-        this.humans.add(new PlayerImpl(centerX, centerY));
-        this.humans.add(new MaleImpl(centerX + ScreenImpl.TILE_SIZE * 2, centerY + ScreenImpl.TILE_SIZE * 2));
-        this.humans.add(new FemaleImpl(centerX - ScreenImpl.TILE_SIZE * 2, centerY - ScreenImpl.TILE_SIZE * 2));
+        final Position centerPosition = new Position(
+            (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2,
+            (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2
+        );
+        this.humans.add(new PlayerImpl(centerPosition));
+        this.humans.add(new FemaleImpl(randomPosition(centerPosition)));
     }
 
     @Override
@@ -63,9 +66,8 @@ public final class ChapterImpl implements Chapter {
                 }
                 final Male male = (Male) human2;
                 if (female.collide(male)) {
-                    final Position position = female.getPosition();
-                    generated.add(new MaleImpl(position.x() - ScreenImpl.TILE_SIZE * 2,
-                                    position.y() - ScreenImpl.TILE_SIZE * 2));
+                    final Position femalePosition = female.getPosition();
+                    generated.add(new MaleImpl(randomPosition(femalePosition)));
                 }
             }
         }
@@ -87,4 +89,18 @@ public final class ChapterImpl implements Chapter {
         return humans.get(0);
     }
 
+    private Position randomPosition(final Position reference) {
+        return new Position(
+            (int) Math.floor(
+                reference.x()
+                    + (random.nextBoolean() ? 1 : -1)
+                        * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
+            ),
+            (int) Math.floor(
+                reference.y()
+                    + (random.nextBoolean() ? 1 : -1)
+                        * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
+            )
+        );
+    }
 }
