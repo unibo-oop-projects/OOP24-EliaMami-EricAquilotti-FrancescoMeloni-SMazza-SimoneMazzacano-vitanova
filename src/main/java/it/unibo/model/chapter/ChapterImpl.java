@@ -6,13 +6,18 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import it.unibo.common.Circle;
+import it.unibo.common.CircleImpl;
 import it.unibo.common.Position;
+import it.unibo.common.RectangleImpl;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.Male;
 import it.unibo.model.human.MaleImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
+import it.unibo.model.chapter.quadtree.QuadTree;
+import it.unibo.model.chapter.quadtree.QuadTreeImpl;
 import it.unibo.model.human.Female;
 import it.unibo.model.human.FemaleImpl;
 import it.unibo.model.human.Player;
@@ -25,6 +30,7 @@ import it.unibo.view.screen.ScreenImpl;
  */
 public final class ChapterImpl implements Chapter {
     private static final int STARTING_FEMALES = 100;
+    private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map = new MapImpl();
     private final InputHandler inputHandler;
     // The first human is the player.
@@ -60,23 +66,49 @@ public final class ChapterImpl implements Chapter {
 
     private void solveCollisions() {
         final List<Human> generated = new ArrayList<>();
+        final QuadTree tree = createTree();
         for (final Human human : humans) {
             if (!(human instanceof Female)) {
                 continue;
             }
             final Female female = (Female) human;
-            for (final Human human2 : humans) {
-                if (!(human2 instanceof Male)) {
-                    continue;
-                }
-                final Male male = (Male) human2;
-                if (female.collide(male)) {
+            final List<Human> closeHumans = new ArrayList<>();
+            final Circle range = new CircleImpl(female.reproductionArea());
+            range.setRadius(range.getRadius() * 2);
+            tree.query(range, closeHumans);
+            for (final Human closeHuman : closeHumans) {
+                if (female.collide((Male) closeHuman)) {
                     final Position femalePosition = female.getPosition();
-                    generated.add(new MaleImpl(randomPosition(femalePosition)));
+
+                    generated.add(
+                        random.nextDouble() < MALE_SPAWNING_PROBABILITY
+                            ? new MaleImpl(randomPosition(femalePosition))
+                            : new FemaleImpl(randomPosition(femalePosition))
+                    );
                 }
             }
         }
         this.humans.addAll(generated);
+    }
+
+    private QuadTree createTree() {
+        final QuadTree tree = new QuadTreeImpl(
+            new RectangleImpl(
+                new Position(0, 0),
+                MapImpl.MAP_ROW * ScreenImpl.TILE_SIZE,
+                MapImpl.MAP_COL * ScreenImpl.TILE_SIZE
+            )
+        );
+        fillTree(tree);
+        return tree;
+    }
+
+    private void fillTree(final QuadTree tree) {
+        for (final Human human : humans) {
+            if (human instanceof Male) {
+                tree.insert(human);
+            }
+        }
     }
 
     @Override
@@ -99,12 +131,12 @@ public final class ChapterImpl implements Chapter {
             (int) Math.floor(
                 reference.x()
                     + (random.nextBoolean() ? 1 : -1)
-                        * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
+                        * ScreenImpl.TILE_SIZE * 3 * random.nextDouble()
             ),
             (int) Math.floor(
                 reference.y()
                     + (random.nextBoolean() ? 1 : -1)
-                        * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
+                        * ScreenImpl.TILE_SIZE * 3 * random.nextDouble()
             )
         );
     }
