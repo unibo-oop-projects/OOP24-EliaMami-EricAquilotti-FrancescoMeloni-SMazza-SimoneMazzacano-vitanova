@@ -129,13 +129,17 @@ public final class ScreenImpl extends JPanel implements Screen {
                     final int num = tileIds[r][c];
                     final int mapX = r * TILE_SIZE;
                     final int mapY = c * TILE_SIZE;
-                    final int screenX = mapX - xOffset + CENTER_X;
-                    final int screenY = mapY - yOffset + CENTER_Y;
-
-                    if (screenX + TILE_SIZE >= 0 && screenX - TILE_SIZE < SCREEN_WIDTH
-                        && screenY + TILE_SIZE >= 0 && screenY - TILE_SIZE < SCREEN_HEIGHT) {
+                    final Position screenPosition = screenPosition(new Position(mapX, mapY));
+                    if (validScreenPosition(screenPosition)) {
                         final BufferedImage image = TileManager.getTile(num).getSprite().getImage();
-                        bufferGraphics.drawImage(image, screenX, screenY, TILE_SIZE, TILE_SIZE, null);
+                        bufferGraphics.drawImage(
+                            image,
+                            (int) screenPosition.x(),
+                            (int) screenPosition.y(),
+                            TILE_SIZE,
+                            TILE_SIZE,
+                            null
+                        );
                     }
                 }
             }
@@ -143,6 +147,9 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         humansToDraw.ifPresent(humans -> {
             for (final Human human : humans) {
+                if (!validScreenPosition(screenPosition(human.getPosition()))) {
+                    continue;
+                }
                 if (human instanceof Player) {
                     drawPlayer(bufferGraphics, (Player) human);
                 } else {
@@ -157,6 +164,17 @@ public final class ScreenImpl extends JPanel implements Screen {
             bufferGraphics.setFont(f);
             bufferGraphics.drawString(text, TEXT_SIZE, TEXT_SIZE);
         });
+    }
+
+    private Position screenPosition(final Position position) {
+        return new Position(position.x() - xOffset + CENTER_X, position.y() - yOffset + CENTER_Y);
+    }
+
+    private boolean validScreenPosition(final Position position) {
+        return position.x() + TILE_SIZE >= 0
+            && position.x() - TILE_SIZE < SCREEN_WIDTH
+            && position.y() + TILE_SIZE >= 0
+            && position.y() - TILE_SIZE < SCREEN_HEIGHT;
     }
 
     @Override
@@ -175,10 +193,15 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private void drawHuman(final Graphics2D g2, final Human human) {
-        final Position humanPosition = human.getPosition();
-        final int screenX = (int) humanPosition.x() - xOffset + CENTER_X;
-        final int screenY = (int) humanPosition.y() - yOffset + CENTER_Y;
-        g2.drawImage(human.getSprite().getImage(), screenX, screenY, TILE_SIZE, TILE_SIZE, null);
+        final Position screenPosition = screenPosition(human.getPosition());
+        g2.drawImage(
+            human.getSprite().getImage(),
+            (int) screenPosition.x(),
+            (int) screenPosition.y(),
+            TILE_SIZE,
+            TILE_SIZE,
+            null
+        );
     }
 
     private void drawPlayer(final Graphics2D g2, final Player player) {
