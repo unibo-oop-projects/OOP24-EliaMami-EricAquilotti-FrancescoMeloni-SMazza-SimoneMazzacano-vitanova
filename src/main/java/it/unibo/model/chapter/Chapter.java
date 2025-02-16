@@ -2,6 +2,7 @@ package it.unibo.model.chapter;
 
 import java.util.List;
 
+import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 // import it.unibo.model.human.Player;
 

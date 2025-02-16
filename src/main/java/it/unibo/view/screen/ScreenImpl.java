@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
-import it.unibo.model.chapter.Map;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.Player;
 import it.unibo.model.tile.TileManager;
@@ -176,8 +176,8 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     private void drawHuman(final Graphics2D g2, final Human human) {
         final Position humanPosition = human.getPosition();
-        final int screenX = humanPosition.x() - xOffset + CENTER_X;
-        final int screenY = humanPosition.y() - yOffset + CENTER_Y;
+        final int screenX = (int) humanPosition.x() - xOffset + CENTER_X;
+        final int screenY = (int) humanPosition.y() - yOffset + CENTER_Y;
         g2.drawImage(human.getSprite().getImage(), screenX, screenY, TILE_SIZE, TILE_SIZE, null);
     }
 

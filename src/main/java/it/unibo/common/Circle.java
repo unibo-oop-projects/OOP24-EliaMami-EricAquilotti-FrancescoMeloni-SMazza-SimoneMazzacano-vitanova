@@ -20,20 +20,20 @@ public interface Circle {
 
     /**
      * 
-     * @return the radious of the circle.
+     * @return the radius of the circle.
      */
-    double getRadious();
+    double getRadius();
 
     /**
      * 
      * @param newCenterX new x coordinate of the center.
      * @param newCenterY new y coordinate of the center.
      */
-    void setCenter(int newCenterX, int newCenterY);
+    void setCenter(double newCenterX, double newCenterY);
 
     /**
      * 
      * @param newRadious the new radious of the circle.
      */
-    void setRadious(double newRadious);
+    void setRadius(double newRadious);
 }

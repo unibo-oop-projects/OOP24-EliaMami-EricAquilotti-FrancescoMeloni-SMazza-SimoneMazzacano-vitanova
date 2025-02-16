@@ -31,8 +31,8 @@ public abstract class BasicHuman implements Human {
     private static final double SPEED = 1.0;
     private boolean canReproduce = true;
     private final Circle reproductionArea;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private Sprite sprite;
     private Direction direction = new Direction(false, false, false, false);
     private int numSprite = 1;

@@ -2,7 +2,7 @@ package it.unibo.view.screen;
 
 import java.util.List;
 
-import it.unibo.model.chapter.Map;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 
 /**

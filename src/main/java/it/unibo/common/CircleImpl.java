@@ -5,20 +5,20 @@ package it.unibo.common;
  * with other circles.
  */
 public final class CircleImpl implements Circle {
-    private int centerX;
-    private int centerY;
-    private double radious;
+    private double centerX;
+    private double centerY;
+    private double radius;
 
     /**
      * 
      * @param centerX x coordinate of the center.
      * @param centerY y coordinate of the center.
-     * @param radious radious of the circle.
+     * @param radius radius of the circle.
      */
-    public CircleImpl(final int centerX, final int centerY, final double radious) {
+    public CircleImpl(final double centerX, final double centerY, final double radius) {
         this.centerX = centerX;
         this.centerY = centerY;
-        this.radious = radious;
+        this.radius = radius;
     }
 
     /**
@@ -28,15 +28,15 @@ public final class CircleImpl implements Circle {
     public CircleImpl(final Circle circle) {
         this.centerX = circle.getCenter().x();
         this.centerY = circle.getCenter().y();
-        this.radious = circle.getRadious();
+        this.radius = circle.getRadius();
     }
 
     @Override
     public boolean intersects(final Circle other) {
         final Position otherCenter = other.getCenter();
-        final int xDiff = this.centerX - otherCenter.x();
-        final int yDiff = this.centerY - otherCenter.y();
-        return xDiff * xDiff + yDiff * yDiff <= 4 * radious * radious;
+        final double xDiff = this.centerX - otherCenter.x();
+        final double yDiff = this.centerY - otherCenter.y();
+        return xDiff * xDiff + yDiff * yDiff <= 4 * radius * radius;
     }
 
     @Override
@@ -45,19 +45,19 @@ public final class CircleImpl implements Circle {
     }
 
     @Override
-    public double getRadious() {
-        return radious;
+    public double getRadius() {
+        return radius;
     }
 
     @Override
-    public void setCenter(final int newCenterX, final int newCenterY) {
+    public void setCenter(final double newCenterX, final double newCenterY) {
         centerX = newCenterX;
         centerY = newCenterY;
     }
 
     @Override
-    public void setRadious(final double newRadious) {
-        radious = newRadious;
+    public void setRadius(final double newRadius) {
+        radius = newRadius;
     }
 
 }

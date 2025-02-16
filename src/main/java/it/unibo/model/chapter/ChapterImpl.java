@@ -11,6 +11,8 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.Male;
 import it.unibo.model.human.MaleImpl;
+import it.unibo.model.chapter.map.Map;
+import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.human.Female;
 import it.unibo.model.human.FemaleImpl;
 import it.unibo.model.human.Player;
@@ -22,7 +24,7 @@ import it.unibo.view.screen.ScreenImpl;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 20;
+    private static final int STARTING_FEMALES = 100;
     private final Map map = new MapImpl();
     private final InputHandler inputHandler;
     // The first human is the player.
