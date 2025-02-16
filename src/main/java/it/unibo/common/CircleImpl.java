@@ -33,10 +33,7 @@ public final class CircleImpl implements Circle {
 
     @Override
     public boolean intersects(final Circle other) {
-        final Position otherCenter = other.getCenter();
-        final double xDiff = this.centerX - otherCenter.x();
-        final double yDiff = this.centerY - otherCenter.y();
-        return xDiff * xDiff + yDiff * yDiff <= 4 * radius * radius;
+        return distanceSquared(this.getCenter(), other.getCenter()) <= sumSquared(this.radius, other.getRadius());
     }
 
     @Override
@@ -48,16 +45,8 @@ public final class CircleImpl implements Circle {
 
         final double closestX = Math.max(rectX, Math.min(this.centerX, rectX + width));
         final double closestY = Math.max(rectY, Math.min(this.centerY, rectY + height));
-        final double dx = centerX - closestX;
-        final double dy = centerY - closestY;
-        final double distanceSquared = dx * dx + dy * dy;
-        // Circle intersects the rectangle.
-        if (distanceSquared <= (this.radius * this.radius)) {
-            return true;
-        }
-
-        // Circle inside the rectangle.
-        return (this.centerX - this.radius >= rectX)
+        return this.contains(new Position(closestX, closestY))
+            || (this.centerX - this.radius >= rectX)
             && (this.centerX + this.radius <= rectX + width)
             && (this.centerY - this.radius >= rectY)
             && (this.centerY + this.radius <= rectY + height);
@@ -84,4 +73,18 @@ public final class CircleImpl implements Circle {
         radius = newRadius;
     }
 
+    @Override
+    public boolean contains(final Position point) {
+        return distanceSquared(this.getCenter(), point) <= (this.radius * this.radius);
+    }
+
+    private double distanceSquared(final Position a, final Position b) {
+        final double dx = a.x() - b.x();
+        final double dy = a.y() - b.y();
+        return dx * dx + dy * dy;
+    }
+
+    private double sumSquared(final double a, final double b) {
+        return a * a + 2 * a * b + b * b;
+    }
 }

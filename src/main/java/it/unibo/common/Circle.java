@@ -21,6 +21,13 @@ public interface Circle {
 
     /**
      * 
+     * @param point the point to check.
+     * @return if the point is inside the circle.
+     */
+    boolean contains(Position point);
+
+    /**
+     * 
      * @return the center of the circle.
      */
     Position getCenter();
