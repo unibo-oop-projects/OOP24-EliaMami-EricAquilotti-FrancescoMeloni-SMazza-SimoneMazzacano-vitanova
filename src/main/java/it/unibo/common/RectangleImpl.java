@@ -25,9 +25,9 @@ public final class RectangleImpl implements Rectangle {
 
     @Override
     public boolean contains(final Position point) {
-        return point.x() >= this.x - this.width
+        return point.x() >= this.x
             && point.x() <= this.x + this.width
-            && point.y() >= this.y - this.height
+            && point.y() >= this.y
             && point.y() <= this.y + this.height;
     }
 
