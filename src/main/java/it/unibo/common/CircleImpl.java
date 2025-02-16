@@ -40,6 +40,30 @@ public final class CircleImpl implements Circle {
     }
 
     @Override
+    public boolean intersects(final Rectangle other) {
+        final double rectX = other.topLeftCorner().x();
+        final double rectY = other.topLeftCorner().y();
+        final double width = other.width();
+        final double height = other.height();
+
+        final double closestX = Math.max(rectX, Math.min(this.centerX, rectX + width));
+        final double closestY = Math.max(rectY, Math.min(this.centerY, rectY + height));
+        final double dx = centerX - closestX;
+        final double dy = centerY - closestY;
+        final double distanceSquared = dx * dx + dy * dy;
+        // Circle intersects the rectangle.
+        if (distanceSquared <= (this.radius * this.radius)) {
+            return true;
+        }
+
+        // Circle inside the rectangle.
+        return (this.centerX - this.radius >= rectX)
+            && (this.centerX + this.radius <= rectX + width)
+            && (this.centerY - this.radius >= rectY)
+            && (this.centerY + this.radius <= rectY + height);
+    }
+
+    @Override
     public Position getCenter() {
         return new Position(centerX, centerY);
     }

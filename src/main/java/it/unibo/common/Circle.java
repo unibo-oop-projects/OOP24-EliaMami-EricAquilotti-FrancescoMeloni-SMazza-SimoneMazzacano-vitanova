@@ -14,6 +14,13 @@ public interface Circle {
 
     /**
      * 
+     * @param other the rectangle to intersect.
+     * @return if the circle intersects the rectangle.
+     */
+    boolean intersects(Rectangle other);
+
+    /**
+     * 
      * @return the center of the circle.
      */
     Position getCenter();
