@@ -1,4 +1,4 @@
-package it.unibo.model.chapter;
+package it.unibo.model.chapter.map;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package it.unibo.model.chapter;
+package it.unibo.model.chapter.map;
 
 /**
  * Models the background of a chapter.
