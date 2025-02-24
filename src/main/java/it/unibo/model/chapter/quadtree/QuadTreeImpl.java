@@ -7,7 +7,6 @@ import it.unibo.common.Circle;
 import it.unibo.common.Position;
 import it.unibo.common.Rectangle;
 import it.unibo.common.RectangleImpl;
-import it.unibo.model.human.Human;
 
 /**
  * Implementation of a quad tree that allows insertion and queries.
@@ -15,7 +14,7 @@ import it.unibo.model.human.Human;
 public final class QuadTreeImpl implements QuadTree {
     private static final int CAPACITY = 10;
     private final Rectangle boundary;
-    private final List<Human> humans;
+    private final List<Point> points;
     private boolean isDivided;
     private QuadTree northWest;
     private QuadTree northEast;
@@ -28,25 +27,25 @@ public final class QuadTreeImpl implements QuadTree {
      */
     public QuadTreeImpl(final Rectangle boundary) {
         this.boundary = boundary;
-        this.humans = new ArrayList<>(CAPACITY);
+        this.points = new ArrayList<>(CAPACITY);
     }
 
     @Override
-    public boolean insert(final Human human) {
-        if (!boundary.contains(human.getPosition())) {
+    public boolean insert(final Point point) {
+        if (!boundary.contains(point.position())) {
             return false;
         }
-        if (humans.size() < CAPACITY && !isDivided) {
-            humans.add(human);
+        if (points.size() < CAPACITY && !isDivided) {
+            points.add(point);
             return true;
         }
         if (!isDivided) {
             subdivide();
         }
-        return northWest.insert(human)
-            || northEast.insert(human)
-            || southWest.insert(human)
-            || southEast.insert(human);
+        return northWest.insert(point)
+            || northEast.insert(point)
+            || southWest.insert(point)
+            || southEast.insert(point);
     }
 
     private void subdivide() {
@@ -67,13 +66,13 @@ public final class QuadTreeImpl implements QuadTree {
     }
 
     @Override
-    public void query(final Circle range, final List<Human> found) {
+    public void query(final Circle range, final List<Point> found) {
         if (!range.intersects(this.boundary)) {
             return;
         }
-        for (final Human human : this.humans) {
-            if (range.contains(human.getPosition())) {
-                found.add(human);
+        for (final Point point : this.points) {
+            if (range.contains(point.position())) {
+                found.add(point);
             }
         }
         if (isDivided) {

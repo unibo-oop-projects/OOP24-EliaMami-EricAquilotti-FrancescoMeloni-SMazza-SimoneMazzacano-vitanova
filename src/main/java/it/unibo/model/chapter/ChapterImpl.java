@@ -16,6 +16,7 @@ import it.unibo.model.human.Male;
 import it.unibo.model.human.MaleImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
+import it.unibo.model.chapter.quadtree.Point;
 import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
 import it.unibo.model.human.Female;
@@ -72,11 +73,12 @@ public final class ChapterImpl implements Chapter {
                 continue;
             }
             final Female female = (Female) human;
-            final List<Human> closeHumans = new ArrayList<>();
+            final List<Point> closePoints = new ArrayList<>();
             final Circle range = new CircleImpl(female.reproductionArea());
             range.setRadius(range.getRadius() * 2);
-            tree.query(range, closeHumans);
-            for (final Human closeHuman : closeHumans) {
+            tree.query(range, closePoints);
+            for (final Point closePoint : closePoints) {
+                final Human closeHuman = (Human) closePoint.data();
                 if (female.collide((Male) closeHuman)) {
                     final Position femalePosition = female.getPosition();
 
@@ -106,7 +108,7 @@ public final class ChapterImpl implements Chapter {
     private void fillTree(final QuadTree tree) {
         for (final Human human : humans) {
             if (human instanceof Male) {
-                tree.insert(human);
+                tree.insert(new Point(human.getPosition(), human));
             }
         }
     }

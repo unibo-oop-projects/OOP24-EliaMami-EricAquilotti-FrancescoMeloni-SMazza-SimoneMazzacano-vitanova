@@ -13,10 +13,9 @@ import org.junit.jupiter.api.Test;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Position;
 import it.unibo.common.RectangleImpl;
+import it.unibo.model.chapter.quadtree.Point;
 import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
-import it.unibo.model.human.Human;
-import it.unibo.model.human.MaleImpl;
 
 class QuadTreeTest {
     @Test
@@ -25,13 +24,13 @@ class QuadTreeTest {
             new RectangleImpl(new Position(0, 0), 4, 4)
         );
         // basic insertion
-        assertTrue(tree.insert(new MaleImpl(new Position(2, 0))));
-        assertTrue(tree.insert(new MaleImpl(new Position(0, 1))));
+        assertTrue(tree.insert(new Point(new Position(2, 0), null)));
+        assertTrue(tree.insert(new Point(new Position(0, 1), null)));
         // edge
-        assertTrue(tree.insert(new MaleImpl(new Position(0, 0))));
-        assertTrue(tree.insert(new MaleImpl(new Position(0, 4))));
+        assertTrue(tree.insert(new Point(new Position(0, 0), null)));
+        assertTrue(tree.insert(new Point(new Position(0, 4), null)));
         // no insertion
-        assertFalse(tree.insert(new MaleImpl(new Position(-1, 0))));
+        assertFalse(tree.insert(new Point(new Position(-1, 0), null)));
     }
 
     @Test
@@ -39,15 +38,15 @@ class QuadTreeTest {
         final QuadTree tree = new QuadTreeImpl(
             new RectangleImpl(new Position(0, 0), 4, 4)
         );
-        final Human male1 = new MaleImpl(new Position(2, 2));
-        final Human male2 = new MaleImpl(new Position(0, 4));
-        final Human male3 = new MaleImpl(new Position(0, 2));
-        assertTrue(tree.insert(male1));
-        assertTrue(tree.insert(male2));
-        assertTrue(tree.insert(male3));
+        final Point point1 = new Point(new Position(2, 2), null);
+        final Point point2 = new Point(new Position(0, 4), null);
+        final Point point3 = new Point(new Position(0, 2), null);
+        assertTrue(tree.insert(point1));
+        assertTrue(tree.insert(point2));
+        assertTrue(tree.insert(point3));
 
-        final List<Human> closeHumans = new ArrayList<>();
+        final List<Point> closeHumans = new ArrayList<>();
         tree.query(new CircleImpl(4, 4, 4), closeHumans);
-        assertEquals(Set.of(male1, male2), Set.copyOf(closeHumans));
+        assertEquals(Set.of(point1, point2), Set.copyOf(closeHumans));
     }
 }
