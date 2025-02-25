@@ -11,21 +11,21 @@ import it.unibo.model.human.Human;
 public interface Screen {
     /**
      * 
-     * @param text the string to render.
+     * @param text the string to load.
      */
-    void renderText(String text);
+    void loadText(String text);
 
     /**
      * 
-     * @param humans the humans to render.
+     * @param humans the humans to load.
      */
-    void renderHumans(List<Human> humans);
+    void loadHumans(List<Human> humans);
 
     /**
      * 
-     * @param map the map to render.
+     * @param map the map to load.
      */
-    void renderMap(Map map);
+    void loadMap(Map map);
 
     /**
      * Sets the offset for the rendering.
@@ -33,4 +33,9 @@ public interface Screen {
      * @param yOffset
      */
     void setOffset(int xOffset, int yOffset);
+
+    /**
+     * Draws the loaded objects on the screen.
+     */
+    void show();
 }

@@ -53,7 +53,7 @@ public final class Game implements Runnable {
 
             // Measure FPS every second
             if (System.currentTimeMillis() - timer >= 1000) {
-                screen.renderText(chapter.getHumans().size() + " FPS: " + frameCount);
+                screen.loadText(chapter.getHumans().size() + " FPS: " + frameCount);
                 frameCount = 0;
                 timer += 1000;
             }
@@ -67,7 +67,8 @@ public final class Game implements Runnable {
     }
 
     private void draw() {
-        screen.renderMap(chapter.getMap());
-        screen.renderHumans(chapter.getHumans());
+        screen.loadMap(chapter.getMap());
+        screen.loadHumans(chapter.getHumans());
+        screen.show();
     }
 }

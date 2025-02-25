@@ -93,21 +93,18 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void renderMap(final Map map) {
+    public void loadMap(final Map map) {
         mapToDraw = Optional.of(map);
-        repaint();
     }
 
     @Override
-    public void renderHumans(final List<Human> humans) {
+    public void loadHumans(final List<Human> humans) {
         humansToDraw = Optional.of(humans);
-        repaint();
     }
 
     @Override
-    public void renderText(final String text) {
+    public void loadText(final String text) {
         textToDraw = Optional.of(text);
-        repaint();
     }
 
     private void clearBuffer() {
@@ -119,7 +116,6 @@ public final class ScreenImpl extends JPanel implements Screen {
         if (bufferGraphics == null) {
             initializeBuffer();
         }
-
         clearBuffer();
 
         mapToDraw.ifPresent(map -> {
@@ -169,7 +165,6 @@ public final class ScreenImpl extends JPanel implements Screen {
         redrawBuffer();
         final Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(bufferedImage, 0, 0, null);
-        g2.dispose();
     }
 
     @Override
@@ -189,5 +184,10 @@ public final class ScreenImpl extends JPanel implements Screen {
                 null
             );
         }
+    }
+
+    @Override
+    public void show() {
+        repaint();
     }
 }
