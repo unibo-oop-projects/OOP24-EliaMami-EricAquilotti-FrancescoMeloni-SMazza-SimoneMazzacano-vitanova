@@ -14,7 +14,7 @@ public final class Game implements Runnable {
     private static final int NANO_IN_SEC = 1_000_000_000;
 
     private final Thread gameThread = new Thread(this);
-    private final InputHandler inputHandler = new InputHandlerImpl();;
+    private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final Chapter chapter = new ChapterImpl(inputHandler);
 
