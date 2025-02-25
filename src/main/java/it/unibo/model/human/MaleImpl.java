@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.unibo.common.Position;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -20,8 +21,8 @@ public final class MaleImpl extends BasicNPC implements Male {
      * 
      * @param startingPosition the initial position.
      */
-    public MaleImpl(final Position startingPosition) {
-        super(startingPosition, Sprite.MALE_DOWN_1);
+    public MaleImpl(final Position startingPosition, final Map map) {
+        super(startingPosition, Sprite.MALE_DOWN_1, map);
     }
 
     @Override

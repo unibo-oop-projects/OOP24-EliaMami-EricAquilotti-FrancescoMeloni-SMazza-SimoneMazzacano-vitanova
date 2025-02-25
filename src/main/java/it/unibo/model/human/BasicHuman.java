@@ -7,6 +7,7 @@ import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -37,17 +38,19 @@ public abstract class BasicHuman implements Human {
     private Direction direction = new Direction(false, false, false, false);
     private int numSprite = 1;
     private int spriteCounter;
+    private final Map map;
 
     /**
      * 
      * @param startingPosition the initial position.
      * @param startingSprite the fist sprite to show.
      */
-    protected BasicHuman(final Position startingPosition, final Sprite startingSprite) {
+    protected BasicHuman(final Position startingPosition, final Sprite startingSprite, final Map map) {
         this.x = startingPosition.x();
         this.y = startingPosition.y();
         this.sprite = startingSprite;
         this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
+        this.map = map;
     }
 
     /**

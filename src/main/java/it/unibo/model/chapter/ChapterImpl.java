@@ -49,9 +49,9 @@ public final class ChapterImpl implements Chapter {
             (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2,
             (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2
         );
-        this.humans.add(new PlayerImpl(centerPosition));
+        this.humans.add(new PlayerImpl(centerPosition, map));
         for (int i = 0; i < STARTING_FEMALES; i++) {
-            this.humans.add(new FemaleImpl(randomPosition(centerPosition)));
+            this.humans.add(new FemaleImpl(randomPosition(centerPosition), map));
         }
     }
 
@@ -83,8 +83,8 @@ public final class ChapterImpl implements Chapter {
 
                     generated.add(
                         random.nextDouble() < MALE_SPAWNING_PROBABILITY
-                            ? new MaleImpl(randomPosition(femalePosition))
-                            : new FemaleImpl(randomPosition(femalePosition))
+                            ? new MaleImpl(randomPosition(femalePosition), map)
+                            : new FemaleImpl(randomPosition(femalePosition), map)
                     );
                 }
             }
