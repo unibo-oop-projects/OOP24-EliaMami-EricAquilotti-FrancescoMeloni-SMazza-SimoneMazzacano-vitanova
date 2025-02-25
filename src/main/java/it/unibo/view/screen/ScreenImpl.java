@@ -17,7 +17,7 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.Player;
-import it.unibo.model.tile.TileManager;
+import it.unibo.model.tile.Tile;
 
 /**
  * Class that handles all the rendering on the screen.
@@ -123,15 +123,15 @@ public final class ScreenImpl extends JPanel implements Screen {
         clearBuffer();
 
         mapToDraw.ifPresent(map -> {
-            final int[][] tileIds = map.getTileIds();
-            for (int r = 0; r < tileIds.length; r++) {
-                for (int c = 0; c < tileIds[r].length; c++) {
-                    final int num = tileIds[r][c];
+            final Tile[][] tiles = map.getTiles();
+            for (int r = 0; r < tiles.length; r++) {
+                for (int c = 0; c < tiles[r].length; c++) {
+                    final Tile tile = tiles[r][c];
                     final int mapX = r * TILE_SIZE;
                     final int mapY = c * TILE_SIZE;
                     final Position screenPosition = screenPosition(new Position(mapX, mapY));
                     if (validScreenPosition(screenPosition)) {
-                        final BufferedImage image = TileManager.getTile(num).getSprite().getImage();
+                        final BufferedImage image = tile.getSprite().getImage();
                         bufferGraphics.drawImage(
                             image,
                             (int) screenPosition.x(),

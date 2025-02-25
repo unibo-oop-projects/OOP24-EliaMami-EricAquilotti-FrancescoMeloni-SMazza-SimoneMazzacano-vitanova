@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import it.unibo.model.tile.Tile;
+import it.unibo.model.tile.TileManager;
+
 /**
  * Implementation of a game map.
  */
@@ -49,7 +52,12 @@ public final class MapImpl implements Map {
     }
 
     @Override
-    public int[][] getTileIds() {
-        return Arrays.stream(tileIds).map(int[]::clone).toArray(int[][]::new);
+    public Tile[][] getTiles() {
+        return Arrays.stream(tileIds)
+                    .map(row -> Arrays.stream(row)
+                        .mapToObj(TileManager::getTile)
+                        .toArray(Tile[]::new)
+                    )
+                    .toArray(Tile[][]::new);
     }
 }
