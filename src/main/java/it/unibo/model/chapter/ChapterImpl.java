@@ -73,10 +73,9 @@ public final class ChapterImpl implements Chapter {
                 continue;
             }
             final Female female = (Female) human;
-            final List<Point> closePoints = new ArrayList<>();
             final Circle range = new CircleImpl(female.reproductionArea());
             range.setRadius(range.getRadius() * 2);
-            tree.query(range, closePoints);
+            final List<Point> closePoints = tree.query(range);
             for (final Point closePoint : closePoints) {
                 final Human closeHuman = (Human) closePoint.data();
                 if (female.collide((Male) closeHuman)) {

@@ -17,9 +17,9 @@ public interface QuadTree {
     boolean insert(Point point);
 
     /**
-     * Fills the found list with the points that are inside the given range.
+     * 
      * @param range the range to check.
-     * @param found the list to fill.
+     * @return the list of points that are inside the range.
      */
-    void query(Circle range, List<Point> found);
+    List<Point> query(Circle range);
 }

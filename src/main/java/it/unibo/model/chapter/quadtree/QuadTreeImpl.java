@@ -66,9 +66,10 @@ public final class QuadTreeImpl implements QuadTree {
     }
 
     @Override
-    public void query(final Circle range, final List<Point> found) {
+    public List<Point> query(final Circle range) {
+        final List<Point> found = new ArrayList<>();
         if (!range.intersects(this.boundary)) {
-            return;
+            return found;
         }
         for (final Point point : this.points) {
             if (range.contains(point.position())) {
@@ -76,11 +77,12 @@ public final class QuadTreeImpl implements QuadTree {
             }
         }
         if (isDivided) {
-            northWest.query(range, found);
-            northEast.query(range, found);
-            southWest.query(range, found);
-            southEast.query(range, found);
+            found.addAll(northWest.query(range));
+            found.addAll(northEast.query(range));
+            found.addAll(southWest.query(range));
+            found.addAll(southEast.query(range));
         }
+        return found;
     }
 
 }

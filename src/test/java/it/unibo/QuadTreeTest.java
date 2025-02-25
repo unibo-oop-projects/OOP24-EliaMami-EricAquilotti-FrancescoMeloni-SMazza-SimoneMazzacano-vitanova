@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -45,8 +44,7 @@ class QuadTreeTest {
         assertTrue(tree.insert(point2));
         assertTrue(tree.insert(point3));
 
-        final List<Point> closeHumans = new ArrayList<>();
-        tree.query(new CircleImpl(4, 4, 4), closeHumans);
-        assertEquals(Set.of(point1, point2), Set.copyOf(closeHumans));
+        final List<Point> closePoints = tree.query(new CircleImpl(4, 4, 4));
+        assertEquals(Set.of(point1, point2), Set.copyOf(closePoints));
     }
 }
