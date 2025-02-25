@@ -18,11 +18,11 @@ public abstract class BasicHuman implements Human {
     /**
      * Offset for the x coordinate of the reproduction circle center.
      */
-    protected static final int CIRCLE_X_OFFSET = 8;
+    protected static final int CIRCLE_X_OFFSET = 16;
     /**
      * Offset for the y coordinate of the reproduction circle center.
      */
-    protected static final int CIRCLE_Y_OFFSET = 12;
+    protected static final int CIRCLE_Y_OFFSET = 24;
     /**
      * Base radious of the reproduction circle.
      */
@@ -57,15 +57,23 @@ public abstract class BasicHuman implements Human {
      */
     @Override
     public void move() {
-        if (direction.up() && !direction.down()) {
-            y -= SPEED;
+        if (direction.up()) {
+            if (!direction.down()) {
+                y -= SPEED;
+            }
         } else if (direction.down()) {
-            y += SPEED;
+            if (!direction.up()) {
+                y += SPEED;
+            }
         }
-        if (direction.left() && !direction.right()) {
-            x -= SPEED;
+        if (direction.left()) {
+            if (!direction.right()) {
+                x -= SPEED;
+            }
         } else if (direction.right()) {
-            x += SPEED;
+            if (!direction.left()) {
+                x += SPEED;
+            }
         }
         reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
 
@@ -112,15 +120,23 @@ public abstract class BasicHuman implements Human {
      * @param validSprites the sprites that are valid depending on the subclass.
      */
     protected final void updateSprite(final List<Sprite> validSprites) {
-        if (direction.up() && !direction.down()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "UP");
+        if (direction.up()) {
+            if (!direction.down()) {
+                sprite = getSpriteFromDirection(validSprites.stream(), "UP");
+            }
         } else if (direction.down()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
+            if (!direction.up()) {
+                sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
+            }
         }
-        if (direction.left() && !direction.right()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "LEFT");
+        if (direction.left()) {
+            if (!direction.right()) {
+                sprite = getSpriteFromDirection(validSprites.stream(), "LEFT");
+            }
         } else if (direction.right()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
+            if (!direction.left()) {
+                sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
+            }
         }
     }
 
