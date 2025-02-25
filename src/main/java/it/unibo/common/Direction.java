@@ -7,5 +7,4 @@ package it.unibo.common;
  * @param left tells if going left.
  */
 public record Direction(boolean up, boolean right, boolean down, boolean left) {
-
 }

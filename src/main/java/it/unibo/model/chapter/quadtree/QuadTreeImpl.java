@@ -14,7 +14,7 @@ import it.unibo.common.RectangleImpl;
 public final class QuadTreeImpl implements QuadTree {
     private static final int CAPACITY = 10;
     private final Rectangle boundary;
-    private final List<Point> points;
+    private final List<Point> points = new ArrayList<>(CAPACITY);
     private boolean isDivided;
     private QuadTree northWest;
     private QuadTree northEast;
@@ -27,7 +27,6 @@ public final class QuadTreeImpl implements QuadTree {
      */
     public QuadTreeImpl(final Rectangle boundary) {
         this.boundary = boundary;
-        this.points = new ArrayList<>(CAPACITY);
     }
 
     @Override
