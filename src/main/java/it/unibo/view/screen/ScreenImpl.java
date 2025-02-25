@@ -130,31 +130,17 @@ public final class ScreenImpl extends JPanel implements Screen {
                     final int mapX = r * TILE_SIZE;
                     final int mapY = c * TILE_SIZE;
                     final Position screenPosition = screenPosition(new Position(mapX, mapY));
-                    if (validScreenPosition(screenPosition)) {
-                        final BufferedImage image = tile.getSprite().getImage();
-                        bufferGraphics.drawImage(
-                            image,
-                            (int) screenPosition.x(),
-                            (int) screenPosition.y(),
-                            TILE_SIZE,
-                            TILE_SIZE,
-                            null
-                        );
-                    }
+                    drawImage(bufferGraphics, tile.getSprite().getImage(), screenPosition);
                 }
             }
         });
 
         humansToDraw.ifPresent(humans -> {
             for (final Human human : humans) {
-                if (!validScreenPosition(screenPosition(human.getPosition()))) {
-                    continue;
-                }
-                if (human instanceof Player) {
-                    drawPlayer(bufferGraphics, (Player) human);
-                } else {
-                    drawHuman(bufferGraphics, human);
-                }
+                final Position screenPosition = (human instanceof Player)
+                    ? new Position(CENTER_X, CENTER_Y)
+                    : screenPosition(human.getPosition());
+                drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
             }
         });
 
@@ -192,19 +178,16 @@ public final class ScreenImpl extends JPanel implements Screen {
         this.yOffset = yOffset;
     }
 
-    private void drawHuman(final Graphics2D g2, final Human human) {
-        final Position screenPosition = screenPosition(human.getPosition());
-        g2.drawImage(
-            human.getSprite().getImage(),
-            (int) screenPosition.x(),
-            (int) screenPosition.y(),
-            TILE_SIZE,
-            TILE_SIZE,
-            null
-        );
-    }
-
-    private void drawPlayer(final Graphics2D g2, final Player player) {
-        g2.drawImage(player.getSprite().getImage(), CENTER_X, CENTER_Y, TILE_SIZE, TILE_SIZE, null);
+    private void drawImage(final Graphics2D g2, final BufferedImage image, final Position position) {
+        if (validScreenPosition(position)) {
+            g2.drawImage(
+                image,
+                (int) position.x(),
+                (int) position.y(),
+                TILE_SIZE,
+                TILE_SIZE,
+                null
+            );
+        }
     }
 }
