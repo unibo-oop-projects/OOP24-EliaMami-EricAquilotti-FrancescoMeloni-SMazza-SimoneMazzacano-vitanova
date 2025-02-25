@@ -62,18 +62,14 @@ public abstract class BasicHuman implements Human {
                 y -= SPEED;
             }
         } else if (direction.down()) {
-            if (!direction.up()) {
-                y += SPEED;
-            }
+            y += SPEED;
         }
         if (direction.left()) {
             if (!direction.right()) {
                 x -= SPEED;
             }
         } else if (direction.right()) {
-            if (!direction.left()) {
-                x += SPEED;
-            }
+            x += SPEED;
         }
         reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
 
@@ -125,18 +121,14 @@ public abstract class BasicHuman implements Human {
                 sprite = getSpriteFromDirection(validSprites.stream(), "UP");
             }
         } else if (direction.down()) {
-            if (!direction.up()) {
-                sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
-            }
+            sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
         }
         if (direction.left()) {
             if (!direction.right()) {
                 sprite = getSpriteFromDirection(validSprites.stream(), "LEFT");
             }
         } else if (direction.right()) {
-            if (!direction.left()) {
-                sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
-            }
+            sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
         }
     }
 
