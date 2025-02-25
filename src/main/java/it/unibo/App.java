@@ -13,7 +13,7 @@ public final class App {
     private App() { }
 
     /**
-     * Starts the controller i.e. the game.
+     * Starts the controller i.e. the game engine.
      * @param args
      */
     public static void main(final String[] args) {

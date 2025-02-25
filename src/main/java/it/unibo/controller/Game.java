@@ -13,19 +13,15 @@ public final class Game implements Runnable {
     private static final int FPS = 60;
     private static final int NANO_IN_SEC = 1_000_000_000;
 
-    private final Thread gameThread;
-    private final InputHandler inputHandler;
-    private final Screen screen;
-    private final Chapter chapter;
+    private final Thread gameThread = new Thread(this);
+    private final InputHandler inputHandler = new InputHandlerImpl();;
+    private final Screen screen = new ScreenImpl(inputHandler);
+    private final Chapter chapter = new ChapterImpl(inputHandler);
 
     /**
-     * Sets up all the parameters.
+     * Starts the game engine.
      */
     public Game() {
-        inputHandler = new InputHandlerImpl();
-        chapter = new ChapterImpl(inputHandler);
-        screen = new ScreenImpl(inputHandler);
-        gameThread = new Thread(this);
         gameThread.start();
     }
 

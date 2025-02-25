@@ -23,13 +23,12 @@ public final class MapImpl implements Map {
      */
     public static final int MAP_ROW = 32;
     private static final String ROOT_MAP = "it/unibo/view/maps/";
-    private final int[][] tileIds;
+    private final int[][] tileIds = new int[MAP_ROW][MAP_COL];
 
     /**
      * Initialize tileIds and loads the map from a file.
      */
     public MapImpl() {
-        this.tileIds = new int[MAP_ROW][MAP_COL];
         loadMap("test.txt");
     }
 
