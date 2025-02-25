@@ -4,13 +4,10 @@ package it.unibo.model.tile;
  * Manages the Tiles and maps them to ids.
  */
 public final class TileManager {
-
-    /**
-     * Array that contains all the tile types.
-     */
+    private static final TileFactory TILE_FACTORY = new TileFactoryImpl();
     private static final Tile[] TILES = {
-        new TileGrass(),
-        new TileWater(),
+        TILE_FACTORY.tileGrass(),
+        TILE_FACTORY.tileWater(),
     };
 
     private TileManager() { }
