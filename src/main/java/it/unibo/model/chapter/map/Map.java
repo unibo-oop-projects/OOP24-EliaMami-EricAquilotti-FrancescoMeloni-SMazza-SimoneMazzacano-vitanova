@@ -11,4 +11,6 @@ public interface Map {
      * @return the tiles of the map.
      */
     Tile[][] getTiles();
+
+    Tile getTile(final int row, final int coloumns);
 }

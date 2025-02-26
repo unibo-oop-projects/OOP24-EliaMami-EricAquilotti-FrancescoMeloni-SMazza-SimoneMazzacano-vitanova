@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import it.unibo.common.Position;
 import it.unibo.model.tile.Tile;
 import it.unibo.model.tile.TileManager;
 
@@ -23,13 +24,18 @@ public final class MapImpl implements Map {
      */
     public static final int MAP_ROW = 32;
     private static final String ROOT_MAP = "it/unibo/view/maps/";
-    private final int[][] tileIds = new int[MAP_ROW][MAP_COL];
+    private final int[][] tileIds;
 
     /**
      * Initialize tileIds and loads the map from a file.
      */
     public MapImpl() {
+        tileIds = new int[MAP_ROW][MAP_COL];
         loadMap("test.txt");
+    }
+
+    public MapImpl(final int[][] tileIds) {
+        this.tileIds = tileIds;
     }
 
     private void loadMap(final String path) {
@@ -59,4 +65,10 @@ public final class MapImpl implements Map {
                     )
                     .toArray(Tile[][]::new);
     }
+
+    @Override
+    public Tile getTile(final int row, final int coloumns) {
+        return TileManager.getTile(tileIds[row][coloumns]);
+    }
+
 }
