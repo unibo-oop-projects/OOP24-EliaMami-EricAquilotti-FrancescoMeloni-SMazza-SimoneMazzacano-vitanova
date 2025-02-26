@@ -30,7 +30,7 @@ import it.unibo.view.screen.ScreenImpl;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 100;
+    private static final int STARTING_FEMALES = 500;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map = new MapImpl();
     private final InputHandler inputHandler;
@@ -73,14 +73,12 @@ public final class ChapterImpl implements Chapter {
                 continue;
             }
             final Female female = (Female) human;
+            final Position femalePosition = female.getPosition();
             final Circle range = new CircleImpl(female.reproductionArea());
             range.setRadius(range.getRadius() * 2);
-            final List<Point> closePoints = tree.query(range);
-            for (final Point closePoint : closePoints) {
-                final Human closeHuman = (Human) closePoint.data();
-                if (female.collide((Male) closeHuman)) {
-                    final Position femalePosition = female.getPosition();
-
+            final List<Male> closeMales = tree.query(range).stream().map(p -> (Male) p.data()).toList();
+            for (final Male closeMale : closeMales) {
+                if (female.collide(closeMale)) {
                     generated.add(
                         random.nextDouble() < MALE_SPAWNING_PROBABILITY
                             ? new MaleImpl(randomPosition(femalePosition))
@@ -105,11 +103,11 @@ public final class ChapterImpl implements Chapter {
     }
 
     private void fillTree(final QuadTree tree) {
-        for (final Human human : humans) {
-            if (human instanceof Male) {
-                tree.insert(new Point(human.getPosition(), human));
+        humans.forEach(h -> {
+            if (h instanceof Male) {
+                tree.insert(new Point(h.getPosition(), (Male) h));
             }
-        }
+        });
     }
 
     @Override

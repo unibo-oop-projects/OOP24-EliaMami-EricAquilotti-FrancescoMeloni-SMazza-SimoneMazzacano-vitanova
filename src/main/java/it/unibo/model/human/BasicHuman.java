@@ -92,6 +92,7 @@ public abstract class BasicHuman implements Human {
 
     @Override
     public final Circle reproductionArea() {
+        // Put here the logic for radius multipliers and then remove this comment.
         return new CircleImpl(this.reproductionArea);
     }
 
