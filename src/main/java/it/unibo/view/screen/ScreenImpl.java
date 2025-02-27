@@ -1,7 +1,7 @@
 package it.unibo.view.screen;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
@@ -28,33 +29,18 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int TEXT_SIZE = 50;
+    private static final int BASE_WINDOW_WIDTH = 1920;
+    private static final int BASE_WINDOW_HEIGHT = 1080;
     /**
      * The pixel size of a tile scaled.
      */
     public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
-    /**
-     * Number of tiles in a row.
-     */
-    public static final int SCREEN_COL = 16;
-    /**
-     * Number of tiles in a column.
-     */
-    public static final int SCREEN_ROW = 12;
-    /**
-     * Width of the screen obtained by the size of a tile and the amount of
-     * tiles in a row.
-     */
-    public static final int SCREEN_WIDTH = TILE_SIZE * SCREEN_COL;
-    /**
-     * Height of the screen obtained by the size of a tile and the amount of
-     * tiles in a column.
-     */
-    public static final int SCREEN_HEIGHT = TILE_SIZE * SCREEN_ROW;
-    private static final int CENTER_X = SCREEN_WIDTH / 2 - TILE_SIZE / 2;
-    private static final int CENTER_Y = SCREEN_HEIGHT / 2 - TILE_SIZE / 2;
+    private int centerX;
+    private int centerY;
 
     private int xOffset;
     private int yOffset;
+    private final JFrame window = new JFrame();
 
     // Marked as transient because they don't need to be serialized.
     private transient Optional<List<Human>> humansToDraw = Optional.empty();
@@ -69,26 +55,24 @@ public final class ScreenImpl extends JPanel implements Screen {
      * @param inputHandler
      */
     public ScreenImpl(final InputHandler inputHandler) {
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
 
-        final JFrame window = new JFrame();
+        window.setLayout(new BorderLayout());
+        window.setSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
         window.setTitle("Vita Nova");
-        window.add(this);
+        window.setResizable(true);
+        window.add(this, BorderLayout.CENTER);
         window.addKeyListener(inputHandler);
-        window.pack();
-
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
+        window.pack();
         initializeBuffer();
     }
 
     private void initializeBuffer() {
-        bufferedImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        bufferedImage = new BufferedImage(window.getWidth(), window.getHeight(), BufferedImage.TYPE_INT_ARGB);
         bufferGraphics = bufferedImage.createGraphics();
     }
 
@@ -107,17 +91,15 @@ public final class ScreenImpl extends JPanel implements Screen {
         textToDraw = Optional.of(text);
     }
 
-    private void clearBuffer() {
-        bufferGraphics.setColor(Color.BLACK);
-        bufferGraphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    private void updateCenter() {
+        centerX = window.getWidth() / 2 - TILE_SIZE / 2;
+        centerY = window.getHeight() / 2 - TILE_SIZE / 2;
     }
 
     private void redrawBuffer() {
-        if (bufferGraphics == null) {
-            initializeBuffer();
-        }
-        clearBuffer();
-
+        // Always initialize the buffer because the size of the window may have changed.
+        initializeBuffer();
+        updateCenter();
         mapToDraw.ifPresent(map -> {
             final Tile[][] tiles = map.getTiles();
             for (int r = 0; r < tiles.length; r++) {
@@ -134,7 +116,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         humansToDraw.ifPresent(humans -> {
             for (final Human human : humans) {
                 final Position screenPosition = (human instanceof Player)
-                    ? new Position(CENTER_X, CENTER_Y)
+                    ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
             }
@@ -149,14 +131,14 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private Position screenPosition(final Position position) {
-        return new Position(position.x() - xOffset + CENTER_X, position.y() - yOffset + CENTER_Y);
+        return new Position(position.x() - xOffset + centerX, position.y() - yOffset + centerY);
     }
 
     private boolean validScreenPosition(final Position position) {
         return position.x() + TILE_SIZE >= 0
-            && position.x() - TILE_SIZE < SCREEN_WIDTH
+            && position.x() - TILE_SIZE < window.getWidth()
             && position.y() + TILE_SIZE >= 0
-            && position.y() - TILE_SIZE < SCREEN_HEIGHT;
+            && position.y() - TILE_SIZE < window.getHeight();
     }
 
     @Override
@@ -177,8 +159,8 @@ public final class ScreenImpl extends JPanel implements Screen {
         if (validScreenPosition(position)) {
             g2.drawImage(
                 image,
-                (int) position.x(),
-                (int) position.y(),
+                (int) Math.round(position.x()),
+                (int) Math.round(position.y()),
                 TILE_SIZE,
                 TILE_SIZE,
                 null
@@ -188,6 +170,6 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     @Override
     public void show() {
-        repaint();
+        SwingUtilities.invokeLater(this::repaint);
     }
 }
