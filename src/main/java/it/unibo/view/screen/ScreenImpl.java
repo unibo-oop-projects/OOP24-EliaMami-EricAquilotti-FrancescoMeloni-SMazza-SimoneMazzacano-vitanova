@@ -67,7 +67,6 @@ public final class ScreenImpl extends JPanel implements Screen {
         window.addKeyListener(inputHandler);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-        window.pack();
         initializeBuffer();
     }
 
