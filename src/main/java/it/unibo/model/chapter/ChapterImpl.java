@@ -30,7 +30,7 @@ import it.unibo.view.screen.ScreenImpl;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 0;
+    private static final int STARTING_FEMALES = 3;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map = new MapImpl();
     private final InputHandler inputHandler;

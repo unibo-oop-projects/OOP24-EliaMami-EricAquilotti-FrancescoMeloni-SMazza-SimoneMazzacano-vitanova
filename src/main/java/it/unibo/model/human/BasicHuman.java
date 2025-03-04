@@ -29,7 +29,7 @@ public abstract class BasicHuman implements Human {
      */
     private static final int CIRCLE_RADIOUS = 12;
     private static final int CHANGE_SPRITE_THRESHOLD = 20;
-    private static final double SPEED = 8.0;
+    private static final double SPEED = 4.0;
     private boolean canReproduce = true;
     private final Circle reproductionArea;
     private double x;
