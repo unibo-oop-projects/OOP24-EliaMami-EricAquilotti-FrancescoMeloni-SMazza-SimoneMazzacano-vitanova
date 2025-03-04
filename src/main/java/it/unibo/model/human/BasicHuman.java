@@ -29,7 +29,7 @@ public abstract class BasicHuman implements Human {
      */
     private static final int CIRCLE_RADIOUS = 12;
     private static final int CHANGE_SPRITE_THRESHOLD = 20;
-    private static final double SPEED = 4.0;
+    private static final double SPEED = 8.0;
     private boolean canReproduce = true;
     private final Circle reproductionArea;
     private double x;
@@ -44,6 +44,7 @@ public abstract class BasicHuman implements Human {
      * 
      * @param startingPosition the initial position.
      * @param startingSprite the fist sprite to show.
+     * @param map the chapter's map
      */
     protected BasicHuman(final Position startingPosition, final Sprite startingSprite, final Map map) {
         this.x = startingPosition.x();
@@ -60,30 +61,28 @@ public abstract class BasicHuman implements Human {
      */
     @Override
     public void move() {
-        if (direction.up()) {
-            if (!direction.down()) {
-                y -= SPEED;
-            }
-        } else if (direction.down()) {
-            if (!direction.up()) {
-                y += SPEED;
-            }
+        final double oldX = this.x;
+        final double oldY = this.y;
+        if (direction.up() && !direction.down()) {
+            this.y -= SPEED;
+        } else if (direction.down() && !direction.up()) {
+            this.y += SPEED;
         }
-        if (direction.left()) {
-            if (!direction.right()) {
-                x -= SPEED;
-            }
-        } else if (direction.right()) {
-            if (!direction.left()) {
-                x += SPEED;
-            }
+        if (direction.left() && !direction.right()) {
+            this.x -= SPEED;
+        } else if (direction.right() && !direction.left()) {
+            this.x += SPEED;
         }
-        reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
-
-        spriteCounter++;
-        if (spriteCounter > CHANGE_SPRITE_THRESHOLD) {
-            spriteCounter = 0;
-            numSprite = numSprite == 1 ? 2 : 1;
+        if (map.getTileFromPixel(this.x, this.y).isWalkable()) {
+            reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
+            spriteCounter++;
+            if (spriteCounter > CHANGE_SPRITE_THRESHOLD) {
+                spriteCounter = 0;
+                numSprite = numSprite == 1 ? 2 : 1;
+            }
+        } else {
+            this.x = oldX;
+            this.y = oldY;
         }
     }
 
@@ -123,23 +122,15 @@ public abstract class BasicHuman implements Human {
      * @param validSprites the sprites that are valid depending on the subclass.
      */
     protected final void updateSprite(final List<Sprite> validSprites) {
-        if (direction.up()) {
-            if (!direction.down()) {
-                sprite = getSpriteFromDirection(validSprites.stream(), "UP");
-            }
-        } else if (direction.down()) {
-            if (!direction.up()) {
-                sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
-            }
+        if (direction.up() && !direction.down()) {
+            sprite = getSpriteFromDirection(validSprites.stream(), "UP");
+        } else if (direction.down() && !direction.up()) {
+            sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
         }
-        if (direction.left()) {
-            if (!direction.right()) {
-                sprite = getSpriteFromDirection(validSprites.stream(), "LEFT");
-            }
-        } else if (direction.right()) {
-            if (!direction.left()) {
-                sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
-            }
+        if (direction.left() && !direction.right()) {
+            sprite = getSpriteFromDirection(validSprites.stream(), "LEFT");
+        } else if (direction.right() && !direction.left()) {
+            sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
         }
     }
 

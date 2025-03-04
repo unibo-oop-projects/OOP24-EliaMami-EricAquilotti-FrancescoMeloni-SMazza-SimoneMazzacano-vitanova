@@ -23,6 +23,7 @@ public final class FemaleImpl extends BasicNPC implements Female {
     /**
      * 
      * @param startingPosition the initial position.
+     * @param map the chapter's map
      */
     public FemaleImpl(final Position startingPosition, final Map map) {
         super(startingPosition, Sprite.FEMALE_DOWN_1, map);

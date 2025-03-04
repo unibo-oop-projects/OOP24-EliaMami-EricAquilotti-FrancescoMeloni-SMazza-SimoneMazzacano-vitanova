@@ -20,6 +20,7 @@ public final class MaleImpl extends BasicNPC implements Male {
     /**
      * 
      * @param startingPosition the initial position.
+     * @param map the chapter's map
      */
     public MaleImpl(final Position startingPosition, final Map map) {
         super(startingPosition, Sprite.MALE_DOWN_1, map);

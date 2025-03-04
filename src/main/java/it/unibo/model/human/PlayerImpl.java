@@ -20,6 +20,7 @@ public final class PlayerImpl extends BasicHuman implements Player {
     /**
      * 
      * @param startingPosition the initial position.
+     * @param map the chapter's map
      */
     public PlayerImpl(final Position startingPosition, final Map map) {
         super(startingPosition, Sprite.PLAYER_DOWN_1, map);

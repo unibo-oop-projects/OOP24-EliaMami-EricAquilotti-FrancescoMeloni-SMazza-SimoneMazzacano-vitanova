@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import it.unibo.common.Position;
 import it.unibo.model.tile.Tile;
 import it.unibo.model.tile.TileManager;
+import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Implementation of a game map.
@@ -32,10 +32,6 @@ public final class MapImpl implements Map {
     public MapImpl() {
         tileIds = new int[MAP_ROW][MAP_COL];
         loadMap("test.txt");
-    }
-
-    public MapImpl(final int[][] tileIds) {
-        this.tileIds = tileIds;
     }
 
     private void loadMap(final String path) {
@@ -67,8 +63,8 @@ public final class MapImpl implements Map {
     }
 
     @Override
-    public Tile getTile(final int row, final int coloumns) {
-        return TileManager.getTile(tileIds[row][coloumns]);
+    public Tile getTileFromPixel(final double x, final double y) {
+        return TileManager.getTile(tileIds[(int) x / ScreenImpl.TILE_SIZE][(int) y / ScreenImpl.TILE_SIZE]);
     }
 
 }
