@@ -64,7 +64,9 @@ public final class MapImpl implements Map {
 
     @Override
     public Tile getTileFromPixel(final double x, final double y) {
-        return TileManager.getTile(tileIds[(int) x / ScreenImpl.TILE_SIZE][(int) y / ScreenImpl.TILE_SIZE]);
+        final int newX = (int) (x + ScreenImpl.TILE_SIZE / 2) / ScreenImpl.TILE_SIZE;
+        final int newY = (int) (y + ScreenImpl.TILE_SIZE / 2)  / ScreenImpl.TILE_SIZE;
+        return TileManager.getTile(tileIds[newX][newY]);
     }
 
 }
