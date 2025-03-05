@@ -1,5 +1,7 @@
 package it.unibo.controller;
 
+import java.awt.Color;
+
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
@@ -49,7 +51,10 @@ public final class Game implements Runnable {
 
             // Measure FPS every second
             if (System.currentTimeMillis() - timer >= 1000) {
-                screen.loadText(chapter.getHumans().getFirst().getPosition() + " FPS: " + frameCount);
+                final int textSize = 32;
+                final Position textPosition = new Position(textSize, textSize);
+                final String content = chapter.getHumans().getFirst().getPosition() + " FPS: " + frameCount;
+                screen.loadText(content, textPosition, Color.RED, textSize);
                 frameCount = 0;
                 timer += 1000;
             }

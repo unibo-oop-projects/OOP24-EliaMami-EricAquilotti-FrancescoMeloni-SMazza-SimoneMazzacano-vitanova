@@ -1,7 +1,9 @@
 package it.unibo.view.screen;
 
+import java.awt.Color;
 import java.util.List;
 
+import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 
@@ -11,9 +13,12 @@ import it.unibo.model.human.Human;
 public interface Screen {
     /**
      * 
-     * @param text the string to load.
+     * @param text the string to show.
+     * @param position the position on the screen.
+     * @param color the color of the text.
+     * @param size the size of the text.
      */
-    void loadText(String text);
+    void loadText(String text, Position position, Color color, int size);
 
     /**
      * 

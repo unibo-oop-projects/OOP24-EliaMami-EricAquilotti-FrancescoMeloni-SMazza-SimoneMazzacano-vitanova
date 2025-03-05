@@ -28,7 +28,6 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
-    private static final int TEXT_SIZE = 50;
     private static final int BASE_WINDOW_WIDTH = 1920;
     private static final int BASE_WINDOW_HEIGHT = 1080;
     /**
@@ -44,11 +43,14 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     // Marked as transient because they don't need to be serialized.
     private transient Optional<List<Human>> humansToDraw = Optional.empty();
-    private transient Optional<String> textToDraw = Optional.empty();
+    private transient Optional<Text> textToDraw = Optional.empty();
     private transient Optional<Map> mapToDraw = Optional.empty();
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
+
+    private record Text(String content, Position position, Color color, int size) {
+    }
 
     /**
      * 
@@ -86,8 +88,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void loadText(final String text) {
-        textToDraw = Optional.of(text);
+    public void loadText(final String text, final Position position, final Color color, final int size) {
+        textToDraw = Optional.of(new Text(text, position, color, size));
     }
 
     private void updateCenter() {
@@ -122,10 +124,10 @@ public final class ScreenImpl extends JPanel implements Screen {
         });
 
         textToDraw.ifPresent(text -> {
-            final Font f = new Font("Verdana", Font.BOLD, 32);
-            bufferGraphics.setColor(Color.RED);
+            final Font f = new Font("Verdana", Font.BOLD, text.size);
+            bufferGraphics.setColor(text.color);
             bufferGraphics.setFont(f);
-            bufferGraphics.drawString(text, TEXT_SIZE, TEXT_SIZE);
+            bufferGraphics.drawString(text.content, (int) text.position.x(), (int) text.position.y());
         });
     }
 
