@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.unibo.common.Position;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -22,9 +23,10 @@ public final class FemaleImpl extends BasicNPC implements Female {
     /**
      * 
      * @param startingPosition the initial position.
+     * @param map the chapter's map
      */
-    public FemaleImpl(final Position startingPosition) {
-        super(startingPosition, Sprite.FEMALE_DOWN_1);
+    public FemaleImpl(final Position startingPosition, final Map map) {
+        super(startingPosition, Sprite.FEMALE_DOWN_1, map);
         setCanReproduce(true);
     }
 

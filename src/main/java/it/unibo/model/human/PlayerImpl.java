@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -19,9 +20,10 @@ public final class PlayerImpl extends BasicHuman implements Player {
     /**
      * 
      * @param startingPosition the initial position.
+     * @param map the chapter's map
      */
-    public PlayerImpl(final Position startingPosition) {
-        super(startingPosition, Sprite.PLAYER_DOWN_1);
+    public PlayerImpl(final Position startingPosition, final Map map) {
+        super(startingPosition, Sprite.PLAYER_DOWN_1, map);
     }
 
     @Override

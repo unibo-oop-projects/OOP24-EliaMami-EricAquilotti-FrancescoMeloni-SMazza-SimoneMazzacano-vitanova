@@ -30,7 +30,7 @@ import it.unibo.view.screen.ScreenImpl;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 500;
+    private static final int STARTING_FEMALES = 0;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map = new MapImpl();
     private final InputHandler inputHandler;
@@ -49,9 +49,9 @@ public final class ChapterImpl implements Chapter {
             (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2,
             (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2
         );
-        this.humans.add(new PlayerImpl(centerPosition));
+        this.humans.add(new PlayerImpl(centerPosition, map));
         for (int i = 0; i < STARTING_FEMALES; i++) {
-            this.humans.add(new FemaleImpl(randomPosition(centerPosition)));
+            this.humans.add(new FemaleImpl(randomPosition(centerPosition), map));
         }
     }
 
@@ -81,8 +81,8 @@ public final class ChapterImpl implements Chapter {
                 if (female.collide(closeMale)) {
                     generated.add(
                         random.nextDouble() < MALE_SPAWNING_PROBABILITY
-                            ? new MaleImpl(randomPosition(femalePosition))
-                            : new FemaleImpl(randomPosition(femalePosition))
+                            ? new MaleImpl(randomPosition(femalePosition), map)
+                            : new FemaleImpl(randomPosition(femalePosition), map)
                     );
                 }
             }

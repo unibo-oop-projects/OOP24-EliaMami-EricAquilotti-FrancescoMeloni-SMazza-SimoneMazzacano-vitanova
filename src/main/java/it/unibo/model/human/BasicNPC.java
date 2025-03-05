@@ -4,6 +4,7 @@ import java.util.Random;
 
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.model.chapter.map.Map;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -18,9 +19,10 @@ public abstract class BasicNPC extends BasicHuman {
      * 
      * @param startingPosition the initial position.
      * @param startingSprite the fist sprite to show.
+     * @param map the chapter's map
      */
-    protected BasicNPC(final Position startingPosition, final Sprite startingSprite) {
-        super(startingPosition, startingSprite);
+    protected BasicNPC(final Position startingPosition, final Sprite startingSprite, final Map map) {
+        super(startingPosition, startingSprite, map);
     }
 
     /**

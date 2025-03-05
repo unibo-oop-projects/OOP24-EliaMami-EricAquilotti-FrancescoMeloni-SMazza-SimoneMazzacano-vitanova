@@ -11,4 +11,11 @@ public interface Map {
      * @return the tiles of the map.
      */
     Tile[][] getTiles();
+
+    /**
+     * @param x row's coordinates in pixel
+     * @param y coloumn's coordinates in pixel
+     * @return the tile of the map.
+     */
+    Tile getTileFromPixel(double x, double y);
 }

@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import it.unibo.model.tile.Tile;
 import it.unibo.model.tile.TileManager;
+import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Implementation of a game map.
@@ -23,12 +24,13 @@ public final class MapImpl implements Map {
      */
     public static final int MAP_ROW = 32;
     private static final String ROOT_MAP = "it/unibo/view/maps/";
-    private final int[][] tileIds = new int[MAP_ROW][MAP_COL];
+    private final int[][] tileIds;
 
     /**
      * Initialize tileIds and loads the map from a file.
      */
     public MapImpl() {
+        tileIds = new int[MAP_ROW][MAP_COL];
         loadMap("test.txt");
     }
 
@@ -59,4 +61,12 @@ public final class MapImpl implements Map {
                     )
                     .toArray(Tile[][]::new);
     }
+
+    @Override
+    public Tile getTileFromPixel(final double x, final double y) {
+        final int newX = (int) (x + ScreenImpl.TILE_SIZE / 2) / ScreenImpl.TILE_SIZE;
+        final int newY = (int) (y + ScreenImpl.TILE_SIZE / 2)  / ScreenImpl.TILE_SIZE;
+        return TileManager.getTile(tileIds[newX][newY]);
+    }
+
 }
