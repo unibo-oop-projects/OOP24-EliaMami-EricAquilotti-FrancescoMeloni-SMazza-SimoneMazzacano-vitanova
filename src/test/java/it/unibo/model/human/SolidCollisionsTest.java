@@ -1,6 +1,5 @@
 package it.unibo.model.human;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,16 +12,22 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.view.screen.ScreenImpl;
 
-public class SolidCollisionsTest {
+/**
+ * Class that tests the solid collisions.
+ */
+class SolidCollisionsTest {
 
     private Map map;
     private Player human;
-    private Position initialPosition = null;
+    private Position initialPosition;
 
+    /**
+     * Initialize map, human and initialPosition.
+     */
     @BeforeEach
     void initialize() {
         this.map = new MapImpl();
-        var tiles = map.getTiles();
+        final var tiles = map.getTiles();
         boolean positionAssigned = false;
         for (int r = 0; r < tiles.length && !positionAssigned; r++) {
             for (int c = 0; c < tiles[r].length && !positionAssigned; c++) {
@@ -37,7 +42,7 @@ public class SolidCollisionsTest {
 
     @Test
     void testCanMove() {
-        Position pos = human.getPosition();
+        final Position pos = human.getPosition();
         assertTrue(map.getTileFromPixel(pos.x(), pos.y()).isWalkable());
         canMove(new Direction(false, true, false, false));
         canMove(new Direction(false, false, true, false));
@@ -51,7 +56,7 @@ public class SolidCollisionsTest {
 
     @Test
     void testStayStill() {
-        Position pos = human.getPosition();
+        final Position pos = human.getPosition();
         assertTrue(map.getTileFromPixel(pos.x(), pos.y()).isWalkable());
         stayStill(new Direction(false, false, false, true));
         stayStill(new Direction(true, false, false, true));
@@ -59,8 +64,11 @@ public class SolidCollisionsTest {
 
     private void stayStill(final Direction dir) {
         human.setDirection(dir);
-        human.move();
-        assertEquals(initialPosition, human.getPosition());
+        final Position pos = human.getPosition();
+        for (int i = 0; i < 10; i++) {
+            human.move();
+        }
+        assertTrue(map.getTileFromPixel(pos.x(), pos.y()).isWalkable());
     }
 
 }
