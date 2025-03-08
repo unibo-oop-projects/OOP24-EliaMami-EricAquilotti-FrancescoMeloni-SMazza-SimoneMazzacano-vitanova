@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     // Marked as transient because they don't need to be serialized.
     private transient Optional<List<Human>> humansToDraw = Optional.empty();
-    private transient Optional<Text> textToDraw = Optional.empty();
+    private transient Optional<List<Text>> textToDraw = Optional.empty();
     private transient Optional<Map> mapToDraw = Optional.empty();
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
@@ -89,7 +90,11 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     @Override
     public void loadText(final String text, final Position position, final Color color, final int size) {
-        textToDraw = Optional.of(new Text(text, position, color, size));
+        if (textToDraw.isEmpty()) {
+            textToDraw = Optional.of(new LinkedList<>());
+        }
+        textToDraw.get().removeIf(txt -> txt.position().equals(position));
+        textToDraw.get().add(new Text(text, position, color, size));
     }
 
     private void updateCenter() {
@@ -123,12 +128,12 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
         });
 
-        textToDraw.ifPresent(text -> {
+        textToDraw.ifPresent(list -> list.forEach(text -> {
             final Font f = new Font("Verdana", Font.BOLD, text.size);
             bufferGraphics.setColor(text.color);
             bufferGraphics.setFont(f);
             bufferGraphics.drawString(text.content, (int) text.position.x(), (int) text.position.y());
-        });
+        }));
     }
 
     private Position screenPosition(final Position position) {
