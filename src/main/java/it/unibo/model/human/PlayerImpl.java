@@ -1,21 +1,14 @@
 package it.unibo.model.human;
 
-import java.util.Arrays;
-import java.util.List;
-
-import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
 /**
  * Implementation of a player that is moved by the user.
  */
 public final class PlayerImpl extends BasicHuman implements Player {
-    private static final List<Sprite> VALID_SPRITES =
-        Arrays.stream(Sprite.values())
-                .filter(s -> s.name().startsWith("PLAYER_"))
-                .toList();
 
     /**
      * 
@@ -23,18 +16,13 @@ public final class PlayerImpl extends BasicHuman implements Player {
      * @param map the chapter's map
      */
     public PlayerImpl(final Position startingPosition, final Map map) {
-        super(startingPosition, Sprite.PLAYER_DOWN_1, map);
+        super(startingPosition, Sprite.PLAYER_DOWN_1, map, HumanType.PLAYER);
     }
 
     @Override
     public void move() {
         super.move();
-        updateSprite(VALID_SPRITES);
-    }
-
-    @Override
-    public void setDirection(final Direction newDirection) {
-        super.setDirection(newDirection);
+        updateSprite();
     }
 
     @Override

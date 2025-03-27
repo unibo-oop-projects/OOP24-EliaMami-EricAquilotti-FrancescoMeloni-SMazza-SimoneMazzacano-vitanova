@@ -1,13 +1,12 @@
 package it.unibo.model.human;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
+import it.unibo.common.DirectionEnum;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -32,26 +31,30 @@ public abstract class BasicHuman implements Human {
     private static final double SPEED = 4.0;
     private boolean canReproduce = true;
     private final Circle reproductionArea;
+    private final Map map;
+    private final HumanType characterType;
     private double x;
     private double y;
     private Sprite sprite;
     private Direction direction = new Direction(false, false, false, false);
     private int numSprite = 1;
     private int spriteCounter;
-    private final Map map;
 
     /**
      * 
      * @param startingPosition the initial position.
      * @param startingSprite the fist sprite to show.
-     * @param map the chapter's map
+     * @param map the chapter's map.
+     * @param characterType the character type.
      */
-    protected BasicHuman(final Position startingPosition, final Sprite startingSprite, final Map map) {
+    protected BasicHuman(final Position startingPosition, final Sprite startingSprite,
+                            final Map map, final HumanType characterType) {
         this.x = startingPosition.x();
         this.y = startingPosition.y();
         this.sprite = startingSprite;
         this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
         this.map = map;
+        this.characterType = characterType;
     }
 
     /**
@@ -63,16 +66,8 @@ public abstract class BasicHuman implements Human {
     public void move() {
         final double oldX = this.x;
         final double oldY = this.y;
-        if (direction.up() && !direction.down()) {
-            this.y -= SPEED;
-        } else if (direction.down() && !direction.up()) {
-            this.y += SPEED;
-        }
-        if (direction.left() && !direction.right()) {
-            this.x -= SPEED;
-        } else if (direction.right() && !direction.left()) {
-            this.x += SPEED;
-        }
+        this.x += SPEED * direction.getDx();
+        this.y += SPEED * direction.getDy();
         if (map.getTileFromPixel(this.x, this.y).isWalkable()) {
             reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
             spriteCounter++;
@@ -120,32 +115,13 @@ public abstract class BasicHuman implements Human {
 
     /**
      * Update the sprite.
-     * @param validSprites the sprites that are valid depending on the subclass.
      */
-    protected final void updateSprite(final List<Sprite> validSprites) {
-        if (direction.up() && !direction.down()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "UP");
-        } else if (direction.down() && !direction.up()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "DOWN");
-        }
-        if (direction.left() && !direction.right()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "LEFT");
-        } else if (direction.right() && !direction.left()) {
-            sprite = getSpriteFromDirection(validSprites.stream(), "RIGHT");
-        }
+    protected final void updateSprite() {
+        sprite = Sprite.getSprite(characterType, DirectionEnum.getDirectionEnum(direction), numSprite).orElse(sprite);
     }
 
-    private Sprite getSpriteFromDirection(final Stream<Sprite> validSprites, final String direction) {
-        return validSprites.filter(s -> s.name().endsWith(direction + "_" + numSprite))
-                        .findFirst()
-                        .orElse(null);
-    }
-
-    /**
-     *
-     * @param newDirection
-     */
-    protected void setDirection(final Direction newDirection) {
+    @Override
+    public final void setDirection(final Direction newDirection) {
         direction = newDirection;
     }
 }

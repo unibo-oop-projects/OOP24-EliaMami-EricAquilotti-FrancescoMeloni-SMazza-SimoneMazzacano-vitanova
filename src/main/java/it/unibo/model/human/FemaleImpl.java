@@ -1,10 +1,8 @@
 package it.unibo.model.human;
 
-import java.util.Arrays;
-import java.util.List;
-
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -12,11 +10,6 @@ import it.unibo.view.sprite.Sprite;
  * produces new humans.
  */
 public final class FemaleImpl extends BasicNPC implements Female {
-
-    private static final List<Sprite> VALID_SPRITES =
-        Arrays.stream(Sprite.values())
-                .filter(s -> s.name().startsWith("FEMALE_"))
-                .toList();
     private static final int REPRODUCTION_COOLDOWN = 100;
     private int reproductionCounter;
 
@@ -26,7 +19,7 @@ public final class FemaleImpl extends BasicNPC implements Female {
      * @param map the chapter's map
      */
     public FemaleImpl(final Position startingPosition, final Map map) {
-        super(startingPosition, Sprite.FEMALE_DOWN_1, map);
+        super(startingPosition, Sprite.FEMALE_DOWN_1, map, HumanType.FEMALE);
         setCanReproduce(true);
     }
 
@@ -40,7 +33,7 @@ public final class FemaleImpl extends BasicNPC implements Female {
             }
         }
         super.move();
-        updateSprite(VALID_SPRITES);
+        updateSprite();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package it.unibo.model.human;
 
 import it.unibo.common.Circle;
+import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
@@ -33,4 +34,10 @@ public interface Human {
      * @return the circle representing the reproduction area.
      */
     Circle reproductionArea();
+
+    /**
+     * 
+     * @param newDirection the new direction the human will face
+     */
+    void setDirection(Direction newDirection);
 }
