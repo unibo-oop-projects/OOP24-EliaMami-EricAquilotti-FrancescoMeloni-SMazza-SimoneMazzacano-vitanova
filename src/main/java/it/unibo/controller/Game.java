@@ -70,6 +70,5 @@ public final class Game implements Runnable {
     private void draw() {
         screen.loadMap(chapter.getMap());
         screen.loadHumans(chapter.getHumans());
-        screen.show();
     }
 }
