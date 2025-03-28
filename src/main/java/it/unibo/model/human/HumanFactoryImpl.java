@@ -10,6 +10,9 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.strategies.movement.MovementStrategy;
 import it.unibo.model.human.strategies.movement.PlayerMovementStrategy;
 import it.unibo.model.human.strategies.movement.RandomMovementStrategy;
+import it.unibo.model.human.strategies.reproduction.FemaleReproductionStrategy;
+import it.unibo.model.human.strategies.reproduction.MaleReproductionStrategy;
+import it.unibo.model.human.strategies.reproduction.ReproductionStrategy;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -20,62 +23,63 @@ public final class HumanFactoryImpl implements HumanFactory {
 
     @Override
     public Human male(final Position startingPosition, final Map map) {
-        return generalised(startingPosition, map, HumanType.MALE, new RandomMovementStrategy());
+        return generalised(
+            startingPosition,
+            map,
+            HumanType.MALE,
+            new RandomMovementStrategy(),
+            new MaleReproductionStrategy(startingPosition)
+        );
     }
 
     @Override
     public Human female(final Position startingPosition, final Map map) {
-        return generalised(startingPosition, map, HumanType.FEMALE, new RandomMovementStrategy());
+        return generalised(
+            startingPosition,
+            map,
+            HumanType.FEMALE,
+            new RandomMovementStrategy(),
+            new FemaleReproductionStrategy(startingPosition)
+        );
     }
 
     @Override
     public Human player(final Position startingPosition, final Map map, final InputHandler inputHandler) {
-        return generalised(startingPosition, map, HumanType.PLAYER, new PlayerMovementStrategy(inputHandler));
+        return generalised(
+            startingPosition,
+            map,
+            HumanType.PLAYER,
+            new PlayerMovementStrategy(inputHandler),
+            new MaleReproductionStrategy(startingPosition)
+        );
     }
 
     private Human generalised(final Position startingPosition, final Map map,
-                                final HumanType humanType, final MovementStrategy movementStrategy) {
+                                final HumanType humanType, final MovementStrategy movementStrategy,
+                                final ReproductionStrategy reproductionStrategy) {
         return new Human() {
-            // I want the center to be around the legs of the human.
-            /**
-             * Offset for the x coordinate of the reproduction circle center.
-             */
-            protected static final int CIRCLE_X_OFFSET = 16;
-            /**
-             * Offset for the y coordinate of the reproduction circle center.
-             */
-            protected static final int CIRCLE_Y_OFFSET = 24;
-            /**
-             * Base radious of the reproduction circle.
-             */
-            private static final int CIRCLE_RADIOUS = 12;
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
             private static final double SPEED = 4.0;
             // private boolean canReproduce = true;
             private double x = startingPosition.x();
             private double y = startingPosition.y();
-            private final Circle reproductionArea = new CircleImpl(
-                x + CIRCLE_X_OFFSET,
-                y + CIRCLE_Y_OFFSET,
-                CIRCLE_RADIOUS
-            );
-            private Sprite sprite;
-            // Initially everyone is facing down.
+            // Initially the human is facing down.
             private Direction direction = new Direction(false, false, true, false);
             private int numSprite = 1;
             private int spriteCounter;
+            private Sprite sprite = nextSprite();
 
             @Override
             public void move() {
-                updateSprite();
+                sprite = nextSprite();
                 direction = movementStrategy.nextDirection(this);
                 final Position nextPosition = nextPosition();
                 if (validPosition(nextPosition)) {
-                    centerReproductionArea();
                     updateSpriteCounter();
                     this.x = nextPosition.x();
                     this.y = nextPosition.y();
                 }
+                reproductionStrategy.update(new Position(x, y));
             }
 
             @Override
@@ -91,19 +95,11 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public Circle reproductionArea() {
                 // Put here the logic for radius multipliers and then remove this comment.
-                return new CircleImpl(this.reproductionArea);
+                return new CircleImpl(reproductionStrategy.getReproductionArea());
             }
 
-            // private void setCanReproduce(final boolean canReproduce) {
-            //     this.canReproduce = canReproduce;
-            // }
-
-            // private boolean canReproduce() {
-            //     return this.canReproduce;
-            // }
-
-            private void updateSprite() {
-                sprite = Sprite.getSprite(
+            private Sprite nextSprite() {
+                return Sprite.getSprite(
                     humanType,
                     DirectionEnum.getDirectionEnum(direction), numSprite
                 ).orElse(sprite);
@@ -115,10 +111,6 @@ public final class HumanFactoryImpl implements HumanFactory {
                     spriteCounter = 0;
                     numSprite = numSprite == 1 ? 2 : 1;
                 }
-            }
-
-            private void centerReproductionArea() {
-                reproductionArea.setCenter(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET);
             }
 
             private boolean validPosition(final Position position) {
@@ -140,6 +132,11 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public HumanType getType() {
                 return humanType;
+            }
+
+            @Override
+            public boolean collide(final Human other) {
+                return reproductionStrategy.collide(other);
             }
         };
     }

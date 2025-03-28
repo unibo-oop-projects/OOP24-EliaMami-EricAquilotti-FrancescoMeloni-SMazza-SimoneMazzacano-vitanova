@@ -47,4 +47,11 @@ public interface Human {
      * @return the type of the human.
      */
     HumanType getType();
+
+    /**
+     * 
+     * @param other the human to collide with.
+     * @return true if the collision happened.
+     */
+    boolean collide(Human other);
 }

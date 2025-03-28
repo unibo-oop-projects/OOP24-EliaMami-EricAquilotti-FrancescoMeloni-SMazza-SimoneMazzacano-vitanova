@@ -15,7 +15,6 @@ import it.unibo.controller.InputHandler;
 import it.unibo.controller.InputHandlerImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
-import it.unibo.model.human.strategies.movement.PlayerMovementStrategy;
 import it.unibo.view.screen.ScreenImpl;
 
 /**
@@ -26,7 +25,8 @@ class SolidCollisionsTest {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final JPanel dummyPanel = new JPanel();
     private final Map map = new MapImpl();
-    private Player human;
+    private final HumanFactory humanFactory = new HumanFactoryImpl();
+    private Human human;
     private Position initialPosition;
 
     /**
@@ -44,7 +44,7 @@ class SolidCollisionsTest {
                 }
             }
         }
-        this.human = new PlayerImpl(initialPosition, map, new PlayerMovementStrategy(inputHandler));
+        this.human = humanFactory.player(initialPosition, map, inputHandler);
     }
 
     @Test
