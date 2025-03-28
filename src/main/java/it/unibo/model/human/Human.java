@@ -37,7 +37,7 @@ public interface Human {
 
     /**
      * 
-     * @param newDirection the new direction the human will face
+     * @return the current direction of the human.
      */
-    void setDirection(Direction newDirection);
+    Direction getDirection();
 }

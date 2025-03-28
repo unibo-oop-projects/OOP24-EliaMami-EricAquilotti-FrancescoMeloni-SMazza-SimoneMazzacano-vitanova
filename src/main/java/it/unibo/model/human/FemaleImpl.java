@@ -2,6 +2,7 @@ package it.unibo.model.human;
 
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.human.strategies.RandomMovementStrategy;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -9,7 +10,7 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of a female human that moves randomly around the map and
  * produces new humans.
  */
-public final class FemaleImpl extends BasicNPC implements Female {
+public final class FemaleImpl extends BasicHuman implements Female {
     private static final int REPRODUCTION_COOLDOWN = 100;
     private int reproductionCounter;
 
@@ -19,7 +20,7 @@ public final class FemaleImpl extends BasicNPC implements Female {
      * @param map the chapter's map
      */
     public FemaleImpl(final Position startingPosition, final Map map) {
-        super(startingPosition, Sprite.FEMALE_DOWN_1, map, HumanType.FEMALE);
+        super(startingPosition, Sprite.FEMALE_DOWN_1, map, HumanType.FEMALE, new RandomMovementStrategy());
         setCanReproduce(true);
     }
 
@@ -33,7 +34,6 @@ public final class FemaleImpl extends BasicNPC implements Female {
             }
         }
         super.move();
-        updateSprite();
     }
 
     @Override

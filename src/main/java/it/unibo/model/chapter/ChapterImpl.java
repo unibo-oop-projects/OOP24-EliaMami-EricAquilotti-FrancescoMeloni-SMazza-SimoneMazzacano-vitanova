@@ -21,8 +21,8 @@ import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
 import it.unibo.model.human.Female;
 import it.unibo.model.human.FemaleImpl;
-import it.unibo.model.human.Player;
 import it.unibo.model.human.PlayerImpl;
+import it.unibo.model.human.strategies.PlayerMovementStrategy;
 import it.unibo.view.screen.ScreenImpl;
 
 /**
@@ -30,10 +30,9 @@ import it.unibo.view.screen.ScreenImpl;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 0;
+    private static final int STARTING_FEMALES = 20;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map = new MapImpl();
-    private final InputHandler inputHandler;
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
@@ -44,12 +43,11 @@ public final class ChapterImpl implements Chapter {
      * @param inputHandler
      */
     public ChapterImpl(final InputHandler inputHandler) {
-        this.inputHandler = inputHandler;
         final Position centerPosition = new Position(
             (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2,
             (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2
         );
-        this.humans.add(new PlayerImpl(centerPosition, map));
+        this.humans.add(new PlayerImpl(centerPosition, map, new PlayerMovementStrategy(inputHandler)));
         for (int i = 0; i < STARTING_FEMALES; i++) {
             this.humans.add(new FemaleImpl(randomPosition(centerPosition), map));
         }
@@ -57,8 +55,6 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public void update() {
-        final Player player = (Player) getPlayer();
-        player.setDirection(inputHandler.getDirection());
         for (final Human human : humans) {
             human.move();
         }

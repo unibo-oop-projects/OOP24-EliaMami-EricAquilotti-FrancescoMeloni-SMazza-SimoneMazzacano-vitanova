@@ -6,6 +6,7 @@ import it.unibo.common.Direction;
 import it.unibo.common.DirectionEnum;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.human.strategies.MovementStrategy;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -33,6 +34,7 @@ public abstract class BasicHuman implements Human {
     private final Circle reproductionArea;
     private final Map map;
     private final HumanType characterType;
+    private final MovementStrategy movementStrategy;
     private double x;
     private double y;
     private Sprite sprite;
@@ -46,15 +48,17 @@ public abstract class BasicHuman implements Human {
      * @param startingSprite the fist sprite to show.
      * @param map the chapter's map.
      * @param characterType the character type.
+     * @param movementStrategy the movement strategy of the human.
      */
     protected BasicHuman(final Position startingPosition, final Sprite startingSprite,
-                            final Map map, final HumanType characterType) {
+                            final Map map, final HumanType characterType, final MovementStrategy movementStrategy) {
         this.x = startingPosition.x();
         this.y = startingPosition.y();
         this.sprite = startingSprite;
         this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
         this.map = map;
         this.characterType = characterType;
+        this.movementStrategy = movementStrategy;
     }
 
     /**
@@ -66,6 +70,7 @@ public abstract class BasicHuman implements Human {
     public void move() {
         final double oldX = this.x;
         final double oldY = this.y;
+        direction = movementStrategy.nextDirection(this);
         this.x += SPEED * direction.getDx();
         this.y += SPEED * direction.getDy();
         if (map.getTileFromPixel(this.x, this.y).isWalkable()) {
@@ -79,6 +84,7 @@ public abstract class BasicHuman implements Human {
             this.x = oldX;
             this.y = oldY;
         }
+        updateSprite();
     }
 
     @Override
@@ -121,7 +127,7 @@ public abstract class BasicHuman implements Human {
     }
 
     @Override
-    public final void setDirection(final Direction newDirection) {
-        direction = newDirection;
+    public final Direction getDirection() {
+        return direction;
     }
 }
