@@ -17,8 +17,8 @@ import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
-import it.unibo.model.human.Player;
 import it.unibo.model.tile.Tile;
+import it.unibo.view.sprite.HumanType;
 
 /**
  * Class that handles all the rendering on the screen.
@@ -116,7 +116,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         humansToDraw.ifPresent(humans -> {
             for (final Human human : humans) {
-                final Position screenPosition = (human instanceof Player)
+                final Position screenPosition = (human.getType() == HumanType.PLAYER)
                     ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);

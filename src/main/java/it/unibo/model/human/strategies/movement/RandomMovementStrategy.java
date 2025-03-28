@@ -1,4 +1,4 @@
-package it.unibo.model.human.strategies;
+package it.unibo.model.human.strategies.movement;
 
 import java.util.Random;
 

@@ -3,6 +3,7 @@ package it.unibo.model.human;
 import it.unibo.common.Circle;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -40,4 +41,10 @@ public interface Human {
      * @return the current direction of the human.
      */
     Direction getDirection();
+
+    /**
+     * 
+     * @return the type of the human.
+     */
+    HumanType getType();
 }

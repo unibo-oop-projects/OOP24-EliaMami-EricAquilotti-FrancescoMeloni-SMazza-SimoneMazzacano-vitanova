@@ -2,9 +2,8 @@ package it.unibo.model.human;
 
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
-import it.unibo.model.human.strategies.MovementStrategy;
+import it.unibo.model.human.strategies.movement.MovementStrategy;
 import it.unibo.view.sprite.HumanType;
-import it.unibo.view.sprite.Sprite;
 
 /**
  * Implementation of a player that is moved by the user.
@@ -18,7 +17,7 @@ public final class PlayerImpl extends BasicHuman implements Player {
      * @param movementStrategy the movement brhavior of the player.
      */
     public PlayerImpl(final Position startingPosition, final Map map, final MovementStrategy movementStrategy) {
-        super(startingPosition, Sprite.PLAYER_DOWN_1, map, HumanType.PLAYER, movementStrategy);
+        super(startingPosition, map, HumanType.PLAYER, movementStrategy);
     }
 
     @Override
@@ -33,4 +32,9 @@ public final class PlayerImpl extends BasicHuman implements Player {
         throw new UnsupportedOperationException("Unimplemented method 'setHitRadiousMultiplier'");
     }
 
+
+    @Override
+    public HumanType getType() {
+        return HumanType.PLAYER;
+    }
 }

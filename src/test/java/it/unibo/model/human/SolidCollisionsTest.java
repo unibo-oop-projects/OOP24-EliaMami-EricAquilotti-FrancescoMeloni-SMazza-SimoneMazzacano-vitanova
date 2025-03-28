@@ -15,7 +15,7 @@ import it.unibo.controller.InputHandler;
 import it.unibo.controller.InputHandlerImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
-import it.unibo.model.human.strategies.PlayerMovementStrategy;
+import it.unibo.model.human.strategies.movement.PlayerMovementStrategy;
 import it.unibo.view.screen.ScreenImpl;
 
 /**

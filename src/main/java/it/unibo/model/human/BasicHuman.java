@@ -6,7 +6,7 @@ import it.unibo.common.Direction;
 import it.unibo.common.DirectionEnum;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
-import it.unibo.model.human.strategies.MovementStrategy;
+import it.unibo.model.human.strategies.movement.MovementStrategy;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -38,27 +38,27 @@ public abstract class BasicHuman implements Human {
     private double x;
     private double y;
     private Sprite sprite;
-    private Direction direction = new Direction(false, false, false, false);
+    // Initially everyone is facing down.
+    private Direction direction = new Direction(false, false, true, false);
     private int numSprite = 1;
     private int spriteCounter;
 
     /**
      * 
      * @param startingPosition the initial position.
-     * @param startingSprite the fist sprite to show.
      * @param map the chapter's map.
      * @param characterType the character type.
      * @param movementStrategy the movement strategy of the human.
      */
-    protected BasicHuman(final Position startingPosition, final Sprite startingSprite,
-                            final Map map, final HumanType characterType, final MovementStrategy movementStrategy) {
+    protected BasicHuman(final Position startingPosition, final Map map,
+                            final HumanType characterType, final MovementStrategy movementStrategy) {
         this.x = startingPosition.x();
         this.y = startingPosition.y();
-        this.sprite = startingSprite;
         this.reproductionArea = new CircleImpl(x + CIRCLE_X_OFFSET, y + CIRCLE_Y_OFFSET, CIRCLE_RADIOUS);
         this.map = map;
         this.characterType = characterType;
         this.movementStrategy = movementStrategy;
+        updateSprite();
     }
 
     /**

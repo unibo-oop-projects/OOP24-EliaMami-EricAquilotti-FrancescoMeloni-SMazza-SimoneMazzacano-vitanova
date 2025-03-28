@@ -2,9 +2,8 @@ package it.unibo.model.human;
 
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
-import it.unibo.model.human.strategies.RandomMovementStrategy;
+import it.unibo.model.human.strategies.movement.RandomMovementStrategy;
 import it.unibo.view.sprite.HumanType;
-import it.unibo.view.sprite.Sprite;
 
 /**
  * Implementation of a female human that moves randomly around the map and
@@ -20,7 +19,7 @@ public final class FemaleImpl extends BasicHuman implements Female {
      * @param map the chapter's map
      */
     public FemaleImpl(final Position startingPosition, final Map map) {
-        super(startingPosition, Sprite.FEMALE_DOWN_1, map, HumanType.FEMALE, new RandomMovementStrategy());
+        super(startingPosition, map, HumanType.FEMALE, new RandomMovementStrategy());
         setCanReproduce(true);
     }
 
@@ -43,5 +42,10 @@ public final class FemaleImpl extends BasicHuman implements Female {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public HumanType getType() {
+        return HumanType.FEMALE;
     }
 }
