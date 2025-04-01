@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
@@ -43,7 +42,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private int xOffset;
     private int yOffset;
     private final JFrame window = new JFrame();
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
 
     // Marked as transient because they don't need to be serialized.
@@ -79,8 +78,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private void initializeBuffer() {
-        int width = window.getWidth();
-        int height = window.getHeight();
+        final int width = window.getWidth();
+        final int height = window.getHeight();
         if (bufferedImage == null || bufferedImage.getWidth() != width || bufferedImage.getHeight() != height) {
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             bufferGraphics = bufferedImage.createGraphics();

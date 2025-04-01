@@ -17,7 +17,7 @@ import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
 /**
- * Implementation of an NPC Factory that produces NPCs.
+ * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
 

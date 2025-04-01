@@ -119,7 +119,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     private Position randomPosition(final Position reference) {
-        return new Position(
+        final Position r = new Position(
             (int) Math.floor(
                 reference.x()
                     + (random.nextBoolean() ? 1 : -1)
@@ -131,5 +131,10 @@ public final class ChapterImpl implements Chapter {
                         * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
             )
         );
+        return wolkablePosition(r) ? r : randomPosition(reference);
+    }
+
+    private boolean wolkablePosition(final Position position) {
+        return map.getTileFromPixel(position.x(), position.y()).isWalkable();
     }
 }
