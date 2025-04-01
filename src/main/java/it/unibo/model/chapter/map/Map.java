@@ -8,6 +8,18 @@ import it.unibo.model.tile.Tile;
 public interface Map {
     /**
      * 
+     * @return the number of rows of the map.
+     */
+    public int getRows();
+
+    /**
+     * 
+     * @return the number of coloumns of the map.
+     */
+    public int getColoumns();
+    
+    /**
+     * 
      * @return the tiles of the map.
      */
     Tile[][] getTiles();

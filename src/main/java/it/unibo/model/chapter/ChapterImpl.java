@@ -26,9 +26,9 @@ import it.unibo.view.sprite.HumanType;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 100;
+    private static final int STARTING_FEMALES = 10;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private final Map map = new MapImpl();
+    private final Map map;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
@@ -39,10 +39,11 @@ public final class ChapterImpl implements Chapter {
      * Sets up all the parameters.
      * @param inputHandler
      */
-    public ChapterImpl(final InputHandler inputHandler) {
+    public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
+        map = new MapImpl(STARTING_FEMALES, STARTING_FEMALES);
         final Position centerPosition = new Position(
-            (MapImpl.MAP_ROW - 1) * ScreenImpl.TILE_SIZE / 2,
-            (MapImpl.MAP_COL - 1) * ScreenImpl.TILE_SIZE / 2
+            (map.getRows() - 1) * ScreenImpl.TILE_SIZE / 2,
+            (map.getColoumns() - 1) * ScreenImpl.TILE_SIZE / 2
         );
         this.humans.add(humanFactory.player(centerPosition, map, inputHandler));
         for (int i = 0; i < STARTING_FEMALES; i++) {
@@ -87,8 +88,8 @@ public final class ChapterImpl implements Chapter {
         final QuadTree tree = new QuadTreeImpl(
             new RectangleImpl(
                 new Position(0, 0),
-                MapImpl.MAP_ROW * ScreenImpl.TILE_SIZE,
-                MapImpl.MAP_COL * ScreenImpl.TILE_SIZE
+                map.getRows() * ScreenImpl.TILE_SIZE,
+                map.getColoumns() * ScreenImpl.TILE_SIZE
             )
         );
         fillTree(tree);

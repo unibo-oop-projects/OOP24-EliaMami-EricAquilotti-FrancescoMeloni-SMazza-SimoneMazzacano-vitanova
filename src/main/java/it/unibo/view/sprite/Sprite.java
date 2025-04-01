@@ -113,15 +113,7 @@ public enum Sprite {
     /**
      * Female human facing left.
      */
-    FEMALE_LEFT_2("human/female/left_2.png"),
-    /**
-     * Grass tile.
-     */
-    TILE_GRASS("tile/grass.png"),
-    /**
-     * Water tile.
-     */
-    TILE_WATER("tile/water.png");
+    FEMALE_LEFT_2("human/female/left_2.png");
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;

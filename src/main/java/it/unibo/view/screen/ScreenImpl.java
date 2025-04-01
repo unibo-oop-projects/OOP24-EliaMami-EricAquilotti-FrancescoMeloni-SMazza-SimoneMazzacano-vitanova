@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
