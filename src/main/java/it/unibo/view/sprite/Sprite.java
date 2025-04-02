@@ -113,7 +113,15 @@ public enum Sprite {
     /**
      * Female human facing left.
      */
-    FEMALE_LEFT_2("human/female/left_2.png");
+    FEMALE_LEFT_2("human/female/left_2.png"),
+    /**
+     * Grass tile.
+     */
+    TILE_GRASS("tile/grass.png"),
+    /**
+     * Water tile.
+     */
+    TILE_WATER("tile/water.png");
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
@@ -164,5 +172,14 @@ public enum Sprite {
             return Optional.empty();
         }
         return Optional.of(SPRITE_CHARACTERS_MAP.get(type).get(direction)[frame % 2]);
+    }
+
+    /**
+     * @throws IllegalArgumentException if the specified enum type has no constant with the specified name, or the specified class object does not represent an enum type
+     * @param type the type of tile we want to get the sprite of.
+     * @return the correct sprite if the human is moving.
+     */
+    public static Sprite getSprite(final String path) {
+        return valueOf(path);
     }
 }

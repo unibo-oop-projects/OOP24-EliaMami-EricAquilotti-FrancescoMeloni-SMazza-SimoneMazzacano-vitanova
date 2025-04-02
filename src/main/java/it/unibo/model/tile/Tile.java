@@ -12,31 +12,26 @@ import it.unibo.view.sprite.Sprite;
  */
 public interface Tile {
     /**
-     * 
+     * @throws IllegalStateException when the tile has not been set.
      * @return true if a human can walk on the tile.
      */
     boolean isWalkable();
 
     /**
-     * 
+     * @throws IllegalStateException when the tile has not been set.
      * @return the relative sprite.
      */
     Sprite getSprite();
 
     /**
-     * 
-     * @return the number of possible tile types.
+     * @return the number of possible tile types, if the returned value is 0,
+     * than the tile has been set.
      */
     int getEntropy();
 
     /**
-     * 
-     * @return the type of the relative tile.
-     */
-    Optional<TileType> getTileType();
-
-    /**
-     * Adds the {@code tile} as a neighbour
+     * Adds the {@code tile} as a neighbour, if is already present an entry with {@code direction}
+     * as a key, then the {@code value} become the {@code tile}.
      * @param direction where the {@code tile} is 
      */
     void addNeighbour(Tile tile, DirectionEnum direction);

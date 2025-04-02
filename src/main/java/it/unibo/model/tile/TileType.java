@@ -36,6 +36,21 @@ public enum TileType {
      * 
      * @return the image path that corresponds to {@code tileType}.
      */
+    public static boolean isWalkable(TileType tileType) {
+        switch (tileType) {
+            case TILE_GRASS:
+                return true;
+            case TILE_WATER:
+                return false;
+            default:
+                throw new IllegalArgumentException("The tile type does not exist.");
+        }
+    }
+
+    /**
+     * 
+     * @return the image path that corresponds to {@code tileType}.
+     */
     public static String getPath(TileType tileType) {
         switch (tileType) {
             case TILE_GRASS:
