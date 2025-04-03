@@ -12,6 +12,7 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 
 import it.unibo.common.DirectionEnum;
+import it.unibo.model.tile.TileType;
 
 /**
  * Set of sprites for the tiles and humans.
@@ -126,6 +127,7 @@ public enum Sprite {
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
     private static final Map<HumanType, Map<DirectionEnum, Sprite[]>> SPRITE_CHARACTERS_MAP = new EnumMap<>(HumanType.class);
+    private static final Map<TileType, Sprite> SPRITE_TILES_MAP = new EnumMap<>(TileType.class);
     static {
         for (final HumanType type : HumanType.values()) {
             final Map<DirectionEnum, Sprite[]> directionMap = new EnumMap<>(DirectionEnum.class);
@@ -138,6 +140,9 @@ public enum Sprite {
                     );
                 }
             SPRITE_CHARACTERS_MAP.put(type, directionMap);
+        }
+        for (TileType tileType : TileType.values()) {
+            SPRITE_TILES_MAP.put(tileType, valueOf("" + tileType));
         }
     }
 
@@ -175,11 +180,12 @@ public enum Sprite {
     }
 
     /**
-     * @throws IllegalArgumentException if the specified enum type has no constant with the specified name, or the specified class object does not represent an enum type
-     * @param type the type of tile we want to get the sprite of.
+     * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
+     * or the specified class object does not represent an enum type.
+     * @param tileType the tile type we want to get the sprite of.
      * @return the correct sprite if the human is moving.
      */
-    public static Sprite getSprite(final String path) {
-        return valueOf(path);
+    public static Sprite getSprite(final TileType tileType) {
+        return SPRITE_TILES_MAP.get(tileType);
     }
 }

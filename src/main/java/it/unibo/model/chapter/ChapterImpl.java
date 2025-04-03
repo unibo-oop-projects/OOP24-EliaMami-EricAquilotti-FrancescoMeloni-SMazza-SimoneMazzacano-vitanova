@@ -38,9 +38,11 @@ public final class ChapterImpl implements Chapter {
     /**
      * Sets up all the parameters.
      * @param inputHandler
+     * @param rows the number of rows of the map.
+     * @param coloumns the number of coloumns of the map.
      */
     public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
-        map = new MapImpl(STARTING_FEMALES, STARTING_FEMALES);
+        map = new MapImpl(rows, coloumns);
         final Position centerPosition = new Position(
             (map.getRows() - 1) * ScreenImpl.TILE_SIZE / 2,
             (map.getColoumns() - 1) * ScreenImpl.TILE_SIZE / 2

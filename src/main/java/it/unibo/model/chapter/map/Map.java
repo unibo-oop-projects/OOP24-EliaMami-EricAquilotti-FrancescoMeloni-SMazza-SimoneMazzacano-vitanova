@@ -10,14 +10,14 @@ public interface Map {
      * 
      * @return the number of rows of the map.
      */
-    public int getRows();
+    int getRows();
 
     /**
      * 
      * @return the number of coloumns of the map.
      */
-    public int getColoumns();
-    
+    int getColoumns();
+
     /**
      * 
      * @return the tiles of the map.

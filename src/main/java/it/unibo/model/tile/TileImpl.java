@@ -1,6 +1,7 @@
 package it.unibo.model.tile;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,18 +10,19 @@ import java.util.Optional;
 import it.unibo.common.DirectionEnum;
 import it.unibo.view.sprite.Sprite;
 
-public class TileImpl implements Tile {
+/**
+ * Implementation of {@code Tile}.
+ * @see Tile
+ */
+public final class TileImpl implements Tile {
 
-    private final List<TileType> possibleTiles = new LinkedList<>(TileType.getRules().keySet());
+    private List<TileType> possibleTiles = Arrays.asList(TileType.values());
     private int entropy = possibleTiles.size();
-    private final Map<DirectionEnum, Tile> neighbours = new HashMap<>();
-
-    public TileImpl() {
-    }
+    private final Map<DirectionEnum, Tile> neighbours = new EnumMap<>(DirectionEnum.class);
 
     @Override
     public boolean isWalkable() {
-        var tile = getTileType();
+        final var tile = getTileType();
         if (tile.isEmpty()) {
             throw new IllegalStateException("The tile has not been set.");
         }
@@ -29,16 +31,16 @@ public class TileImpl implements Tile {
 
     @Override
     public Sprite getSprite() {
-        var tile = getTileType();
+        final var tile = getTileType();
         if (tile.isEmpty()) {
             throw new IllegalStateException("The tile has not been set.");
         }
         //not needed try-catch because the path will be always in the enum Sprite.
-        return Sprite.getSprite(TileType.getPath(tile.get()));
+        return Sprite.getSprite(getTileType().get());
     }
 
     private Optional<TileType> getTileType() {
-        return (this.entropy != 0) 
+        return (this.entropy == 0) 
                 ? Optional.of(this.possibleTiles.getFirst())
                 : Optional.empty();
     }
@@ -49,20 +51,20 @@ public class TileImpl implements Tile {
     }
 
     @Override
-    public void addNeighbour(Tile tile, DirectionEnum direction) {
+    public void addNeighbour(final Tile tile, final DirectionEnum direction) {
         this.neighbours.put(direction, tile);
     }
 
     @Override
-    public Optional<Tile> getNeighbour(DirectionEnum direction) {
-        Tile neighbour = this.neighbours.get(direction);
+    public Optional<Tile> getNeighbour(final DirectionEnum direction) {
+        final Tile neighbour = this.neighbours.get(direction);
         return (neighbour != null) ? Optional.of(neighbour)
                 : Optional.empty();
     }
 
     @Override
     public Map<DirectionEnum, Tile> getNeighbours() {
-        return new HashMap<>(this.neighbours);
+        return new EnumMap<>(this.neighbours);
     }
 
     @Override
@@ -72,12 +74,27 @@ public class TileImpl implements Tile {
 
     @Override
     public void collapse() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'collapse'");
+        this.possibleTiles = List.of(choseTileType());
+        this.entropy = 0;
+    }
+
+    private TileType choseTileType() {
+        final List<Integer> weights = this.possibleTiles.stream()
+                .map(TileType::getWeight)
+                .toList();
+        final int totalWeights = weights.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+        int n = (int) Math.abs(System.currentTimeMillis() % totalWeights);
+        int index = -1;
+        for (; n >= 0 && index < this.entropy - 1; index++) {
+            n -= weights.get(index + 1);
+        }
+        return this.possibleTiles.get(index);
     }
 
     @Override
-    public boolean costrain(List<TileType> neighbourPossibleTiles, DirectionEnum direction) {
+    public boolean costrain(final List<TileType> neighbourPossibleTiles, final DirectionEnum direction) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'costrain'");
     }

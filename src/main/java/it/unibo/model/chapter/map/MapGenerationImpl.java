@@ -1,6 +1,10 @@
 package it.unibo.model.chapter.map;
 
-public class MapGenerationImpl implements MapGeneration {
+/**
+ * Implementation of {@code MapGeneration}.
+ * @see MapGeneration
+ */
+public final class MapGenerationImpl implements MapGeneration {
 
     @Override
     public Map generateMap() {

@@ -7,7 +7,7 @@ public enum DirectionEnum {
     /**
      * The direction names.
      */
-    NORTH, EAST, SOUTH, WEST, NONE;
+    UP, RIGHT, DOWN, LEFT, NONE;
 
     /**
      * 
@@ -19,13 +19,13 @@ public enum DirectionEnum {
         final int dy = direction.getDy();
 
         if (dy < 0) {
-            return NORTH;
+            return UP;
         } else if (dx > 0) {
-            return EAST;
+            return RIGHT;
         } else if (dy > 0) {
-            return SOUTH;
+            return DOWN;
         } else if (dx < 0) {
-            return WEST;
+            return LEFT;
         } else {
             return NONE;
         }

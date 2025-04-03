@@ -14,6 +14,8 @@ public final class MapImpl implements Map {
 
     /**
      * Initialize tileIds and loads the map from a file.
+     * @param rows number of the rows of the map
+     * @param coloumns number of the coloumns of the map
      */
     public MapImpl(final int rows, final int coloumns) {
         this.rows = rows;

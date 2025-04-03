@@ -78,8 +78,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private void initializeBuffer() {
-        int width = window.getWidth();
-        int height = window.getHeight();
+        final int width = window.getWidth();
+        final int height = window.getHeight();
         if (bufferedImage == null || bufferedImage.getWidth() != width || bufferedImage.getHeight() != height) {
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             bufferGraphics = bufferedImage.createGraphics();
