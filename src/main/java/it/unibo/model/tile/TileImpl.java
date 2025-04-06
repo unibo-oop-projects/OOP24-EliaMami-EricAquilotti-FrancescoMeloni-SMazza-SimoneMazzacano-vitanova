@@ -16,7 +16,7 @@ import it.unibo.view.sprite.Sprite;
  */
 public final class TileImpl implements Tile {
 
-    private List<TileType> possibleTiles = Arrays.asList(TileType.values());
+    private List<TileType> possibleTiles = new LinkedList<>(Arrays.asList(TileType.values()));
     private int entropy = possibleTiles.size();
     private final Map<DirectionEnum, Tile> neighbours = new EnumMap<>(DirectionEnum.class);
 
@@ -40,7 +40,7 @@ public final class TileImpl implements Tile {
     }
 
     private Optional<TileType> getTileType() {
-        return (this.entropy == 0) 
+        return hasType()
                 ? Optional.of(this.possibleTiles.getFirst())
                 : Optional.empty();
     }
@@ -48,6 +48,10 @@ public final class TileImpl implements Tile {
     @Override
     public int getEntropy() {
         return this.entropy;
+    }
+
+    public boolean hasType() {
+        return this.entropy == 0;
     }
 
     @Override
@@ -94,9 +98,23 @@ public final class TileImpl implements Tile {
     }
 
     @Override
-    public boolean costrain(final List<TileType> neighbourPossibleTiles, final DirectionEnum direction) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'costrain'");
+    public boolean costrain(final DirectionEnum direction) {
+        boolean reduced = false;
+        if (!hasType()) {
+            final var oppositeDirection = DirectionEnum.getOpposite(direction);
+            final var connectors = this.neighbours.get(direction).getPossibleTiles()
+                    .stream()
+                    .map(p -> TileType.getEdges(p).get(oppositeDirection))
+                    .toList();
+            for (final TileType possibleTileType : this.possibleTiles) {
+                if (!connectors.contains(TileType.getEdges(possibleTileType).get(direction))) {
+                    this.possibleTiles.remove(possibleTileType);
+                    reduced = true;
+                }
+            }
+            this.entropy = this.possibleTiles.size();
+        }
+        return reduced;
     }
 
 }

@@ -55,41 +55,57 @@ class TileTest {
     @Test
     void isWalkableTest() {
         assertThrowsExactly(IllegalStateException.class, new Executable() {
+            @Override
             public void execute() throws Throwable {
                 tile.isWalkable();
-            }       
+            }
         });
         tile.collapse();
         assertDoesNotThrow(new Executable() {
+            @Override
             public void execute() throws Throwable {
                 tile.isWalkable();
-            }       
+            }
         });
         assertNotNull(tile.isWalkable());
     }
 
     @Test
-    void getSpriteTest() {
+    void spriteTest() {
         assertThrowsExactly(IllegalStateException.class, new Executable() {
+            @Override
             public void execute() throws Throwable {
                 tile.getSprite();
-            }       
+            }
         });
         tile.collapse();
         assertDoesNotThrow(new Executable() {
+            @Override
             public void execute() throws Throwable {
                 tile.getSprite();
-            }       
+            }
         });
-        var a = tile.getSprite();
+        final var a = tile.getSprite();
         assertNotNull(a);
     }
 
     @Test
-    void getEntropyTest() {
+    void entropyTest() {
         assertEquals(TileType.values().length, tile.getEntropy());
         tile.collapse();
         assertEquals(0, tile.getEntropy());
+    }
+
+    @Test 
+    void costrainTest() {
+        final Tile tile2 = new TileImpl();
+        final int entropyTile2 = tile2.getEntropy();
+        tile2.addNeighbour(tile, DirectionEnum.RIGHT);
+        assertEquals(tile.getEntropy(), entropyTile2);
+        tile.collapse();
+        assertNotEquals(tile.getEntropy(), entropyTile2);
+        assertTrue(tile2.costrain(DirectionEnum.RIGHT));
+        assertNotEquals(entropyTile2, tile2.getEntropy());
     }
 
 }

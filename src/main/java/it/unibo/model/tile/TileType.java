@@ -1,6 +1,8 @@
 package it.unibo.model.tile;
 
-import java.util.Set;
+import java.util.Map;
+
+import it.unibo.common.DirectionEnum;
 
 /**
  * Enum representing all types of tiles.
@@ -19,12 +21,18 @@ public enum TileType {
      * @param tileType the tile's type we want to know the edges.
      * @return a Set of all the edges, on the directions [North, East, South, West], of a {@code tileType}.
      */
-    public static Set<TileEdge> getEdges(final TileType tileType) {
+    public static Map<DirectionEnum, TileEdge> getEdges(final TileType tileType) {
         switch (tileType) {
             case TILE_GRASS:
-                return Set.of(TileEdge.EDGE_GRASS, TileEdge.EDGE_GRASS, TileEdge.EDGE_GRASS, TileEdge.EDGE_GRASS);
+                return Map.of(DirectionEnum.UP, TileEdge.EDGE_GRASS, 
+                        DirectionEnum.RIGHT, TileEdge.EDGE_GRASS, 
+                        DirectionEnum.DOWN, TileEdge.EDGE_GRASS, 
+                        DirectionEnum.LEFT, TileEdge.EDGE_GRASS);
             default:
-                return Set.of(TileEdge.EDGE_GRASS, TileEdge.EDGE_GRASS, TileEdge.EDGE_GRASS, TileEdge.EDGE_GRASS);
+                return Map.of(DirectionEnum.UP, TileEdge.EDGE_GRASS, 
+                        DirectionEnum.RIGHT, TileEdge.EDGE_WATER, 
+                        DirectionEnum.DOWN, TileEdge.EDGE_GRASS, 
+                        DirectionEnum.LEFT, TileEdge.EDGE_WATER);
         }
     }
 

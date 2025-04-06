@@ -24,16 +24,20 @@ public interface Tile {
     Sprite getSprite();
 
     /**
-     * @return the number of possible tile types, if the returned value is 0,
-     * than the tile has been set.
+     * @return the number of possible tile types.
      */
     int getEntropy();
 
     /**
+     * @return true if the tile type has been set.
+     */
+    boolean hasType();
+
+    /**
      * Adds the {@code tile} as a neighbour, if is already present an entry with {@code direction}
      * as a key, then the {@code value} become the {@code tile}.
-     * @param tile the tile that hash to be added as the neighbour
-     * @param direction where the {@code tile} is 
+     * @param tile the tile that hash to be added as the neighbour.
+     * @param direction where the {@code tile} is.
      */
     void addNeighbour(Tile tile, DirectionEnum direction);
 
@@ -60,10 +64,9 @@ public interface Tile {
 
     /**
      * If it can, reduces the possible tiles.
-     * @param neighbourPossibleTiles possible tiles of the neighbour
-     * @param direction where the current tile is relative to the neighbouring one
+     * @param direction of where the neighbour tile is relative to the current one.
      * @return true if the possible tiles have been reduced.
      */
-    boolean costrain(List<TileType> neighbourPossibleTiles, DirectionEnum direction);
+    boolean costrain(DirectionEnum direction);
 
 }

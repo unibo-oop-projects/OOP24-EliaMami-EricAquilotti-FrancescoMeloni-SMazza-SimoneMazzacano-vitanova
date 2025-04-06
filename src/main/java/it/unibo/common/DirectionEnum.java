@@ -30,4 +30,23 @@ public enum DirectionEnum {
             return NONE;
         }
     }
+
+    /**
+     * @param direction the direction we want the opposite.
+     * @return the opposite direction.
+     */
+    public static DirectionEnum getOpposite(final DirectionEnum direction) {
+        switch (direction) {
+            case UP:
+                return DOWN;
+            case RIGHT:
+                return LEFT;
+            case DOWN:
+                return UP;
+            case LEFT:
+                return RIGHT;
+            default:
+                return NONE;
+        }
+    }
 }

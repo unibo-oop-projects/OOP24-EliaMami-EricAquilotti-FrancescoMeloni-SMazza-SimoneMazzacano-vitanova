@@ -141,8 +141,8 @@ public enum Sprite {
                 }
             SPRITE_CHARACTERS_MAP.put(type, directionMap);
         }
-        for (TileType tileType : TileType.values()) {
-            SPRITE_TILES_MAP.put(tileType, valueOf("" + tileType));
+        for (final TileType tileType : TileType.values()) {
+            SPRITE_TILES_MAP.put(tileType, valueOf(tileType.toString()));
         }
     }
 
