@@ -1,15 +1,100 @@
 package it.unibo.model.chapter.map;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+
+import it.unibo.common.DirectionEnum;
+import it.unibo.model.tile.Tile;
+import it.unibo.model.tile.TileImpl;
+import it.unibo.model.tile.TileType;
+
 /**
  * Implementation of {@code MapGeneration}.
  * @see MapGeneration
  */
 public final class MapGenerationImpl implements MapGeneration {
 
+    private final int rows;
+    private final int coloumns;
+    private final Tile[][] tiles;
+
+    public MapGenerationImpl(final int rows, final int coloumns) {
+        this.rows = rows;
+        this.coloumns = coloumns;
+        this.tiles = new TileImpl[coloumns][rows];
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < coloumns; x++) {
+                this.tiles[x][y] = new TileImpl();
+            }
+        }
+        addNeighbours();
+    }
+
+    private void addNeighbours() {
+        for (int y = 0; y < this.rows; y++) {
+            for (int x = 0; x < this.coloumns; x++) {
+                if (y > 0) {
+                    tiles[x][y].addNeighbour(tiles[x][y - 1], DirectionEnum.UP);
+                }
+                if (x < this.coloumns - 1) {
+                    tiles[x][y].addNeighbour(tiles[x + 1][y], DirectionEnum.RIGHT);
+                }
+                if (y < this.rows - 1) {
+                    tiles[x][y].addNeighbour(tiles[x][y + 1], DirectionEnum.DOWN);
+                }
+                if (x > 0) {
+                    tiles[x][y].addNeighbour(tiles[x - 1][y], DirectionEnum.LEFT);
+                }
+            }
+        }
+    }
+
     @Override
-    public Map generateMap() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generateMap'");
+    public Tile[][] generateMap() {
+        while (!waveFunctionCollapse()){
+        }
+        return this.tiles;
+    }
+
+    private boolean waveFunctionCollapse() {
+        final var tilesLowestEntropy = getTilesLowestEntropy();
+        if (tilesLowestEntropy.size() == 0) {
+            return true;
+        }
+        final int index = (int) Math.abs(System.currentTimeMillis() % tilesLowestEntropy.size());
+        final var tileCollapsed = tilesLowestEntropy.get(index);
+        tileCollapsed.collapse();
+        final Stack<Tile> stack = new Stack<>();
+        stack.push(tileCollapsed);
+        while (!stack.isEmpty()) {
+            final var currentTile = stack.pop();
+            currentTile.getNeighbours().forEach((d, t) -> {
+                if (!t.hasType() && t.costrain(d)) {
+                    stack.push(t);
+                }
+            });
+        }
+        return false;
+    }
+
+    private List<Tile> getTilesLowestEntropy(){
+        var lowestEntropy = TileType.values().length;
+        final List<Tile> tilesLowestEntropy = new LinkedList<>();
+        for (int y = 0; y < this.rows; y++) {
+            for (int x = 0; x < this.coloumns; x++) {
+                final var currentTile = tiles[x][y];
+                final var tileEntropy = currentTile.getEntropy();
+                if (!currentTile.hasType() && tileEntropy <= lowestEntropy) {
+                    if (tileEntropy < lowestEntropy) {
+                        lowestEntropy = tileEntropy;
+                        tilesLowestEntropy.clear();
+                    }
+                    tilesLowestEntropy.add(currentTile);
+                }
+            }
+        }
+        return tilesLowestEntropy;
     }
 
 }

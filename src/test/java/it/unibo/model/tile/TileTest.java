@@ -104,7 +104,7 @@ class TileTest {
         assertEquals(tile.getEntropy(), entropyTile2);
         tile.collapse();
         assertNotEquals(tile.getEntropy(), entropyTile2);
-        assertTrue(tile2.costrain(DirectionEnum.RIGHT));
+        assertTrue(tile2.costrain(DirectionEnum.LEFT));
         assertNotEquals(entropyTile2, tile2.getEntropy());
     }
 

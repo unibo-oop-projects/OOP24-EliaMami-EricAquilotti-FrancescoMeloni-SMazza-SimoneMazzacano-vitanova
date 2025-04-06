@@ -25,9 +25,10 @@ public interface Map {
     Tile[][] getTiles();
 
     /**
-     * @param x row's coordinates in pixel
-     * @param y coloumn's coordinates in pixel
+     * @param x coloumn's coordinates in pixel
+     * @param y row's coordinates in pixel
      * @return the tile of the map.
+     * @throws IllegalArgumentException if the coordinates are not in the map.
      */
     Tile getTileFromPixel(double x, double y);
 }

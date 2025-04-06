@@ -26,7 +26,7 @@ import it.unibo.view.sprite.HumanType;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 10;
+    private static final int STARTING_FEMALES = 0;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
@@ -44,8 +44,8 @@ public final class ChapterImpl implements Chapter {
     public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
         map = new MapImpl(rows, coloumns);
         final Position centerPosition = new Position(
-            (map.getRows() - 1) * ScreenImpl.TILE_SIZE / 2,
-            (map.getColoumns() - 1) * ScreenImpl.TILE_SIZE / 2
+            (map.getColoumns() - 1) * ScreenImpl.TILE_SIZE / 2,
+            (map.getRows() - 1) * ScreenImpl.TILE_SIZE / 2
         );
         this.humans.add(humanFactory.player(centerPosition, map, inputHandler));
         for (int i = 0; i < STARTING_FEMALES; i++) {

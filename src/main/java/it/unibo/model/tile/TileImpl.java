@@ -102,12 +102,12 @@ public final class TileImpl implements Tile {
         boolean reduced = false;
         if (!hasType()) {
             final var oppositeDirection = DirectionEnum.getOpposite(direction);
-            final var connectors = this.neighbours.get(direction).getPossibleTiles()
+            final var connectors = this.neighbours.get(oppositeDirection).getPossibleTiles()
                     .stream()
-                    .map(p -> TileType.getEdges(p).get(oppositeDirection))
+                    .map(p -> TileType.getEdges(p).get(direction))
                     .toList();
             for (final TileType possibleTileType : this.possibleTiles) {
-                if (!connectors.contains(TileType.getEdges(possibleTileType).get(direction))) {
+                if (!connectors.contains(TileType.getEdges(possibleTileType).get(oppositeDirection))) {
                     this.possibleTiles.remove(possibleTileType);
                     reduced = true;
                 }

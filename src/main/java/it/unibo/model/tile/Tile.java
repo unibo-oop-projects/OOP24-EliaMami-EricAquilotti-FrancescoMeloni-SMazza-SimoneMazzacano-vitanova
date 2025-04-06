@@ -64,7 +64,7 @@ public interface Tile {
 
     /**
      * If it can, reduces the possible tiles.
-     * @param direction of where the neighbour tile is relative to the current one.
+     * @param direction of where the current tile is relative to the neighbouring one.
      * @return true if the possible tiles have been reduced.
      */
     boolean costrain(DirectionEnum direction);

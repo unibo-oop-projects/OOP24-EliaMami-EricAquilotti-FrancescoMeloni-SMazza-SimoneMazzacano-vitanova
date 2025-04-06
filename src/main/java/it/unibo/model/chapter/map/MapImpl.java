@@ -20,7 +20,7 @@ public final class MapImpl implements Map {
     public MapImpl(final int rows, final int coloumns) {
         this.rows = rows;
         this.coloumns = coloumns;
-        this.tiles = null;
+        this.tiles = new MapGenerationImpl(rows, coloumns).generateMap();
     }
 
     @Override
@@ -42,7 +42,10 @@ public final class MapImpl implements Map {
     public Tile getTileFromPixel(final double x, final double y) {
         final int newX = (int) (x + ScreenImpl.TILE_SIZE / 2) / ScreenImpl.TILE_SIZE;
         final int newY = (int) (y + ScreenImpl.TILE_SIZE / 2)  / ScreenImpl.TILE_SIZE;
-        return tiles[newX][newY];
+        if (newX <= this.coloumns && newY <= this.rows) {
+            return tiles[newX][newY];
+        }
+        throw new IllegalArgumentException("The coordinates are not in the map.");
     }
 
 }

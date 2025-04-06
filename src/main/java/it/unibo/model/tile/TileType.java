@@ -24,14 +24,14 @@ public enum TileType {
     public static Map<DirectionEnum, TileEdge> getEdges(final TileType tileType) {
         switch (tileType) {
             case TILE_GRASS:
-                return Map.of(DirectionEnum.UP, TileEdge.EDGE_GRASS, 
-                        DirectionEnum.RIGHT, TileEdge.EDGE_GRASS, 
-                        DirectionEnum.DOWN, TileEdge.EDGE_GRASS, 
+                return Map.of(DirectionEnum.UP, TileEdge.EDGE_GRASS,
+                        DirectionEnum.RIGHT, TileEdge.EDGE_GRASS,
+                        DirectionEnum.DOWN, TileEdge.EDGE_GRASS,
                         DirectionEnum.LEFT, TileEdge.EDGE_GRASS);
             default:
-                return Map.of(DirectionEnum.UP, TileEdge.EDGE_GRASS, 
-                        DirectionEnum.RIGHT, TileEdge.EDGE_WATER, 
-                        DirectionEnum.DOWN, TileEdge.EDGE_GRASS, 
+                return Map.of(DirectionEnum.UP, TileEdge.EDGE_WATER,
+                        DirectionEnum.RIGHT, TileEdge.EDGE_WATER,
+                        DirectionEnum.DOWN, TileEdge.EDGE_WATER,
                         DirectionEnum.LEFT, TileEdge.EDGE_WATER);
         }
     }
