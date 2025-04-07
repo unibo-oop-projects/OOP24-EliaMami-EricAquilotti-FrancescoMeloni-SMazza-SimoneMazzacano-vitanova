@@ -20,7 +20,7 @@ public final class MapGenerationImpl implements MapGeneration {
     private final int rows;
     private final int coloumns;
     private final Tile[][] tiles;
-    private final Random rand = new Random();
+    private final Random rand = new Random(System.currentTimeMillis());
 
     /**
      * Initialize tileIds and loads the map from a file.
@@ -33,7 +33,7 @@ public final class MapGenerationImpl implements MapGeneration {
         this.tiles = new TileImpl[coloumns][rows];
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < coloumns; x++) {
-                this.tiles[x][y] = new TileImpl();
+                this.tiles[x][y] = newTile(x, y);
             }
         }
         addNeighbours();
@@ -56,6 +56,14 @@ public final class MapGenerationImpl implements MapGeneration {
                 }
             }
         }
+    }
+
+    private Tile newTile(final int x, final int y) {
+        if (y < MapImpl.MARGIN_COLOUMNS || y > coloumns - MapImpl.MARGIN_COLOUMNS
+            || x < MapImpl.MARGIN_ROWS || x > rows - MapImpl.MARGIN_ROWS) {
+            return new TileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
+        }
+        return new TileImpl();
     }
 
     @Override

@@ -156,11 +156,11 @@ public enum TileType {
      */
     public static int getWeight(final TileType tileType) {
         final int weightTileGrass = 750;
-        final int weightTileWater = 25;
+        final int weightTileWater = 4;
         final int weightTileRock = 5;
-        final int weightTileSingleCoast = 8;
-        final int weightTileDoubleCoast = 6;
-        final int weightTileDoubleCoast2 = 2;
+        final int weightTileSingleCoast = 6;
+        final int weightTileDoubleCoast = 8;
+        final int weightTileDoubleCoast2 = 1;
         switch (tileType) {
             case TILE_GRASS:
                 return weightTileGrass;

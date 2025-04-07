@@ -26,7 +26,7 @@ import it.unibo.view.sprite.HumanType;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 0;
+    private static final int STARTING_FEMALES = 5;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map;
     private final HumanFactory humanFactory = new HumanFactoryImpl();

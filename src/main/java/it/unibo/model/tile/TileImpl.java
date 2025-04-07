@@ -16,12 +16,26 @@ import it.unibo.view.sprite.Sprite;
  * @see Tile
  */
 public final class TileImpl implements Tile {
-    /**
-     * Using the default constructor.
-     */
-    private List<TileType> possibleTiles = new LinkedList<>(Arrays.asList(TileType.values()));
-    private int entropy = possibleTiles.size();
+
+    private List<TileType> possibleTiles;
+    private int entropy;
     private final Map<DirectionEnum, Tile> neighbours = new EnumMap<>(DirectionEnum.class);
+
+    /**
+     * Generating a tile with the default list of possible tile.
+     */
+    public TileImpl() {
+        this(new LinkedList<>(Arrays.asList(TileType.values())));
+    }
+
+    /**
+     * Generating a tile with a defined list of possible tile.
+     * @param possibleTiles the list with a defined types of tile.
+     */
+    public TileImpl(final List<TileType> possibleTiles) {
+        this.possibleTiles = new LinkedList<>(possibleTiles);
+        this.entropy = possibleTiles.size();
+    }
 
     @Override
     public boolean isWalkable() {
