@@ -1,72 +1,67 @@
 package it.unibo.model.chapter.map;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Arrays;
 
 import it.unibo.model.tile.Tile;
-import it.unibo.model.tile.TileManager;
 import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Implementation of a game map.
  */
 public final class MapImpl implements Map {
+
+    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     /**
-     * Number of tiles in a map row.
+     * The vertical margin, used to not display the borders of the map.
      */
-    public static final int MAP_COL = 32;
+    public static final int MARGIN_ROWS = (int) SCREEN_SIZE.getHeight() / ScreenImpl.TILE_SIZE;
     /**
-     * Number of tiles in a map column.
+     * The horizontal margin, used to not display the borders of the map.
      */
-    public static final int MAP_ROW = 32;
-    private static final String ROOT_MAP = "it/unibo/view/maps/";
-    private final int[][] tileIds;
+    public static final int MARGIN_COLOUMNS = (int) SCREEN_SIZE.getWidth() / ScreenImpl.TILE_SIZE;
+
+    private final int rows;
+    private final int coloumns;
+    private final Tile[][] tiles;
 
     /**
-     * Initialize tileIds and loads the map from a file.
+     * Sets {@code rows}, {@code coloums} and generate {@code tiles}.
+     * @see MapGeneration
+     * @see MapGenerationImpl
+     * @param rows number of the rows of the map
+     * @param coloumns number of the coloumns of the map
      */
-    public MapImpl() {
-        tileIds = new int[MAP_ROW][MAP_COL];
-        loadMap("test.txt");
+    public MapImpl(final int rows, final int coloumns) {
+        this.rows = rows + MARGIN_ROWS;
+        this.coloumns = coloumns + MARGIN_COLOUMNS;
+        this.tiles = new MapGenerationImpl(this.rows, this.coloumns).generateMap();
     }
 
-    private void loadMap(final String path) {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(ROOT_MAP + path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            String line = br.readLine();
-            int row = 0;
-            while (line != null) {
-                final int[] nums = Arrays.stream(line.split(" "))
-                .mapToInt(Integer::valueOf).toArray();
-                tileIds[row] = Arrays.copyOf(nums, nums.length);
-                line = br.readLine();
-                row++; 
-            }
+    @Override
+    public int getRows() {
+        return this.rows;
+    }
 
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not read the file", e);
-        }
+    @Override
+    public int getColoumns() {
+        return this.coloumns;
     }
 
     @Override
     public Tile[][] getTiles() {
-        return Arrays.stream(tileIds)
-                    .map(row -> Arrays.stream(row)
-                        .mapToObj(TileManager::getTile)
-                        .toArray(Tile[]::new)
-                    )
-                    .toArray(Tile[][]::new);
+        return Arrays.copyOf(this.tiles, coloumns);
     }
 
     @Override
     public Tile getTileFromPixel(final double x, final double y) {
         final int newX = (int) (x + ScreenImpl.TILE_SIZE / 2) / ScreenImpl.TILE_SIZE;
-        final int newY = (int) (y + ScreenImpl.TILE_SIZE / 2)  / ScreenImpl.TILE_SIZE;
-        return TileManager.getTile(tileIds[newX][newY]);
+        final int newY = (int) (y + ScreenImpl.TILE_SIZE  - ScreenImpl.TILE_SIZE / 8)  / ScreenImpl.TILE_SIZE;
+        if (newX <= this.coloumns && newY <= this.rows) {
+            return tiles[newX][newY];
+        }
+        throw new IllegalArgumentException("The coordinates are not in the map.");
     }
 
 }

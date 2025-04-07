@@ -24,7 +24,7 @@ class SolidCollisionsTest {
 
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final JPanel dummyPanel = new JPanel();
-    private final Map map = new MapImpl();
+    private final Map map = new MapImpl(32, 32);
     private final HumanFactory humanFactory = new HumanFactoryImpl();
     private Human human;
     private Position initialPosition;
