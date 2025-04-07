@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import it.unibo.common.DirectionEnum;
 import it.unibo.view.sprite.Sprite;
@@ -15,7 +16,9 @@ import it.unibo.view.sprite.Sprite;
  * @see Tile
  */
 public final class TileImpl implements Tile {
-
+    /**
+     * Using the default constructor.
+     */
     private List<TileType> possibleTiles = new LinkedList<>(Arrays.asList(TileType.values()));
     private int entropy = possibleTiles.size();
     private final Map<DirectionEnum, Tile> neighbours = new EnumMap<>(DirectionEnum.class);
@@ -50,6 +53,7 @@ public final class TileImpl implements Tile {
         return this.entropy;
     }
 
+    @Override
     public boolean hasType() {
         return this.entropy == 0;
     }
@@ -57,13 +61,6 @@ public final class TileImpl implements Tile {
     @Override
     public void addNeighbour(final Tile tile, final DirectionEnum direction) {
         this.neighbours.put(direction, tile);
-    }
-
-    @Override
-    public Optional<Tile> getNeighbour(final DirectionEnum direction) {
-        final Tile neighbour = this.neighbours.get(direction);
-        return (neighbour != null) ? Optional.of(neighbour)
-                : Optional.empty();
     }
 
     @Override
@@ -77,19 +74,19 @@ public final class TileImpl implements Tile {
     }
 
     @Override
-    public void collapse() {
-        this.possibleTiles = List.of(choseTileType());
+    public void collapse(final Random rand) {
+        this.possibleTiles = List.of(choseTileType(rand));
         this.entropy = 0;
     }
 
-    private TileType choseTileType() {
+    private TileType choseTileType(final Random rand) {
         final List<Integer> weights = this.possibleTiles.stream()
                 .map(TileType::getWeight)
                 .toList();
         final int totalWeights = weights.stream()
                 .mapToInt(Integer::intValue)
                 .sum();
-        int n = (int) Math.abs(System.currentTimeMillis() % totalWeights);
+        int n = rand.nextInt(0, totalWeights);
         int index = -1;
         for (; n >= 0 && index < this.entropy - 1; index++) {
             n -= weights.get(index + 1);
@@ -106,12 +103,14 @@ public final class TileImpl implements Tile {
                     .stream()
                     .map(p -> TileType.getEdges(p).get(direction))
                     .toList();
+            final List<TileType> tilesToRemove = new LinkedList<>();
             for (final TileType possibleTileType : this.possibleTiles) {
                 if (!connectors.contains(TileType.getEdges(possibleTileType).get(oppositeDirection))) {
-                    this.possibleTiles.remove(possibleTileType);
+                    tilesToRemove.add(possibleTileType);
                     reduced = true;
                 }
             }
+            this.possibleTiles.removeAll(tilesToRemove);
             this.entropy = this.possibleTiles.size();
         }
         return reduced;

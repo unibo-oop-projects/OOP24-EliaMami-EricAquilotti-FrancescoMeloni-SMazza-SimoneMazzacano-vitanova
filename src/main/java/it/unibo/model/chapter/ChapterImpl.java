@@ -44,8 +44,8 @@ public final class ChapterImpl implements Chapter {
     public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
         map = new MapImpl(rows, coloumns);
         final Position centerPosition = new Position(
-            (map.getColoumns() - 1) * ScreenImpl.TILE_SIZE / 2,
-            (map.getRows() - 1) * ScreenImpl.TILE_SIZE / 2
+            (double) (map.getColoumns() - 1) * ScreenImpl.TILE_SIZE / 2,
+            (double) (map.getRows() - 1) * ScreenImpl.TILE_SIZE / 2
         );
         this.humans.add(humanFactory.player(centerPosition, map, inputHandler));
         for (int i = 0; i < STARTING_FEMALES; i++) {

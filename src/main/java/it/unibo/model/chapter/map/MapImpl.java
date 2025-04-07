@@ -1,5 +1,7 @@
 package it.unibo.model.chapter.map;
 
+import java.util.Arrays;
+
 import it.unibo.model.tile.Tile;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -13,7 +15,9 @@ public final class MapImpl implements Map {
     private final Tile[][] tiles;
 
     /**
-     * Initialize tileIds and loads the map from a file.
+     * Sets {@code rows}, {@code coloums} and generate {@code tiles}.
+     * @see MapGeneration
+     * @see MapGenerationImpl
      * @param rows number of the rows of the map
      * @param coloumns number of the coloumns of the map
      */
@@ -35,7 +39,7 @@ public final class MapImpl implements Map {
 
     @Override
     public Tile[][] getTiles() {
-        return this.tiles;
+        return Arrays.copyOf(this.tiles, coloumns);
     }
 
     @Override

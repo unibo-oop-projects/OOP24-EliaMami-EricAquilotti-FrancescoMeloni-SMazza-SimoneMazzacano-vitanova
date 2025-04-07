@@ -122,7 +122,59 @@ public enum Sprite {
     /**
      * Water tile.
      */
-    TILE_WATER("tile/water.png");
+    TILE_WATER("tile/water.png"),
+    /**
+     * Rock tile.
+     */
+    TILE_ROCK("tile/rock.png"),
+    /**
+     * Upper coast tile.
+     */
+    TILE_COAST_UP("tile/coastUp.png"),
+    /**
+     * Right coast tile.
+     */
+    TILE_COAST_RIGHT("tile/coastRight.png"),
+    /**
+     * Down coast tile.
+     */
+    TILE_COAST_DOWN("tile/coastDown.png"),
+    /**
+     * Left coast tile.
+     */
+    TILE_COAST_LEFT("tile/coastLeft.png"),
+    /**
+     * Upper-Right coast tile.
+     */
+    TILE_COAST_UP_RIGHT("tile/coastUpRight.png"),
+    /**
+     * Right-Down coast tile.
+     */
+    TILE_COAST_RIGHT_DOWN("tile/coastRightDown.png"),
+    /**
+     * Down-Left coast tile.
+     */
+    TILE_COAST_DOWN_LEFT("tile/coastDownLeft.png"),
+    /**
+     * Upper-Left coast tile.
+     */
+    TILE_COAST_UP_LEFT("tile/coastUpLeft.png"),
+    /**
+     * Upper-Right2 coast tile.
+     */
+    TILE_COAST_UP_RIGHT2("tile/coastUpRight2.png"),
+    /**
+     * Right-Down2 coast tile.
+     */
+    TILE_COAST_RIGHT_DOWN2("tile/coastRightDown2.png"),
+    /**
+     * Down-Left2 coast tile.
+     */
+    TILE_COAST_DOWN_LEFT2("tile/coastDownLeft2.png"),
+    /**
+     * Upper-Left2 coast tile.
+     */
+    TILE_COAST_UP_LEFT2("tile/coastUpLeft2.png");
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
@@ -180,6 +232,7 @@ public enum Sprite {
     }
 
     /**
+     * Returns the {@code Sprite} of the tile type given.
      * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
      * or the specified class object does not represent an enum type.
      * @param tileType the tile type we want to get the sprite of.

@@ -8,7 +8,7 @@ import it.unibo.model.tile.Tile;
 public interface MapGeneration {
 
     /**
-     * 
+     * Returns a Matrix of {@code Tile} generated with the Wave Function Collapse Algorithm.
      * @return a random generated Map.
      */
     Tile[][] generateMap();

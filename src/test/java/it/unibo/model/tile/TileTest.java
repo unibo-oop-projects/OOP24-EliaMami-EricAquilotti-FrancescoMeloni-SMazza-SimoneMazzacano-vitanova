@@ -2,11 +2,12 @@ package it.unibo.model.tile;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import it.unibo.common.DirectionEnum;
 class TileTest {
 
     private Tile tile;
+    private final Random rand = new Random();
 
     @BeforeEach
     void initialize() {
@@ -32,9 +34,6 @@ class TileTest {
         final var neighbour = new TileImpl();
         assertNotEquals(tile, neighbour);
         tile.addNeighbour(neighbour, DirectionEnum.UP);
-        assertTrue(tile.getNeighbour(DirectionEnum.UP).isPresent());
-        assertEquals(neighbour, tile.getNeighbour(DirectionEnum.UP).get());
-        assertFalse(tile.getNeighbour(DirectionEnum.RIGHT).isPresent());
         final var neighbours = tile.getNeighbours();
         assertEquals(1, neighbours.size());
         assertEquals(neighbour, neighbours.get(DirectionEnum.UP));
@@ -48,7 +47,7 @@ class TileTest {
     @Test
     void collapseTest() {
         assertNotEquals(1, tile.getPossibleTiles().size());
-        tile.collapse();
+        tile.collapse(rand);
         assertEquals(1, tile.getPossibleTiles().size());
     }
 
@@ -60,7 +59,7 @@ class TileTest {
                 tile.isWalkable();
             }
         });
-        tile.collapse();
+        tile.collapse(rand);
         assertDoesNotThrow(new Executable() {
             @Override
             public void execute() throws Throwable {
@@ -78,7 +77,7 @@ class TileTest {
                 tile.getSprite();
             }
         });
-        tile.collapse();
+        tile.collapse(rand);
         assertDoesNotThrow(new Executable() {
             @Override
             public void execute() throws Throwable {
@@ -92,7 +91,7 @@ class TileTest {
     @Test
     void entropyTest() {
         assertEquals(TileType.values().length, tile.getEntropy());
-        tile.collapse();
+        tile.collapse(rand);
         assertEquals(0, tile.getEntropy());
     }
 
@@ -102,7 +101,7 @@ class TileTest {
         final int entropyTile2 = tile2.getEntropy();
         tile2.addNeighbour(tile, DirectionEnum.RIGHT);
         assertEquals(tile.getEntropy(), entropyTile2);
-        tile.collapse();
+        tile.collapse(rand);
         assertNotEquals(tile.getEntropy(), entropyTile2);
         assertTrue(tile2.costrain(DirectionEnum.LEFT));
         assertNotEquals(entropyTile2, tile2.getEntropy());

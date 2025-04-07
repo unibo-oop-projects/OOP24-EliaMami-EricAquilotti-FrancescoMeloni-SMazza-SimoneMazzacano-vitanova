@@ -42,7 +42,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private int xOffset;
     private int yOffset;
     private final JFrame window = new JFrame();
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService EXECUTOR = Executors.newSingleThreadScheduledExecutor();
 
 
     // Marked as transient because they don't need to be serialized.
@@ -74,7 +74,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         initializeBuffer();
-        executor.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
+        EXECUTOR.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
     }
 
     private void initializeBuffer() {

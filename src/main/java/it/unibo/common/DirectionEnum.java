@@ -32,6 +32,7 @@ public enum DirectionEnum {
     }
 
     /**
+     * Returns the opposite direction of {@code direction}.
      * @param direction the direction we want the opposite.
      * @return the opposite direction.
      */

@@ -11,5 +11,21 @@ public enum TileEdge {
     /**
      * Water edge.
      */
-    EDGE_WATER;
+    EDGE_WATER,
+    /**
+     * Upper coast edge.
+     */
+    EDGE_COAST_UP,
+    /**
+     * Right coast edge.
+     */
+    EDGE_COAST_RIGHT,
+    /**
+     * Down coast edge.
+     */
+    EDGE_COAST_DOWN,
+    /**
+     * Left coast edge.
+     */
+    EDGE_COAST_LEFT;
 }
