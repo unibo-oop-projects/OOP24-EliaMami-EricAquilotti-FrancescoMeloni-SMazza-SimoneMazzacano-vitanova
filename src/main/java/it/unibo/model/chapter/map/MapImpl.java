@@ -28,15 +28,15 @@ public final class MapImpl implements Map {
 
     /**
      * Sets {@code rows}, {@code coloums} and generate {@code tiles}.
-     * @see MapGeneration
-     * @see MapGenerationImpl
+     * @see MapGenerator
+     * @see MapGeneratorImpl
      * @param rows number of the rows of the map
      * @param coloumns number of the coloumns of the map
      */
     public MapImpl(final int rows, final int coloumns) {
         this.rows = rows + MARGIN_ROWS;
         this.coloumns = coloumns + MARGIN_COLOUMNS;
-        this.tiles = new MapGenerationImpl(this.rows, this.coloumns).generateMap();
+        this.tiles = new MapGeneratorImpl(this.rows, this.coloumns).generateMap();
     }
 
     @Override

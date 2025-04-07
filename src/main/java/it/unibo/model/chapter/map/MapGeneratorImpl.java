@@ -13,9 +13,9 @@ import it.unibo.model.tile.TileType;
 
 /**
  * Implementation of {@code MapGeneration}.
- * @see MapGeneration
+ * @see MapGenerator
  */
-public final class MapGenerationImpl implements MapGeneration {
+public final class MapGeneratorImpl implements MapGenerator {
 
     private final int rows;
     private final int coloumns;
@@ -27,7 +27,7 @@ public final class MapGenerationImpl implements MapGeneration {
      * @param rows number of the rows of the map
      * @param coloumns number of the coloumns of the map
      */
-    public MapGenerationImpl(final int rows, final int coloumns) {
+    public MapGeneratorImpl(final int rows, final int coloumns) {
         this.rows = rows;
         this.coloumns = coloumns;
         this.tiles = new TileImpl[coloumns][rows];
