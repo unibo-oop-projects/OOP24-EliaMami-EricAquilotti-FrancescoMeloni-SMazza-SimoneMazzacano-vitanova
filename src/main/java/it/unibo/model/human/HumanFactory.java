@@ -1,0 +1,37 @@
+package it.unibo.model.human;
+
+import it.unibo.common.Position;
+import it.unibo.controller.InputHandler;
+import it.unibo.model.chapter.map.Map;
+
+/**
+ * Models a factory of NPCs that can be male or female.
+ */
+public interface HumanFactory {
+
+    /**
+     * 
+     * @param startingPosition the initial position.
+     * @param map the chapter's map.
+     * @return a new male human that moves randomly.
+     */
+    Human male(Position startingPosition, Map map);
+
+    /**
+     * 
+     * @param startingPosition the initial position.
+     * @param map the chapter's map.
+     * @return a new female human that moves randomly.
+     */
+    Human female(Position startingPosition, Map map);
+
+
+    /**
+     * 
+     * @param startingPosition the initial position.
+     * @param map the chapter's map.
+     * @param inputHandler the handler for the user input.
+     * @return a new player human, the movement is based on the user input.
+     */
+    Human player(Position startingPosition, Map map, InputHandler inputHandler);
+}

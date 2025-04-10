@@ -38,9 +38,4 @@ public interface Screen {
      * @param yOffset
      */
     void setOffset(int xOffset, int yOffset);
-
-    /**
-     * Draws the loaded objects on the screen.
-     */
-    void show();
 }

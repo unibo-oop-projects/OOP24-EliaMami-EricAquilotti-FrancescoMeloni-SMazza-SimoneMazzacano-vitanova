@@ -9,17 +9,19 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
-import it.unibo.model.human.Player;
 import it.unibo.model.tile.Tile;
+import it.unibo.view.sprite.HumanType;
 
 /**
  * Class that handles all the rendering on the screen.
@@ -41,6 +43,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     private int xOffset;
     private int yOffset;
     private final JFrame window = new JFrame();
+    private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
 
     // Marked as transient because they don't need to be serialized.
     private transient Optional<List<Human>> humansToDraw = Optional.empty();
@@ -71,11 +75,16 @@ public final class ScreenImpl extends JPanel implements Screen {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         initializeBuffer();
+        executor.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
     }
 
     private void initializeBuffer() {
-        bufferedImage = new BufferedImage(window.getWidth(), window.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        bufferGraphics = bufferedImage.createGraphics();
+        final int width = window.getWidth();
+        final int height = window.getHeight();
+        if (bufferedImage == null || bufferedImage.getWidth() != width || bufferedImage.getHeight() != height) {
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            bufferGraphics = bufferedImage.createGraphics();
+        }
     }
 
     @Override
@@ -121,7 +130,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         humansToDraw.ifPresent(humans -> {
             for (final Human human : humans) {
-                final Position screenPosition = (human instanceof Player)
+                final Position screenPosition = (human.getType() == HumanType.PLAYER)
                     ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
@@ -172,10 +181,5 @@ public final class ScreenImpl extends JPanel implements Screen {
                 null
             );
         }
-    }
-
-    @Override
-    public void show() {
-        SwingUtilities.invokeLater(this::repaint);
     }
 }

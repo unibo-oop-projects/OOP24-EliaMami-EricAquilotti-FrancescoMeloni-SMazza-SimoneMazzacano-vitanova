@@ -1,7 +1,9 @@
 package it.unibo.model.human;
 
 import it.unibo.common.Circle;
+import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
 /**
@@ -33,4 +35,23 @@ public interface Human {
      * @return the circle representing the reproduction area.
      */
     Circle reproductionArea();
+
+    /**
+     * 
+     * @return the current direction of the human.
+     */
+    Direction getDirection();
+
+    /**
+     * 
+     * @return the type of the human.
+     */
+    HumanType getType();
+
+    /**
+     * 
+     * @param other the human to collide with.
+     * @return true if the collision happened.
+     */
+    boolean collide(Human other);
 }
