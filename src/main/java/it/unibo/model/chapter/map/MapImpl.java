@@ -1,7 +1,5 @@
 package it.unibo.model.chapter.map;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.Arrays;
 
 import it.unibo.model.tile.Tile;
@@ -12,15 +10,14 @@ import it.unibo.view.screen.ScreenImpl;
  */
 public final class MapImpl implements Map {
 
-    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     /**
      * The vertical margin, used to not display the borders of the map.
      */
-    public static final int MARGIN_ROWS = (int) SCREEN_SIZE.getHeight() / ScreenImpl.TILE_SIZE;
+    public static final int MARGIN_ROWS = ScreenImpl.BASE_WINDOW_HEIGHT / ScreenImpl.TILE_SIZE;
     /**
      * The horizontal margin, used to not display the borders of the map.
      */
-    public static final int MARGIN_COLOUMNS = (int) SCREEN_SIZE.getWidth() / ScreenImpl.TILE_SIZE;
+    public static final int MARGIN_COLOUMNS = ScreenImpl.BASE_WINDOW_WIDTH / ScreenImpl.TILE_SIZE;
 
     private final int rows;
     private final int coloumns;
