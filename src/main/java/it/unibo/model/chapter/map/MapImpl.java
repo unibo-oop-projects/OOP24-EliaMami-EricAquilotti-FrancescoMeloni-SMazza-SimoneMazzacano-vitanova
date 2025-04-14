@@ -48,7 +48,7 @@ public final class MapImpl implements Map {
 
     @Override
     public Tile[][] getTiles() {
-        return Arrays.copyOf(this.tiles, coloumns);
+        return Arrays.copyOf(this.tiles, this.coloumns);
     }
 
     @Override

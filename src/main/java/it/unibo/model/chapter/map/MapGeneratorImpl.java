@@ -61,8 +61,8 @@ public final class MapGeneratorImpl implements MapGenerator {
     private Tile newTile(final int x, final int y) {
         final int columnMargin = (int) Math.ceil(MapImpl.MARGIN_COLOUMNS / 2d);
         final int rowMargin = (int) Math.ceil(MapImpl.MARGIN_ROWS / 2d);
-        if (y < columnMargin || y > coloumns - columnMargin
-            || x < rowMargin || x > rows - rowMargin) {
+        if (x < columnMargin || x > coloumns - columnMargin
+            || y < rowMargin || y > rows - rowMargin) {
             return new TileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
         }
         return new TileImpl();
@@ -74,7 +74,7 @@ public final class MapGeneratorImpl implements MapGenerator {
         while (!finished) {
             finished = waveFunctionCollapse();
         }
-        return Arrays.copyOf(this.tiles, coloumns);
+        return Arrays.copyOf(this.tiles, this.coloumns);
     }
 
     private boolean waveFunctionCollapse() {
