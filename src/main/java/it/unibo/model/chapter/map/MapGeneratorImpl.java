@@ -59,8 +59,10 @@ public final class MapGeneratorImpl implements MapGenerator {
     }
 
     private Tile newTile(final int x, final int y) {
-        if (y < MapImpl.MARGIN_COLOUMNS || y > coloumns - MapImpl.MARGIN_COLOUMNS
-            || x < MapImpl.MARGIN_ROWS || x > rows - MapImpl.MARGIN_ROWS) {
+        final int columnMargin = (int) Math.ceil(MapImpl.MARGIN_COLOUMNS / 2d);
+        final int rowMargin = (int) Math.ceil(MapImpl.MARGIN_ROWS / 2d);
+        if (y < columnMargin || y > coloumns - columnMargin
+            || x < rowMargin || x > rows - rowMargin) {
             return new TileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
         }
         return new TileImpl();
