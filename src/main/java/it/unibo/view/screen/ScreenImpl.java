@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import it.unibo.common.Position;
+import it.unibo.common.Text;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
@@ -54,8 +55,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
 
-    private record Text(String content, Position position, Color color, int size) {
-    }
 
     /**
      * 
@@ -97,13 +96,17 @@ public final class ScreenImpl extends JPanel implements Screen {
         humansToDraw = Optional.of(humans);
     }
 
+    private void removeTextByPosition(final Text text) {
+        textToDraw.ifPresent(list -> list.removeIf(toDrawTxt -> toDrawTxt.position().equals(text.position())));
+    }
+
     @Override
     public void loadText(final String text, final Position position, final Color color, final int size) {
-        if (textToDraw.isEmpty()) {
-            textToDraw = Optional.of(new LinkedList<>());
-        }
-        textToDraw.get().removeIf(txt -> txt.position().equals(position));
-        textToDraw.get().add(new Text(text, position, color, size));
+        final Text txt = new Text(text, position, color, size);
+        removeTextByPosition(txt);
+        textToDraw.ifPresentOrElse(list -> list.add(txt), () -> {
+             textToDraw = Optional.of(new ArrayList<>(List.of(txt)));
+        });
     }
 
     private void updateCenter() {
@@ -138,10 +141,10 @@ public final class ScreenImpl extends JPanel implements Screen {
         });
 
         textToDraw.ifPresent(list -> list.forEach(text -> {
-            final Font f = new Font("Verdana", Font.BOLD, text.size);
-            bufferGraphics.setColor(text.color);
+            final Font f = new Font("Verdana", Font.BOLD, text.size());
+            bufferGraphics.setColor(text.color());
             bufferGraphics.setFont(f);
-            bufferGraphics.drawString(text.content, (int) text.position.x(), (int) text.position.y());
+            bufferGraphics.drawString(text.content(), (int) text.position().x(), (int) text.position().y());
         }));
     }
 
