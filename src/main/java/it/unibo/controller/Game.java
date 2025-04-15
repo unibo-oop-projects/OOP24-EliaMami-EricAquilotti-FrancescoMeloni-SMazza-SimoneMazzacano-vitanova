@@ -1,10 +1,11 @@
 package it.unibo.controller;
 
 import java.awt.Color;
-
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
+import it.unibo.view.menu.Menu;
+import it.unibo.view.menu.MenuImpl;
 import it.unibo.view.screen.Screen;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -19,7 +20,7 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final Chapter chapter = new ChapterImpl(inputHandler, 64, 64);
-
+    private final Menu menu = new MenuImpl(inputHandler, this);
     /**
      * Starts the game engine.
      */
@@ -63,6 +64,7 @@ public final class Game implements Runnable {
 
     private void update() {
         chapter.update();
+        menu.update();
         final Position playerPosition = chapter.getPlayer().getPosition();
         screen.setOffset((int) playerPosition.x(), (int) playerPosition.y());
     }
@@ -70,6 +72,7 @@ public final class Game implements Runnable {
     private void draw() {
         screen.loadMap(chapter.getMap());
         screen.loadHumans(chapter.getHumans());
+        screen.loadMenu(menu.getText());
     }
 
     /**

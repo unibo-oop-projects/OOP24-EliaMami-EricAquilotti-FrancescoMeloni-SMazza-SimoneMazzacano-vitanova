@@ -60,6 +60,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient Optional<List<Human>> humansToDraw = Optional.empty();
     private transient Optional<List<Text>> textToDraw = Optional.empty();
     private transient Optional<Map> mapToDraw = Optional.empty();
+    private transient Optional<List<Text>> menuText = Optional.empty();
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
@@ -118,9 +119,26 @@ public final class ScreenImpl extends JPanel implements Screen {
         });
     }
 
+    @Override
+    public void loadMenu(final List<Text> texts) {
+        menuText = Optional.of(texts);
+    }
+
     private void updateCenter() {
         centerX = window.getWidth() / 2 - TILE_SIZE / 2;
         centerY = window.getHeight() / 2 - TILE_SIZE / 2;
+    }
+
+    private void drawText(final Optional<List<Text>> texts, final boolean alignedCenter) {
+        final Optional<List<Text>> copyTexts = texts.map(ArrayList::new); // to avoid concurrent modifications on iterated list
+        copyTexts.ifPresent(list -> list.forEach(text -> {
+            final Font f = new Font("Verdana", Font.BOLD, text.size());
+            bufferGraphics.setColor(text.color());
+            bufferGraphics.setFont(f);
+
+            bufferGraphics.drawString(text.content(), (int) text.position().x() + (alignedCenter ? this.centerX : 0), 
+            (int) text.position().y() + (alignedCenter ? this.centerY : 0));
+        }));
     }
 
     private void redrawBuffer() {
@@ -149,12 +167,8 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
         });
 
-        textToDraw.ifPresent(list -> list.forEach(text -> {
-            final Font f = new Font("Verdana", Font.BOLD, text.size());
-            bufferGraphics.setColor(text.color());
-            bufferGraphics.setFont(f);
-            bufferGraphics.drawString(text.content(), (int) text.position().x(), (int) text.position().y());
-        }));
+        drawText(textToDraw, false);
+        drawText(menuText, true);
     }
 
     private Position screenPosition(final Position position) {

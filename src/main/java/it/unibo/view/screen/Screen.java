@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.List;
 
 import it.unibo.common.Position;
+import it.unibo.common.Text;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 
@@ -19,6 +20,12 @@ public interface Screen {
      * @param size the size of the text.
      */
     void loadText(String text, Position position, Color color, int size);
+
+    /**
+     * 
+     * @param texts content that represent the menu
+     */
+    void loadMenu(List<Text> texts);
 
     /**
      * 
