@@ -2,6 +2,7 @@ package it.unibo.view.menu;
 
 import it.unibo.common.Position;
 import it.unibo.common.Text;
+import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -40,13 +41,16 @@ public final class MenuImpl implements Menu {
     private boolean isHidden = true;
     private int timer = TIMER_VALUE;
     private final List<Text> textToShow = new ArrayList<>();
+    private final Game game;
 
     /**
      * Constructor for the MenuImpl class.
      * @param input the input handler
+     * @param game the game controller
      */
-    public MenuImpl(final InputHandler input) {
+    public MenuImpl(final InputHandler input, final Game game) {
         this.input = input;
+        this.game = game;
     }
 
 
@@ -64,8 +68,12 @@ public final class MenuImpl implements Menu {
             } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_UP) && selectedOption == OptionType.QUIT) {
                 this.selectedOption = this.selectedOption.next();
                 timer = TIMER_VALUE;
-            } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_ENTER) && selectedOption == OptionType.PLAY) {
-                toggleMenu();
+            } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_ENTER)) {
+                if (selectedOption == OptionType.QUIT) {
+                    game.exit();
+                } else if (selectedOption == OptionType.PLAY) {
+                    toggleMenu();
+                }
             }
         }
     }
