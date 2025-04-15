@@ -71,4 +71,11 @@ public final class Game implements Runnable {
         screen.loadMap(chapter.getMap());
         screen.loadHumans(chapter.getHumans());
     }
+
+    /**
+     * Exits the game.
+     */
+    public void exit() {
+        System.exit(0);
+    }
 }
