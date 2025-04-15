@@ -35,4 +35,9 @@ public final class InputHandlerImpl implements InputHandler {
     public void keyTyped(final KeyEvent e) {
 
     }
+
+    @Override
+    public boolean isKeyPressed(final int keyCode) {
+      return keys[keyCode];
+    }
 }

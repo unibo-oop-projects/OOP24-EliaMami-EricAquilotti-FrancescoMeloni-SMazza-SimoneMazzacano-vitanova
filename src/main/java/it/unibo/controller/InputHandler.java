@@ -13,4 +13,11 @@ public interface InputHandler extends KeyListener {
      * @return the current direction based on the key pressed by the user.
      */
     Direction getDirection();
+
+    /**
+     * 
+     * @param keyCode the key code to check.
+     * @return true if the key is pressed, false otherwise.
+     */
+    boolean isKeyPressed(int keyCode);
 }
