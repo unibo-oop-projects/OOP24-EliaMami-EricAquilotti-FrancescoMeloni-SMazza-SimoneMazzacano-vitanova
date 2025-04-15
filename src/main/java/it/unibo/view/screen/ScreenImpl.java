@@ -3,6 +3,8 @@ package it.unibo.view.screen;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -30,10 +32,17 @@ import it.unibo.view.sprite.HumanType;
 public final class ScreenImpl extends JPanel implements Screen {
     private static final long serialVersionUID = 2L;
 
+    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
-    private static final int BASE_WINDOW_WIDTH = 1920;
-    private static final int BASE_WINDOW_HEIGHT = 1080;
+    /**
+     * Base window width, screen width.
+     */
+    public static final int BASE_WINDOW_WIDTH = (int) SCREEN_SIZE.getWidth();
+    /**
+     * Base window height, screen height.
+     */
+    public static final int BASE_WINDOW_HEIGHT = (int) SCREEN_SIZE.getHeight();
     /**
      * The pixel size of a tile scaled.
      */
