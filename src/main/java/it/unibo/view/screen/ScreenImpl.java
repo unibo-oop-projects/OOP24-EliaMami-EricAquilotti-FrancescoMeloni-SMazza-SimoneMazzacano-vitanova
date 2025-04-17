@@ -83,6 +83,8 @@ public final class ScreenImpl extends JPanel implements Screen {
         window.addKeyListener(inputHandler);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        updateCenter();
+        this.setOffset(centerX, centerY);
         initializeBuffer();
         executor.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
     }
