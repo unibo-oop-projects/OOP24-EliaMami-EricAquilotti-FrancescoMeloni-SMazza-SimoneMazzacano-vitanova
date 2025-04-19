@@ -11,7 +11,7 @@ public interface ReproStrategyFactory {
      * @param startingPosition the position needed to set the reproduction area.
      * @return the reproduction strategy for males (they do not collide)
      */
-    ReproStrategy maleReproductionStrategy(Position startingPosition);
+    ReproStrategy maleReproStrategy(Position startingPosition);
 
     /**
      * 
@@ -19,5 +19,5 @@ public interface ReproStrategyFactory {
      * @return the reproduction strategy for female that can collide with males
      * and have a cooldown for reproduction.
      */
-    ReproStrategy femaleReproductionStrategy(Position startingPosition);
+    ReproStrategy femaleReproStrategy(Position startingPosition);
 }

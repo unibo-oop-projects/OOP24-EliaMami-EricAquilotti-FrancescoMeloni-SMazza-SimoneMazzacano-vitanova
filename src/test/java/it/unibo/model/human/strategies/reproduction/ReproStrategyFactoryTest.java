@@ -18,17 +18,16 @@ import it.unibo.model.human.Human;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
-public class ReproStrategyFactoryTest {
+class ReproStrategyFactoryTest {
     private ReproStrategyFactory factory;
-    private Clock clock;
 
     @BeforeEach
     void setup() {
-        clock = Clock.fixed(Instant.parse("2025-04-19T10:00:00Z"), ZoneOffset.UTC);
+        final Clock clock = Clock.fixed(Instant.parse("2025-04-19T10:00:00Z"), ZoneOffset.UTC);
         factory = new ReproStrategyFactoryImpl(clock);
     }
 
-    private Human createHuman(HumanType type, Circle area) {
+    private Human createHuman(final HumanType type, final Circle area) {
         return new Human() {
             @Override public HumanType getType() {
                 return type;
@@ -60,17 +59,17 @@ public class ReproStrategyFactoryTest {
 
     @Test
     void testMaleReproductionNeverCollides() {
-        ReproStrategy male = factory.maleReproductionStrategy(new Position(0, 0));
-        Human other = createHuman(HumanType.FEMALE, male.getReproductionArea());
+        final ReproStrategy male = factory.maleReproStrategy(new Position(0, 0));
+        final Human other = createHuman(HumanType.FEMALE, male.getReproductionArea());
         assertFalse(male.collide(other));
     }
 
     @Test
     void testFemaleReproductionCollidesWithMaleOnce() {
-        Position pos = new Position(0, 0);
-        ReproStrategy female = factory.femaleReproductionStrategy(pos);
-        Circle area = female.getReproductionArea();
-        Human male = createHuman(HumanType.MALE, area);
+        final Position pos = new Position(0, 0);
+        final ReproStrategy female = factory.femaleReproStrategy(pos);
+        final Circle area = female.getReproductionArea();
+        final Human male = createHuman(HumanType.MALE, area);
 
         assertTrue(female.collide(male));
         assertFalse(female.collide(male), "Should be on cooldown after first reproduction");
@@ -78,13 +77,13 @@ public class ReproStrategyFactoryTest {
 
     @Test
     void testReproductionAreaMovesCorrectly() {
-        Position start = new Position(0, 0);
-        ReproStrategy strategy = factory.maleReproductionStrategy(start);
-        Circle initial = strategy.getReproductionArea();
+        final Position start = new Position(0, 0);
+        final ReproStrategy strategy = factory.maleReproStrategy(start);
+        final Circle initial = strategy.getReproductionArea();
 
-        Position updatedPos = new Position(10, 10);
+        final Position updatedPos = new Position(10, 10);
         strategy.update(updatedPos);
-        Circle moved = strategy.getReproductionArea();
+        final Circle moved = strategy.getReproductionArea();
 
         assertNotEquals(initial.getCenter(), moved.getCenter());
     }
