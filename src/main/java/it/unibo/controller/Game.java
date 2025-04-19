@@ -54,7 +54,7 @@ public final class Game implements Runnable {
             if (System.currentTimeMillis() - timer >= 1000) {
                 final int textSize = 32;
                 final Position textPosition = new Position(textSize, textSize);
-                final String content = chapter.getHumans().getFirst().getPosition() + " FPS: " + frameCount;
+                final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount;
                 screen.loadText(content, textPosition, Color.RED, textSize);
                 frameCount = 0;
                 timer += 1000;
