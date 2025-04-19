@@ -17,7 +17,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     // I want the center to be around the legs of the human.
     private static final int CIRCLE_X_OFFSET = 16;
     private static final int CIRCLE_Y_OFFSET = 24;
-    private static final int CIRCLE_RADIOUS = 12;
+    private static final int CIRCLE_RADIOUS = 20;
 
     private final Clock clock;
 
@@ -37,7 +37,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     @Override
     public ReproStrategy femaleReproStrategy(final Position startingPosition) {
         return generalised(
-            new CooldownPredicate(h -> h.getType() != HumanType.FEMALE, Duration.ofSeconds(2), clock),
+            new CooldownPredicate(h -> h.getType() != HumanType.FEMALE, Duration.ofSeconds(1), clock),
             startingPosition
         );
     }
