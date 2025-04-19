@@ -18,7 +18,6 @@ import it.unibo.model.tile.TileType;
  * Set of sprites for the tiles and humans.
  */
 public enum Sprite {
-
     /**
      * Player facing up.
      */

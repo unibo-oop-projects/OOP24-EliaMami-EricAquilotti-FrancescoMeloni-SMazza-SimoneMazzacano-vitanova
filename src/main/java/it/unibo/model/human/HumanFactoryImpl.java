@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import java.time.Clock;
+
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
@@ -10,9 +12,9 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.strategies.movement.MovementStrategy;
 import it.unibo.model.human.strategies.movement.PlayerMovementStrategy;
 import it.unibo.model.human.strategies.movement.RandomMovementStrategy;
-import it.unibo.model.human.strategies.reproduction.FemaleReproductionStrategy;
-import it.unibo.model.human.strategies.reproduction.MaleReproductionStrategy;
-import it.unibo.model.human.strategies.reproduction.ReproductionStrategy;
+import it.unibo.model.human.strategies.reproduction.ReproStrategy;
+import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
+import it.unibo.model.human.strategies.reproduction.ReproStrategyFactoryImpl;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -20,6 +22,8 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
+    private static final ReproStrategyFactory REPRODUCTION_STRATEGY_FACTORY =
+        new ReproStrategyFactoryImpl(Clock.systemDefaultZone());
 
     @Override
     public Human male(final Position startingPosition, final Map map) {
@@ -28,7 +32,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             map,
             HumanType.MALE,
             new RandomMovementStrategy(),
-            new MaleReproductionStrategy(startingPosition)
+            REPRODUCTION_STRATEGY_FACTORY.maleReproductionStrategy(startingPosition)
         );
     }
 
@@ -39,7 +43,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             map,
             HumanType.FEMALE,
             new RandomMovementStrategy(),
-            new FemaleReproductionStrategy(startingPosition)
+            REPRODUCTION_STRATEGY_FACTORY.femaleReproductionStrategy(startingPosition)
         );
     }
 
@@ -50,13 +54,13 @@ public final class HumanFactoryImpl implements HumanFactory {
             map,
             HumanType.PLAYER,
             new PlayerMovementStrategy(inputHandler),
-            new MaleReproductionStrategy(startingPosition)
+            REPRODUCTION_STRATEGY_FACTORY.maleReproductionStrategy(startingPosition)
         );
     }
 
     private Human generalised(final Position startingPosition, final Map map,
                                 final HumanType humanType, final MovementStrategy movementStrategy,
-                                final ReproductionStrategy reproductionStrategy) {
+                                final ReproStrategy reproductionStrategy) {
         return new Human() {
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
             private static final double SPEED = 4.0;
