@@ -23,7 +23,7 @@ import it.unibo.view.sprite.Sprite;
  */
 public final class HumanFactoryImpl implements HumanFactory {
     private static final ReproStrategyFactory REPRODUCTION_STRATEGY_FACTORY =
-        new ReproStrategyFactoryImpl(Clock.systemDefaultZone());
+        new ReproStrategyFactoryImpl(Clock.systemUTC());
 
     @Override
     public Human male(final Position startingPosition, final Map map) {
@@ -32,7 +32,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             map,
             HumanType.MALE,
             new RandomMovementStrategy(),
-            REPRODUCTION_STRATEGY_FACTORY.maleReproductionStrategy(startingPosition)
+            REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
         );
     }
 
@@ -43,7 +43,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             map,
             HumanType.FEMALE,
             new RandomMovementStrategy(),
-            REPRODUCTION_STRATEGY_FACTORY.femaleReproductionStrategy(startingPosition)
+            REPRODUCTION_STRATEGY_FACTORY.femaleReproStrategy(startingPosition)
         );
     }
 
@@ -54,7 +54,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             map,
             HumanType.PLAYER,
             new PlayerMovementStrategy(inputHandler),
-            REPRODUCTION_STRATEGY_FACTORY.maleReproductionStrategy(startingPosition)
+            REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
         );
     }
 
