@@ -11,11 +11,11 @@ public interface MovStrategyFactory {
      * @param inputHandler the handler to get input from for player movement.
      * @return the movement strategy for a player.
      */
-    MovementStrategy userInputMovement(InputHandler inputHandler);
+    MovStrategy userInputMovement(InputHandler inputHandler);
 
     /**
      * @return a movement strategy for random-controlled humans.
      */
-    MovementStrategy randomMovement();
+    MovStrategy randomMovement();
 }
 

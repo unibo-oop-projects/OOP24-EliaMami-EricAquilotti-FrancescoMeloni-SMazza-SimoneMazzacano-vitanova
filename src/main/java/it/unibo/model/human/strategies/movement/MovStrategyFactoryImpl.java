@@ -27,12 +27,12 @@ public final class MovStrategyFactoryImpl implements MovStrategyFactory {
     }
 
     @Override
-    public MovementStrategy userInputMovement(final InputHandler inputHandler) {
+    public MovStrategy userInputMovement(final InputHandler inputHandler) {
         return generalised(inputHandler::getDirection);
     }
 
     @Override
-    public MovementStrategy randomMovement() {
+    public MovStrategy randomMovement() {
         final CooldownGate directionCooldown = new CooldownGate(
             () -> {
                 final long millis = BASE_MILLIS_COOLDOWN + random.nextLong(RANGE_MILLIS_COOLDOWN);
@@ -50,8 +50,8 @@ public final class MovStrategyFactoryImpl implements MovStrategyFactory {
         });
     }
 
-    private MovementStrategy generalised(final Supplier<Direction> directionSupplier) {
-        return new MovementStrategy() {
+    private MovStrategy generalised(final Supplier<Direction> directionSupplier) {
+        return new MovStrategy() {
             @Override
             public Direction nextDirection() {
                 return directionSupplier.get();

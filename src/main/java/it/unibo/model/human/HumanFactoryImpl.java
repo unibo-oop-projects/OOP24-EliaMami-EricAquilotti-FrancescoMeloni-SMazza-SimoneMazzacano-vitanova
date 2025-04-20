@@ -11,7 +11,7 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.strategies.movement.MovStrategyFactory;
 import it.unibo.model.human.strategies.movement.MovStrategyFactoryImpl;
-import it.unibo.model.human.strategies.movement.MovementStrategy;
+import it.unibo.model.human.strategies.movement.MovStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactoryImpl;
@@ -61,7 +61,7 @@ public final class HumanFactoryImpl implements HumanFactory {
     }
 
     private Human generalised(final Position startingPosition, final Map map,
-                                final HumanType humanType, final MovementStrategy movementStrategy,
+                                final HumanType humanType, final MovStrategy movementStrategy,
                                 final ReproStrategy reproductionStrategy) {
         return new Human() {
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
