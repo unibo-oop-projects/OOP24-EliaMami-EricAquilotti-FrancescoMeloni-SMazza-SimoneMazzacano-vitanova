@@ -9,9 +9,9 @@ import it.unibo.common.DirectionEnum;
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.human.strategies.movement.MovStrategyFactory;
+import it.unibo.model.human.strategies.movement.MovStrategyFactoryImpl;
 import it.unibo.model.human.strategies.movement.MovementStrategy;
-import it.unibo.model.human.strategies.movement.PlayerMovementStrategy;
-import it.unibo.model.human.strategies.movement.RandomMovementStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactoryImpl;
@@ -22,8 +22,10 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
+    private static final Clock BASE_CLOCK = Clock.systemUTC();
     private static final ReproStrategyFactory REPRODUCTION_STRATEGY_FACTORY =
-        new ReproStrategyFactoryImpl(Clock.systemUTC());
+        new ReproStrategyFactoryImpl(BASE_CLOCK);
+    private static final MovStrategyFactory MOVEMENT_STRATEGY_FACTORY = new MovStrategyFactoryImpl(BASE_CLOCK);
 
     @Override
     public Human male(final Position startingPosition, final Map map) {
@@ -31,7 +33,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.MALE,
-            new RandomMovementStrategy(),
+            MOVEMENT_STRATEGY_FACTORY.randomMovement(),
             REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
         );
     }
@@ -42,7 +44,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.FEMALE,
-            new RandomMovementStrategy(),
+            MOVEMENT_STRATEGY_FACTORY.randomMovement(),
             REPRODUCTION_STRATEGY_FACTORY.femaleReproStrategy(startingPosition)
         );
     }
@@ -53,7 +55,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.PLAYER,
-            new PlayerMovementStrategy(inputHandler),
+            MOVEMENT_STRATEGY_FACTORY.userInputMovement(inputHandler),
             REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
         );
     }
@@ -76,7 +78,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public void move() {
                 sprite = nextSprite();
-                direction = movementStrategy.nextDirection(this);
+                direction = movementStrategy.nextDirection();
                 final Position nextPosition = nextPosition();
                 if (validPosition(nextPosition)) {
                     updateSpriteCounter();
