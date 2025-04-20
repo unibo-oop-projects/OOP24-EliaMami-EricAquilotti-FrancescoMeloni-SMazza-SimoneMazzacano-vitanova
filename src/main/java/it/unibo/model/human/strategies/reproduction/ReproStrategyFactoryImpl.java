@@ -37,7 +37,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     @Override
     public ReproStrategy femaleReproStrategy(final Position startingPosition) {
         return generalised(
-            new CooldownPredicate(h -> h.getType() != HumanType.FEMALE, Duration.ofSeconds(1), clock),
+            new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, Duration.ofSeconds(2), clock),
             startingPosition
         );
     }

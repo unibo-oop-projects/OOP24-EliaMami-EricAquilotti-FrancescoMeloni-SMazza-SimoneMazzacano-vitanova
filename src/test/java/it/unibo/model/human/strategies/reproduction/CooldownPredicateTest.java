@@ -53,8 +53,8 @@ class CooldownPredicateTest {
         };
     }
 
-    private CooldownPredicate noFemalePredicate(final Clock clock) {
-        return new CooldownPredicate(h -> h.getType() != HumanType.FEMALE, COOLDOWN, clock);
+    private CooldownReproductionPredicate noFemalePredicate(final Clock clock) {
+        return new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, COOLDOWN, clock);
     }
 
     @BeforeEach
@@ -65,7 +65,7 @@ class CooldownPredicateTest {
     @Test
     void testReproductionAndCooldown() {
         final Human male = createHuman(HumanType.MALE);
-        final CooldownPredicate predicate = noFemalePredicate(baseClock);
+        final CooldownReproductionPredicate predicate = noFemalePredicate(baseClock);
         assertTrue(predicate.test(male), "Should reproduce initially");
 
         assertFalse(predicate.test(male), "Should be on cooldown");
@@ -74,7 +74,7 @@ class CooldownPredicateTest {
     @Test
     void testCooldownExpiresAndAllowsReproductionAgain() {
         final MutableClock mutableClock = new MutableClock(baseClock.instant(), baseClock.getZone());
-        final CooldownPredicate predicate = noFemalePredicate(mutableClock);
+        final CooldownReproductionPredicate predicate = noFemalePredicate(mutableClock);
         final Human male = createHuman(HumanType.MALE);
 
         assertTrue(predicate.test(male), "Initial reproduction allowed");
@@ -89,7 +89,7 @@ class CooldownPredicateTest {
     @Test
     void testNoReproduction() {
         final Human female = createHuman(HumanType.FEMALE);
-        final CooldownPredicate predicate = noFemalePredicate(baseClock);
+        final CooldownReproductionPredicate predicate = noFemalePredicate(baseClock);
         assertFalse(predicate.test(female));
     }
 }

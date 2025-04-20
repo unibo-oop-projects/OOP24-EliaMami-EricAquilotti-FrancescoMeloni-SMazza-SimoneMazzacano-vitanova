@@ -3,7 +3,7 @@ package it.unibo.model.human.strategies.reproduction;
 import it.unibo.common.Position;
 
 /**
- * Models a factory for reproduction strategies.
+ * Factory for creating different reproduction strategies.
  */
 public interface ReproStrategyFactory {
     /**
