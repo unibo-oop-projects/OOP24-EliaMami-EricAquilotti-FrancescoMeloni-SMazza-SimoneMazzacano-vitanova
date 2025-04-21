@@ -5,7 +5,7 @@ import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.view.menu.Menu;
-import it.unibo.view.menu.MenuImpl;
+import it.unibo.view.menu.StartMenu;
 import it.unibo.view.screen.Screen;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -20,7 +20,7 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final Chapter chapter = new ChapterImpl(inputHandler, 64, 64);
-    private Menu menu = new MenuImpl(inputHandler, this);
+    private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted = false;
     /**
      * Starts the game engine.

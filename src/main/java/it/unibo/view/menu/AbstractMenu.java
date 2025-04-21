@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Class that handles the menu options, text and input.
  */
-public final class MenuImpl implements Menu {
+public abstract class AbstractMenu implements Menu {
     private static final int TIMER_VALUE = 10;
     private static final int SPACING = 100;
     private static final int TEXT_SIZE = 60;
@@ -36,21 +36,26 @@ public final class MenuImpl implements Menu {
         }
     }
     private final Position[] positions = {new Position(0, 0), new Position(0, SPACING)};
-    private final InputHandler input;
     private OptionType selectedOption = OptionType.PLAY;
     private boolean isHidden = true;
     private int timer = TIMER_VALUE;
     private final List<Text> textToShow = new ArrayList<>();
-    private final Game game;
+    protected final InputHandler input;
+    protected final Game game;
 
     /**
      * Constructor for the MenuImpl class.
      * @param input the input handler
      * @param game the game controller
      */
-    public MenuImpl(final InputHandler input, final Game game) {
+    public AbstractMenu(final InputHandler input, final Game game) {
         this.input = input;
         this.game = game;
+    }
+
+    public AbstractMenu(final InputHandler input, final Game game, boolean isHidden) {
+        this(input, game);
+        this.isHidden = isHidden;
     }
 
 
@@ -72,6 +77,7 @@ public final class MenuImpl implements Menu {
                 if (selectedOption == OptionType.QUIT) {
                     game.exit();
                 } else if (selectedOption == OptionType.PLAY) {
+                    play();
                     toggleMenu();
                 }
             }
@@ -95,6 +101,9 @@ public final class MenuImpl implements Menu {
             }
         }
     }
+
+    protected abstract void play();
+
     @Override
     public List<Text> getText() {
         if (!isHidden) {
