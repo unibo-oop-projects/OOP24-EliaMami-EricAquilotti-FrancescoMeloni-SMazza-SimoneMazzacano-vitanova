@@ -67,7 +67,7 @@ public final class ChapterImpl implements Chapter {
             }
             final Human female = human;
             final Position femalePosition = female.getPosition();
-            final Circle range = female.reproductionArea();
+            final Circle range = female.getStats().getReproductionAreaRadius();
             range.setRadius(range.getRadius() * 2);
             final List<Human> closeMales = tree.query(range).stream().map(p -> (Human) p.data()).toList();
             for (final Human closeMale : closeMales) {

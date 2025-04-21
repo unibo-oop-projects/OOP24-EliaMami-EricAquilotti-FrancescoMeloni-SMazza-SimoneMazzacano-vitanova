@@ -4,8 +4,8 @@ import java.time.Clock;
 import java.time.Duration;
 import java.util.function.Predicate;
 
+import it.unibo.common.CooldownGate;
 import it.unibo.model.human.Human;
-import it.unibo.model.human.strategies.CooldownGate;
 
 /**
  * Implements the cooldown logic for the reproduction strategies that need it.

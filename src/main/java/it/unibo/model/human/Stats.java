@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import it.unibo.common.Circle;
+
 /**
  * Models stats of a human.
  */
@@ -9,7 +11,7 @@ public interface Stats {
      * 
      * @return the current speed of human.
      */
-    int getSpeed();
+    double getSpeed();
     
     /**
      * Used to increase speed after finishing the chapter.
@@ -20,7 +22,7 @@ public interface Stats {
      * 
      * @return the radius of the reproduction radius.
      */
-    int getReproductionAreaRadius();
+    Circle getReproductionAreaRadius();
 
     /**
      * Used to increase the reproduction area radius after finishing the chapter.
@@ -31,7 +33,7 @@ public interface Stats {
      * 
      * @return the probability to resiste sickness effect.
      */
-    double getResistenceToSickness();
+    double getSicknessResistence();
 
     /**
      * Used to increase sickness resistence after finishing the chapter.

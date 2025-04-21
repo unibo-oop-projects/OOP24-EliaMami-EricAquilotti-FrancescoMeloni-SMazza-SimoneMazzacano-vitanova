@@ -1,6 +1,5 @@
 package it.unibo.model.human;
 
-import it.unibo.common.Circle;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.HumanType;
@@ -32,12 +31,6 @@ public interface Human {
 
     /**
      * 
-     * @return the circle representing the reproduction area.
-     */
-    Circle reproductionArea();
-
-    /**
-     * 
      * @return the current direction of the human.
      */
     Direction getDirection();
@@ -47,6 +40,12 @@ public interface Human {
      * @return the type of the human.
      */
     HumanType getType();
+
+    /**
+     * 
+     * @return the human's stats.
+     */
+    Stats getStats();
 
     /**
      * 

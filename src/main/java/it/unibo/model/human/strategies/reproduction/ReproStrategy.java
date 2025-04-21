@@ -27,4 +27,10 @@ public interface ReproStrategy {
      * @return the current circle representing the reproduction area.
      */
     Circle getReproductionArea();
+
+    /**
+     * 
+     * @return change the radius of the circle.
+     */
+    Circle changeReproductionArea();
 }

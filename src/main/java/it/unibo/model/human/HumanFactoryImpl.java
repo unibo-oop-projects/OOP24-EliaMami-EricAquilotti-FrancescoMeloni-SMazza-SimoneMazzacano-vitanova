@@ -65,7 +65,6 @@ public final class HumanFactoryImpl implements HumanFactory {
                                 final ReproStrategy reproductionStrategy) {
         return new Human() {
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
-            private static final double SPEED = 4.0;
             // private boolean canReproduce = true;
             private double x = startingPosition.x();
             private double y = startingPosition.y();
@@ -98,12 +97,6 @@ public final class HumanFactoryImpl implements HumanFactory {
                 return sprite;
             }
 
-            @Override
-            public Circle reproductionArea() {
-                // Put here the logic for radius multipliers and then remove this comment.
-                return new CircleImpl(reproductionStrategy.getReproductionArea());
-            }
-
             private Sprite nextSprite() {
                 return Sprite.getSprite(
                     humanType,
@@ -125,8 +118,8 @@ public final class HumanFactoryImpl implements HumanFactory {
 
             private Position nextPosition() {
                 return new Position(
-                    this.x + SPEED * direction.getDx(),
-                    this.y + SPEED * direction.getDy()
+                    this.x + getStats().getSpeed() * direction.getDx(),
+                    this.y + getStats().getSpeed() * direction.getDy()
                 );
             }
 
@@ -138,6 +131,74 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public HumanType getType() {
                 return humanType;
+            }
+
+            @Override
+            public Stats getStats(){
+                return new Stats() {
+                    private double speed = 4.0;
+                    private double sicknessResistence = .1;
+                    private double fertility = .1;
+                    private Circle reproductionAreaRadius = new CircleImpl(reproductionStrategy.getReproductionArea());;
+                    private static final double SPEED_UPGRADE_VALUE = .5;
+                    private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .05;
+                    private static final double FERTILITY_UPGRADE_VALUE = .05;
+                    //private static final int RADIUS_UPGRADE_VALUE = 5;
+
+                    @Override
+                    public double getSpeed() {
+                        return this.speed;
+                    }
+
+                    private void setSpeed(double newSpeed){
+                        this.speed = newSpeed;
+                    }
+
+                    @Override
+                    public void increaseSpeed() {
+                        setSpeed(speed+SPEED_UPGRADE_VALUE);
+                    }
+
+                    @Override
+                    public Circle getReproductionAreaRadius() {
+                        return this.reproductionAreaRadius;
+                    }
+
+                    @Override
+                    public void increaseReproductionAreaRadius() {
+                        // TODO Auto-generated method stub
+                        throw new UnsupportedOperationException("Unimplemented method 'increaseReproductionAreaRadius'");
+                    }
+
+                    @Override
+                    public double getSicknessResistence() {
+                        return this.sicknessResistence;
+                    }
+
+                    private void setSicknessResistence(double newSicknessResistence) {
+                        this.sicknessResistence = newSicknessResistence;
+                    }
+
+                    @Override
+                    public void increaseSicknessResistence() {
+                        setSicknessResistence(this.sicknessResistence+SICKNESS_RESISTENCE_UPGRADE_VALUE);
+                    }
+
+                    @Override
+                    public double getFertility() {
+                        return this.fertility;
+                    }
+
+                    private void setFertility(double newFertility) {
+                        this.fertility = newFertility;
+                    }
+
+                    @Override
+                    public void increaseFertility() {
+                        setFertility(fertility+FERTILITY_UPGRADE_VALUE);
+                    }
+                    
+                };
             }
 
             @Override

@@ -1,4 +1,4 @@
-package it.unibo.model.human.strategies;
+package it.unibo.common;
 
 import java.time.Clock;
 import java.time.Duration;

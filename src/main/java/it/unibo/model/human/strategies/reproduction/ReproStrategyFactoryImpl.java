@@ -61,11 +61,17 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
 
             @Override
             public boolean collide(final Human other) {
-                return canReproduceWith.test(other) && reproductionArea.intersects(other.reproductionArea());
+                return canReproduceWith.test(other) && reproductionArea.intersects(other.getStats().getReproductionAreaRadius());
             }
 
             private void centerReproductionArea(final Position humanPosition) {
                 reproductionArea.setCenter(humanPosition.x() + CIRCLE_X_OFFSET, humanPosition.y() + CIRCLE_Y_OFFSET);
+            }
+
+            @Override
+            public Circle changeReproductionArea() {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'changeReproductionArea'");
             }
         };
     }

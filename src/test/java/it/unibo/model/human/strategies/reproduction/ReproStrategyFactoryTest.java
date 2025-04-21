@@ -15,6 +15,7 @@ import it.unibo.common.Circle;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
+import it.unibo.model.human.Stats;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -31,9 +32,6 @@ class ReproStrategyFactoryTest {
         return new Human() {
             @Override public HumanType getType() {
                 return type;
-            }
-            @Override public Circle reproductionArea() {
-                return area;
             }
             @Override
             public void move() {
@@ -53,6 +51,10 @@ class ReproStrategyFactoryTest {
             @Override
             public boolean collide(final Human other) {
                 return false;
+            }
+            @Override
+            public Stats getStats() {
+                return null;
             }
         };
     }
