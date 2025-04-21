@@ -20,7 +20,8 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final Chapter chapter = new ChapterImpl(inputHandler, 64, 64);
-    private final Menu menu = new MenuImpl(inputHandler, this);
+    private Menu menu = new MenuImpl(inputHandler, this);
+    private boolean isGameplayStarted = false;
     /**
      * Starts the game engine.
      */
@@ -63,16 +64,28 @@ public final class Game implements Runnable {
     }
 
     private void update() {
-        chapter.update();
+        if (isGameplayStarted) {
+            chapter.update();
+        }
         menu.update();
         final Position playerPosition = chapter.getPlayer().getPosition();
         screen.setOffset((int) playerPosition.x(), (int) playerPosition.y());
     }
 
     private void draw() {
-        screen.loadMap(chapter.getMap());
-        screen.loadHumans(chapter.getHumans());
         screen.loadMenu(menu.getText());
+        screen.loadMap(chapter.getMap());
+        if (isGameplayStarted) {
+            screen.loadHumans(chapter.getHumans());
+        }
+    }
+
+    public void startGameplay() {
+        this.isGameplayStarted = true;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
     /**
