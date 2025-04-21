@@ -1,5 +1,7 @@
 package it.unibo.view.menu;
 
+import java.util.List;
+
 import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
 
@@ -14,12 +16,12 @@ public final class StartMenu extends AbstractMenu {
      * @param game the game controller
      */
     public StartMenu(final InputHandler input, final Game game) {
-        super(input, game, false);
+        super(input, game, List.of("Play", "Quit"), List.of(g -> {
+            g.setMenu(new GamePlayMenu(input, g));
+            g.startGameplay();
+        }, Game::exit), false);
     }
 
     @Override
-    protected void play() {
-        getGame().setMenu(new GamePlayMenu(getInput(), getGame()));
-        getGame().startGameplay();
-    }
+    protected void toggleMenu() { }
 }

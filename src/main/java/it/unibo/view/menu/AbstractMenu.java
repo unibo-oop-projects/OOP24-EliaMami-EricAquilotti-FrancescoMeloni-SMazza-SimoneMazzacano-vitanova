@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 /**
@@ -15,31 +16,16 @@ import java.util.List;
  */
 public abstract class AbstractMenu implements Menu {
     private static final int TIMER_VALUE = 10;
-    private static final int SPACING = 100;
+    private static final int TEXT_VERTICAL_SPACING = 100;
     private static final int TEXT_SIZE = 60;
-    enum OptionType {
-        PLAY("Play"), 
-        QUIT("Quit");
+    private static final int TEXT_HORIZONTAL_OFFSET = 0;
+    private static final Color TEXT_COLOR = Color.WHITE;
 
-        private final String description;
-        OptionType(final String description) {
-            this.description = description;
-        }
-        public String getDescription() {
-            return description;
-        }
-        public OptionType next() {
-            return values()[(this.ordinal() + 1) % numberOfOptions()];
-        }
-        public static int numberOfOptions() {
-            return values().length;
-        }
-    }
-    private final Position[] positions = {new Position(0, 0), new Position(0, SPACING)};
-    private OptionType selectedOption = OptionType.PLAY;
-    private boolean isHidden = true;
+    private final List<String> optionsDescriptions;
+    private final List<Consumer<Game>> optionsBehaviors;
+    private int selectedOptionIndex;
+    private boolean isHidden;
     private int timer = TIMER_VALUE;
-    private final List<Text> textToShow = new ArrayList<>();
     private final InputHandler input;
     private final Game game;
 
@@ -61,80 +47,64 @@ public abstract class AbstractMenu implements Menu {
      * Constructor for the AbstractMenu class.
      * @param input the input handler
      * @param game the game controller
+     * @param options the list of options
+     * @param optionsBehaviours the list of behaviors for each option
+     * @param isInitiallyHidden the initial state of the menu
      */
-    protected AbstractMenu(final InputHandler input, final Game game) {
+    protected AbstractMenu(final InputHandler input, final Game game, final List<String> options,
+    final List<Consumer<Game>> optionsBehaviours, final boolean isInitiallyHidden) {
         this.input = input;
         this.game = game;
+        this.optionsDescriptions = options;
+        this.optionsBehaviors = optionsBehaviours;
+        this.isHidden = isInitiallyHidden;
     }
-
-    /**
-     * Constructor for the AbstractMenu class.
-     * @param input the input handler
-     * @param game the game controller
-     * @param isHidden the initial state of the menu
-     */
-    protected AbstractMenu(final InputHandler input, final Game game, final boolean isHidden) {
-        this(input, game);
-        this.isHidden = isHidden;
-    }
-
 
     @Override
     public final void update() {
         if (timer > 0) {
             timer--;
-        } else {
-            if (input.isKeyPressed(KeyEvent.VK_E)) {
-                toggleMenu();
-                timer = TIMER_VALUE;
-            } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_DOWN) && selectedOption == OptionType.PLAY) {
-                this.selectedOption = this.selectedOption.next();
-                timer = TIMER_VALUE;
-            } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_UP) && selectedOption == OptionType.QUIT) {
-                this.selectedOption = this.selectedOption.next();
-                timer = TIMER_VALUE;
-            } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_ENTER)) {
-                if (selectedOption == OptionType.QUIT) {
-                    game.exit();
-                } else if (selectedOption == OptionType.PLAY) {
-                    play();
-                    toggleMenu();
-                }
-            }
+        } else if (input.isKeyPressed(KeyEvent.VK_E)) {
+            toggleMenu();
+            timer = TIMER_VALUE;
+        } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_DOWN)
+         && selectedOptionIndex + 1 < optionsDescriptions.size()) {
+            this.selectedOptionIndex++;
+            timer = TIMER_VALUE;
+        } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_UP) && selectedOptionIndex > 0) {
+            this.selectedOptionIndex--;
+            timer = TIMER_VALUE;
+        } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_ENTER)) {
+            this.optionsBehaviors.get(selectedOptionIndex).accept(game);
+            toggleMenu();
         }
     }
     private String applySelectedFormat(final String text) {
         return "> " + text + " <";
     }
-    private void clearTextAtPosition(final Position p) {
-        textToShow.removeIf(txt -> txt.position().equals(p));
-    }
-    private void addText(final Text text) {
-        clearTextAtPosition(text.position());
-        textToShow.add(text);
-    }
-    private void toggleMenu() {
-        isHidden = !isHidden;
-        if (isHidden) {
-            for (final Position pos : positions) {
-                clearTextAtPosition(pos);
-            }
-        }
-    }
+
     /**
-     * Method to be implemented by subclasses to define the action when the play option is selected.
+     * Toggles the menu visibility.
+     * Could be ovverriden in subclasses to implement custom behavior.
      */
-    protected abstract void play();
+    protected void toggleMenu() {
+        isHidden = !isHidden;
+    }
 
     @Override
     public final List<Text> getText() {
         if (!isHidden) {
-            for (final OptionType option : OptionType.values()) {
-                addText(new Text(selectedOption == option 
-                ? applySelectedFormat(option.getDescription()) : option.getDescription(), 
-                positions[option.ordinal()], Color.WHITE, TEXT_SIZE));
+            int verticalOffset = 0;
+            final List<Text> textToShow = new ArrayList<>();
+            for (int index = 0; index < optionsDescriptions.size(); index++) {
+                final String formattedText = selectedOptionIndex == index 
+                    ? applySelectedFormat(optionsDescriptions.get(index)) : optionsDescriptions.get(index);
+
+                textToShow.add(new Text(formattedText, 
+                new Position(TEXT_HORIZONTAL_OFFSET, verticalOffset), TEXT_COLOR, TEXT_SIZE));
+                verticalOffset += TEXT_VERTICAL_SPACING;
             }
-            return new ArrayList<>(textToShow);
+            return textToShow;
         }
         return List.of();
     }
