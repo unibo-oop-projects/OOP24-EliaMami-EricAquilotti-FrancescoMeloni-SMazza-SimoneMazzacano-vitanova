@@ -21,7 +21,8 @@ public interface HumanFactory {
      * 
      * @param startingPosition the initial position.
      * @param map the chapter's map.
-     * @return a new female human that moves randomly.
+     * @return a new female human that moves randomly and can collide with other
+     * humans that are not females.
      */
     Human female(Position startingPosition, Map map);
 

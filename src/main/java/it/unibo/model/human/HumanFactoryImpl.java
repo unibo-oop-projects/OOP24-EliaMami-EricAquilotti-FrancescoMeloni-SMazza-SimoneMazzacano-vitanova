@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import java.time.Clock;
+
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
@@ -7,12 +9,12 @@ import it.unibo.common.DirectionEnum;
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
-import it.unibo.model.human.strategies.movement.MovementStrategy;
-import it.unibo.model.human.strategies.movement.PlayerMovementStrategy;
-import it.unibo.model.human.strategies.movement.RandomMovementStrategy;
-import it.unibo.model.human.strategies.reproduction.FemaleReproductionStrategy;
-import it.unibo.model.human.strategies.reproduction.MaleReproductionStrategy;
-import it.unibo.model.human.strategies.reproduction.ReproductionStrategy;
+import it.unibo.model.human.strategies.movement.MovStrategyFactory;
+import it.unibo.model.human.strategies.movement.MovStrategyFactoryImpl;
+import it.unibo.model.human.strategies.movement.MovStrategy;
+import it.unibo.model.human.strategies.reproduction.ReproStrategy;
+import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
+import it.unibo.model.human.strategies.reproduction.ReproStrategyFactoryImpl;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -20,6 +22,10 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
+    private static final Clock BASE_CLOCK = Clock.systemUTC();
+    private static final ReproStrategyFactory REPRODUCTION_STRATEGY_FACTORY =
+        new ReproStrategyFactoryImpl(BASE_CLOCK);
+    private static final MovStrategyFactory MOVEMENT_STRATEGY_FACTORY = new MovStrategyFactoryImpl(BASE_CLOCK);
 
     @Override
     public Human male(final Position startingPosition, final Map map) {
@@ -27,8 +33,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.MALE,
-            new RandomMovementStrategy(),
-            new MaleReproductionStrategy(startingPosition)
+            MOVEMENT_STRATEGY_FACTORY.randomMovement(),
+            REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
         );
     }
 
@@ -38,8 +44,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.FEMALE,
-            new RandomMovementStrategy(),
-            new FemaleReproductionStrategy(startingPosition)
+            MOVEMENT_STRATEGY_FACTORY.randomMovement(),
+            REPRODUCTION_STRATEGY_FACTORY.femaleReproStrategy(startingPosition)
         );
     }
 
@@ -49,14 +55,14 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.PLAYER,
-            new PlayerMovementStrategy(inputHandler),
-            new MaleReproductionStrategy(startingPosition)
+            MOVEMENT_STRATEGY_FACTORY.userInputMovement(inputHandler),
+            REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
         );
     }
 
     private Human generalised(final Position startingPosition, final Map map,
-                                final HumanType humanType, final MovementStrategy movementStrategy,
-                                final ReproductionStrategy reproductionStrategy) {
+                                final HumanType humanType, final MovStrategy movementStrategy,
+                                final ReproStrategy reproductionStrategy) {
         return new Human() {
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
             private static final double SPEED = 4.0;
@@ -72,7 +78,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public void move() {
                 sprite = nextSprite();
-                direction = movementStrategy.nextDirection(this);
+                direction = movementStrategy.nextDirection();
                 final Position nextPosition = nextPosition();
                 if (validPosition(nextPosition)) {
                     updateSpriteCounter();

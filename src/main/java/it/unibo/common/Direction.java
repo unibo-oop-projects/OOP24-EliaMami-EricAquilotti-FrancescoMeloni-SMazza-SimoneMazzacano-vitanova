@@ -1,9 +1,11 @@
 package it.unibo.common;
 
+import java.util.Objects;
+
 /**
  * Handles a direction and tells the movement on the x and y axis.
  */
-public class Direction {
+public final class Direction {
     private final boolean up, right, down, left;
 
     /**
@@ -35,4 +37,25 @@ public class Direction {
     public int getDy() {
         return (up ? -1 : 0) + (down ? 1 : 0);
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Direction other = (Direction) obj;
+        return this.up == other.up
+            && this.right == other.right
+            && this.down == other.down
+            && this.left == other.left;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(up, right, down, left);
+    }
+
 }

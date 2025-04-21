@@ -7,7 +7,7 @@ import it.unibo.model.human.Human;
 /**
  * Models the reproduction of a human.
  */
-public interface ReproductionStrategy {
+public interface ReproStrategy {
 
     /**
      * Updates the state of reproduction.
