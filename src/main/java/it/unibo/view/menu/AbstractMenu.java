@@ -40,27 +40,47 @@ public abstract class AbstractMenu implements Menu {
     private boolean isHidden = true;
     private int timer = TIMER_VALUE;
     private final List<Text> textToShow = new ArrayList<>();
-    protected final InputHandler input;
-    protected final Game game;
+    private final InputHandler input;
+    private final Game game;
 
     /**
-     * Constructor for the MenuImpl class.
+     * @return the input handler
+     */
+    protected InputHandler getInput() {
+        return input;
+    }
+
+    /**
+     * @return the game controller
+     */
+    protected Game getGame() {
+        return game;
+    }
+
+    /**
+     * Constructor for the AbstractMenu class.
      * @param input the input handler
      * @param game the game controller
      */
-    public AbstractMenu(final InputHandler input, final Game game) {
+    protected AbstractMenu(final InputHandler input, final Game game) {
         this.input = input;
         this.game = game;
     }
 
-    public AbstractMenu(final InputHandler input, final Game game, boolean isHidden) {
+    /**
+     * Constructor for the AbstractMenu class.
+     * @param input the input handler
+     * @param game the game controller
+     * @param isHidden the initial state of the menu
+     */
+    protected AbstractMenu(final InputHandler input, final Game game, final boolean isHidden) {
         this(input, game);
         this.isHidden = isHidden;
     }
 
 
     @Override
-    public void update() {
+    public final void update() {
         if (timer > 0) {
             timer--;
         } else {
@@ -101,11 +121,13 @@ public abstract class AbstractMenu implements Menu {
             }
         }
     }
-
+    /**
+     * Method to be implemented by subclasses to define the action when the play option is selected.
+     */
     protected abstract void play();
 
     @Override
-    public List<Text> getText() {
+    public final List<Text> getText() {
         if (!isHidden) {
             for (final OptionType option : OptionType.values()) {
                 addText(new Text(selectedOption == option 

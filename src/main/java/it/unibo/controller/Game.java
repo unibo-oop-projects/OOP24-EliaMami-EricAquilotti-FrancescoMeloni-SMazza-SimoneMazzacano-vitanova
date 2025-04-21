@@ -21,7 +21,7 @@ public final class Game implements Runnable {
     private final Screen screen = new ScreenImpl(inputHandler);
     private final Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
     private Menu menu = new StartMenu(inputHandler, this);
-    private boolean isGameplayStarted = false;
+    private boolean isGameplayStarted;
     /**
      * Starts the game engine.
      */
@@ -80,11 +80,18 @@ public final class Game implements Runnable {
         }
     }
 
+    /**
+     * Starts the gameplay.
+     */
     public void startGameplay() {
         this.isGameplayStarted = true;
     }
 
-    public void setMenu(Menu menu) {
+    /**
+     * Set current menu.
+     * @param menu
+     */
+    public void setMenu(final Menu menu) {
         this.menu = menu;
     }
 
