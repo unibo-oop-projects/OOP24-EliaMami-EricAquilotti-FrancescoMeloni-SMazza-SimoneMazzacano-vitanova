@@ -19,4 +19,10 @@ public final class GamePlayMenu extends AbstractMenu {
     public GamePlayMenu(final InputHandler input, final Game game) {
         super(input, game, List.of("Play", "Quit"), List.of(g -> { }, Game::exit), true);
     }
+
+    @Override
+    protected void toggleMenu() {
+        super.toggleMenu();
+        getGame().toogleGameplayState();
+    }
 }

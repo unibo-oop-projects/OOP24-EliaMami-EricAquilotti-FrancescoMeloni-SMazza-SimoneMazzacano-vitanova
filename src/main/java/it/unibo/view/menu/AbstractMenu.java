@@ -20,6 +20,7 @@ public abstract class AbstractMenu implements Menu {
     private static final int TEXT_SIZE = 60;
     private static final int TEXT_HORIZONTAL_OFFSET = 0;
     private static final Color TEXT_COLOR = Color.WHITE;
+    private static final int MENU_TOGGLE_KEY = KeyEvent.VK_ESCAPE;
 
     private final List<String> optionsDescriptions;
     private final List<Consumer<Game>> optionsBehaviors;
@@ -64,7 +65,7 @@ public abstract class AbstractMenu implements Menu {
     public final void update() {
         if (timer > 0) {
             timer--;
-        } else if (input.isKeyPressed(KeyEvent.VK_E)) {
+        } else if (input.isKeyPressed(MENU_TOGGLE_KEY)) {
             toggleMenu();
             timer = TIMER_VALUE;
         } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_DOWN)

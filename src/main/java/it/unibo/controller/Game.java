@@ -22,6 +22,7 @@ public final class Game implements Runnable {
     private final Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
+    private boolean isGameplayPaused;
     /**
      * Starts the game engine.
      */
@@ -64,7 +65,7 @@ public final class Game implements Runnable {
     }
 
     private void update() {
-        if (isGameplayStarted) {
+        if (isGameplayStarted && !isGameplayPaused) {
             chapter.update();
         }
         menu.update();
@@ -93,6 +94,13 @@ public final class Game implements Runnable {
      */
     public void setMenu(final Menu menu) {
         this.menu = menu;
+    }
+
+    /**
+     * Pauses the gameplay.
+     */
+    public void toogleGameplayState() {
+        this.isGameplayPaused = !this.isGameplayPaused;
     }
 
     /**
