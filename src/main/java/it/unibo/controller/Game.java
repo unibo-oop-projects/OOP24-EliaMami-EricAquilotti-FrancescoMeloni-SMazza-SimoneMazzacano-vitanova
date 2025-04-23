@@ -19,7 +19,8 @@ public final class Game implements Runnable {
     private final Thread gameThread = new Thread(this);
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
-    private final Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
+    private final int goal = 100;
+    private final Chapter chapter = new ChapterImpl(inputHandler, 64, 64, goal);
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
@@ -56,7 +57,7 @@ public final class Game implements Runnable {
             if (System.currentTimeMillis() - timer >= 1000) {
                 final int textSize = 32;
                 final Position textPosition = new Position(textSize, textSize);
-                final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount;
+                final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount + " Population: " + chapter.getHumans().size() + " Goal: " + goal;
                 screen.loadText(content, textPosition, Color.RED, textSize);
                 frameCount = 0;
                 timer += 1000;
