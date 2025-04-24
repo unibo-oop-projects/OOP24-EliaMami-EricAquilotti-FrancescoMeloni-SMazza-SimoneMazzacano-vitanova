@@ -36,6 +36,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
+    private static final int TEXT_VERTICAL_SPACING = 25;
     /**
      * Base window width, screen width.
      */
@@ -53,6 +54,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     private int xOffset;
     private int yOffset;
+    private int textVerticalOffset;
     private final JFrame window = new JFrame();
     private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -132,6 +134,19 @@ public final class ScreenImpl extends JPanel implements Screen {
         centerY = window.getHeight() / 2 - TILE_SIZE / 2;
     }
 
+    private int calculateTextWidth(final Font font, final Text text, final Graphics2D g) {
+        final FontMetrics fontMetrics = g.getFontMetrics(font);
+        return fontMetrics.stringWidth(text.content());
+    }
+
+    private void drawLine(final Font f, final Text lineText, final boolean isJustifiedCenter) {
+        final int textWidth = calculateTextWidth(f, lineText, bufferGraphics);
+        final int justifiedXPosition = Math.max(this.centerX - (textWidth / 2), 0);
+
+        bufferGraphics.drawString(lineText.content(), isJustifiedCenter ? justifiedXPosition : (int) lineText.position().x(), 
+        (int) lineText.position().y() + (isJustifiedCenter ? this.centerY : 0) + textVerticalOffset);
+    }
+
     private void drawText(final Optional<List<Text>> texts, final boolean isJustifiedCenter) {
         final Optional<List<Text>> copyTexts = texts.map(ArrayList::new); // to avoid concurrent modifications on iterated list
         copyTexts.ifPresent(list -> list.forEach(text -> {
@@ -139,17 +154,16 @@ public final class ScreenImpl extends JPanel implements Screen {
             bufferGraphics.setColor(text.color());
             bufferGraphics.setFont(f);
 
-            final int textWidth = calculateTextWidth(f, text, bufferGraphics);
-            final int justifiedXPosition = this.centerX - (textWidth / 2);
+            final String[] lines = text.content().split("\\R");
+            for (final String line : lines) {
+                final Text lineText = new Text(line, text.position(), text.color(), text.size());
+                drawLine(f, lineText, isJustifiedCenter);
 
-            bufferGraphics.drawString(text.content(), isJustifiedCenter ? justifiedXPosition : (int) text.position().x(), 
-            (int) text.position().y() + (isJustifiedCenter ? this.centerY : 0));
+                if (lines.length > 1) {
+                    incrementVerticalOffset();
+                }
+            }
         }));
-    }
-
-    private int calculateTextWidth(final Font font, final Text text, final Graphics2D g) {
-        final FontMetrics fontMetrics = g.getFontMetrics(font);
-        return fontMetrics.stringWidth(text.content());
     }
 
     private void redrawBuffer() {
@@ -178,8 +192,17 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
         });
 
+        resetVerticalOffset();
         drawText(textToDraw, false);
         drawText(menuText, true);
+    }
+
+    private void resetVerticalOffset() {
+        this.textVerticalOffset = 0;
+    }
+
+    private void incrementVerticalOffset() {
+        this.textVerticalOffset += TEXT_VERTICAL_SPACING;
     }
 
     private Position screenPosition(final Position position) {
