@@ -16,10 +16,10 @@ public final class StartMenu extends AbstractMenu {
      * @param game the game controller
      */
     public StartMenu(final InputHandler input, final Game game) {
-        super(input, game, List.of("Play", "Quit"), List.of(g -> {
+        super(input, game, List.of("Play", "Help", "Quit"), List.of(g -> {
             g.setMenu(new GamePlayMenu(input, g));
             g.startGameplay();
-        }, Game::exit), false, "Welcome to the game", "Vitanova");
+        }, g -> g.setMenu(new HelpMenu(input, game)), Game::exit), false, "Welcome to the game", "Vitanova");
     }
 
     @Override
