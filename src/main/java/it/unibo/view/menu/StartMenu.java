@@ -19,7 +19,7 @@ public final class StartMenu extends AbstractMenu {
         super(input, game, List.of("Play", "Quit"), List.of(g -> {
             g.setMenu(new GamePlayMenu(input, g));
             g.startGameplay();
-        }, Game::exit), false);
+        }, Game::exit), false, "Welcome to the game", "Vitanova");
     }
 
     @Override

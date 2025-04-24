@@ -17,7 +17,7 @@ public final class GamePlayMenu extends AbstractMenu {
      * @param game the game controller
      */
     public GamePlayMenu(final InputHandler input, final Game game) {
-        super(input, game, List.of("Play", "Quit"), List.of(g -> { }, Game::exit), true);
+        super(input, game, List.of("Play", "Quit"), List.of(g -> { }, Game::exit), true, "", "Game paused");
     }
 
     @Override

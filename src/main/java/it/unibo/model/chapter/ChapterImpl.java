@@ -41,6 +41,7 @@ public final class ChapterImpl implements Chapter {
      * @param inputHandler
      * @param rows the number of rows of the map.
      * @param coloumns the number of coloumns of the map.
+     * @param goal the number of humans to reach to win.
      */
     public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns, final int goal) {
         this.goal = goal;

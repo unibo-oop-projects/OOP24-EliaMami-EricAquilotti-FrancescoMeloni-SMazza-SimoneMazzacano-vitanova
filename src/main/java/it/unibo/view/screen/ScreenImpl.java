@@ -3,6 +3,7 @@ package it.unibo.view.screen;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Graphics;
@@ -131,16 +132,24 @@ public final class ScreenImpl extends JPanel implements Screen {
         centerY = window.getHeight() / 2 - TILE_SIZE / 2;
     }
 
-    private void drawText(final Optional<List<Text>> texts, final boolean alignedCenter) {
+    private void drawText(final Optional<List<Text>> texts, final boolean isJustifiedCenter) {
         final Optional<List<Text>> copyTexts = texts.map(ArrayList::new); // to avoid concurrent modifications on iterated list
         copyTexts.ifPresent(list -> list.forEach(text -> {
             final Font f = new Font("Verdana", Font.BOLD, text.size());
             bufferGraphics.setColor(text.color());
             bufferGraphics.setFont(f);
 
-            bufferGraphics.drawString(text.content(), (int) text.position().x() + (alignedCenter ? this.centerX : 0), 
-            (int) text.position().y() + (alignedCenter ? this.centerY : 0));
+            final int textWidth = calculateTextWidth(f, text, bufferGraphics);
+            final int justifiedXPosition = this.centerX - (textWidth / 2);
+
+            bufferGraphics.drawString(text.content(), isJustifiedCenter ? justifiedXPosition : (int) text.position().x(), 
+            (int) text.position().y() + (isJustifiedCenter ? this.centerY : 0));
         }));
+    }
+
+    private int calculateTextWidth(final Font font, final Text text, final Graphics2D g) {
+        final FontMetrics fontMetrics = g.getFontMetrics(font);
+        return fontMetrics.stringWidth(text.content());
     }
 
     private void redrawBuffer() {

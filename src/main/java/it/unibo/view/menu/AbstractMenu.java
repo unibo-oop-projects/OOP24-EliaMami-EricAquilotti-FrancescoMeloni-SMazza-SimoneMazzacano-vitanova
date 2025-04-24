@@ -18,12 +18,15 @@ public abstract class AbstractMenu implements Menu {
     private static final int TIMER_VALUE = 10;
     private static final int TEXT_VERTICAL_SPACING = 100;
     private static final int TEXT_SIZE = 60;
+    private static final int TEXT_SUBTITLE_SIZE = 40;
     private static final int TEXT_HORIZONTAL_OFFSET = 0;
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final int MENU_TOGGLE_KEY = KeyEvent.VK_ESCAPE;
 
     private final List<String> optionsDescriptions;
     private final List<Consumer<Game>> optionsBehaviors;
+    private final String title;
+    private final String subtitle;
     private int selectedOptionIndex;
     private boolean isHidden;
     private int timer = TIMER_VALUE;
@@ -51,9 +54,13 @@ public abstract class AbstractMenu implements Menu {
      * @param options the list of options
      * @param optionsBehaviours the list of behaviors for each option
      * @param isInitiallyHidden the initial state of the menu
+     * @param subtitle the subtitle of the menu
+     * @param title the title of the menu
      */
     protected AbstractMenu(final InputHandler input, final Game game, final List<String> options,
-    final List<Consumer<Game>> optionsBehaviours, final boolean isInitiallyHidden) {
+    final List<Consumer<Game>> optionsBehaviours, final boolean isInitiallyHidden, final String subtitle, final String title) {
+        this.title = title;
+        this.subtitle = subtitle;
         this.input = input;
         this.game = game;
         this.optionsDescriptions = options;
@@ -92,17 +99,28 @@ public abstract class AbstractMenu implements Menu {
         isHidden = !isHidden;
     }
 
+    private void addText(final List<Text> textToShow, final String text, final int verticalOffset, final int textSize) {
+        textToShow.add(new Text(text, 
+        new Position(TEXT_HORIZONTAL_OFFSET, verticalOffset), TEXT_COLOR, textSize));
+    }
+
     @Override
     public final List<Text> getText() {
         if (!isHidden) {
             int verticalOffset = 0;
             final List<Text> textToShow = new ArrayList<>();
+            addText(textToShow, title, verticalOffset, TEXT_SIZE);
+            verticalOffset += TEXT_VERTICAL_SPACING;
+            if (!subtitle.isEmpty()) {
+                addText(textToShow, subtitle, verticalOffset, TEXT_SUBTITLE_SIZE);
+                verticalOffset += TEXT_VERTICAL_SPACING;
+            }
+
             for (int index = 0; index < optionsDescriptions.size(); index++) {
                 final String formattedText = selectedOptionIndex == index 
                     ? applySelectedFormat(optionsDescriptions.get(index)) : optionsDescriptions.get(index);
 
-                textToShow.add(new Text(formattedText, 
-                new Position(TEXT_HORIZONTAL_OFFSET, verticalOffset), TEXT_COLOR, TEXT_SIZE));
+                addText(textToShow, formattedText, verticalOffset, TEXT_SIZE);
                 verticalOffset += TEXT_VERTICAL_SPACING;
             }
             return textToShow;
