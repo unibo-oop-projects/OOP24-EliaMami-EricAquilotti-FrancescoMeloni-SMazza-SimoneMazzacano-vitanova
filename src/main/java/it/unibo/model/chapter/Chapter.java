@@ -34,4 +34,10 @@ public interface Chapter {
      * @return the player.
      */
     Human getPlayer();
+
+    /**
+     * 
+     * @return the number of humans on the map to reach.
+     */
+    int getPopulationGoal();
 }

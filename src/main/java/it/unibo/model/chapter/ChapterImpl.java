@@ -28,7 +28,7 @@ import it.unibo.view.sprite.HumanType;
 public final class ChapterImpl implements Chapter {
     private static final int STARTING_FEMALES = 5;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private final int goal;
+    private static final int POPULATION_GOAL = 100;
     private final Map map;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
     // The first human is the player.
@@ -41,10 +41,8 @@ public final class ChapterImpl implements Chapter {
      * @param inputHandler
      * @param rows the number of rows of the map.
      * @param coloumns the number of coloumns of the map.
-     * @param goal the number of humans to reach to win.
      */
-    public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns, final int goal) {
-        this.goal = goal;
+    public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
         map = new MapImpl(rows, coloumns);
         final Position startingPosition = Position.getRandomWalkablePosition(map);
         this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
@@ -65,7 +63,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     private boolean gameWon() {
-        return this.humans.size() >= this.goal;
+        return this.humans.size() >= POPULATION_GOAL;
     }
 
     private void solveCollisions() {
@@ -146,5 +144,10 @@ public final class ChapterImpl implements Chapter {
 
     private boolean walkablePosition(final Position position) {
         return map.getTileFromPixel(position.x(), position.y()).isWalkable();
+    }
+
+    @Override
+    public int getPopulationGoal() {
+        return POPULATION_GOAL;
     }
 }
