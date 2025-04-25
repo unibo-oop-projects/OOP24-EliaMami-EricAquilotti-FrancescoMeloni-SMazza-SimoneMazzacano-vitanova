@@ -120,7 +120,14 @@ public final class Game implements Runnable {
     /**
      * Restarts the current chapter.
      */
-    public void restartChapter() {
+    public void restartCurrentChapter() {
+        chapter.restart();
+    }
+
+    /**
+     * Sets the new chapter.
+     */
+    public void setNewChapter() {
         this.chapter = new ChapterImpl(inputHandler, 16, 16);
         this.isGameplayStarted = false;
     }

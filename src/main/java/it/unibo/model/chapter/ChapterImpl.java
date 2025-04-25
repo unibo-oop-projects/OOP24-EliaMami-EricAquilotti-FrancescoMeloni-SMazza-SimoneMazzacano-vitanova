@@ -31,6 +31,7 @@ public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int POPULATION_GOAL = 100;
     private final Map map;
+    private final InputHandler inputHandler;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
@@ -45,11 +46,8 @@ public final class ChapterImpl implements Chapter {
      */
     public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
         map = new MapImpl(rows, coloumns);
-        final Position startingPosition = Position.getRandomWalkablePosition(map);
-        this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
-        for (int i = 0; i < STARTING_FEMALES; i++) {
-            this.humans.add(humanFactory.female(randomPosition(startingPosition), map));
-        }
+        this.inputHandler = inputHandler;
+        spawnHumans(inputHandler);
     }
 
     @Override
@@ -62,6 +60,23 @@ public final class ChapterImpl implements Chapter {
 
     private boolean gameWon() {
         return this.humans.size() >= POPULATION_GOAL;
+    }
+
+    private void spawnHumans(final InputHandler inputHandler) {
+        final Position startingPosition = spawnPlayer(inputHandler);
+        for (int i = 0; i < STARTING_FEMALES; i++) {
+            this.humans.add(humanFactory.female(randomPosition(startingPosition), map));
+        }
+    }
+
+    /**
+     * @param inputHandler the input handler.
+     * @return the position of the player.
+     */
+    private Position spawnPlayer(final InputHandler inputHandler) {
+        final Position startingPosition = Position.getRandomWalkablePosition(map);
+        this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
+        return startingPosition;
     }
 
     private void solveCollisions() {
@@ -155,5 +170,11 @@ public final class ChapterImpl implements Chapter {
             return ChapterState.PLAYER_WON;
         }
         return ChapterState.IN_PROGRESS;
+    }
+
+    @Override
+    public void restart() {
+        this.humans.clear();
+        spawnHumans(this.inputHandler);
     }
 }

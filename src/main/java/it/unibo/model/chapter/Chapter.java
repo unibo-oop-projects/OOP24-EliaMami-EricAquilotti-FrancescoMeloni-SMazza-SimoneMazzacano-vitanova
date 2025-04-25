@@ -47,4 +47,9 @@ public interface Chapter {
      * @return state of the chapter.
      */
     ChapterState getState();
+
+    /**
+     * brings back the chapter to its initial state.
+     */
+    void restart();
 }
