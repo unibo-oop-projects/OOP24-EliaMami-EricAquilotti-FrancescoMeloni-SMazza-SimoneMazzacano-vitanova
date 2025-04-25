@@ -22,7 +22,8 @@ public class HelpMenu extends AbstractMenu {
      * @param game the game controller
      */
     public HelpMenu(final InputHandler input, final Game game) {
-        super(input, game, Collections.singletonList("Back"), Collections.singletonList(g -> g.setMenu(new StartMenu(input, g))),
+        super(input, game, Collections.singletonList(
+            MenuOption.of("Back", g -> g.setMenu(new StartMenu(input, g)))),
          false, HELP_TEXT, "Help");
     }
 

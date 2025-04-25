@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 
 /**
@@ -23,8 +22,7 @@ public abstract class AbstractMenu implements Menu {
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final int MENU_TOGGLE_KEY = KeyEvent.VK_ESCAPE;
 
-    private final List<String> optionsDescriptions;
-    private final List<Consumer<Game>> optionsBehaviors;
+    private final List<MenuOption> options;
     private final String title;
     private final String subtitle;
     private int selectedOptionIndex;
@@ -51,20 +49,18 @@ public abstract class AbstractMenu implements Menu {
      * Constructor for the AbstractMenu class.
      * @param input the input handler
      * @param game the game controller
-     * @param options the list of options
-     * @param optionsBehaviours the list of behaviors for each option
+     * @param options the list of MenuOption
      * @param isInitiallyHidden the initial state of the menu
      * @param subtitle the subtitle of the menu
      * @param title the title of the menu
      */
-    protected AbstractMenu(final InputHandler input, final Game game, final List<String> options,
-    final List<Consumer<Game>> optionsBehaviours, final boolean isInitiallyHidden, final String subtitle, final String title) {
+    protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
+    final boolean isInitiallyHidden, final String subtitle, final String title) {
         this.title = title;
         this.subtitle = subtitle;
         this.input = input;
         this.game = game;
-        this.optionsDescriptions = options;
-        this.optionsBehaviors = optionsBehaviours;
+        this.options = options;
         this.isHidden = isInitiallyHidden;
     }
 
@@ -76,14 +72,14 @@ public abstract class AbstractMenu implements Menu {
             toggleMenu();
             timer = TIMER_VALUE;
         } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_DOWN)
-         && selectedOptionIndex + 1 < optionsDescriptions.size()) {
+         && selectedOptionIndex + 1 < options.size()) {
             this.selectedOptionIndex++;
             timer = TIMER_VALUE;
         } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_UP) && selectedOptionIndex > 0) {
             this.selectedOptionIndex--;
             timer = TIMER_VALUE;
         } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_ENTER)) {
-            this.optionsBehaviors.get(selectedOptionIndex).accept(game);
+            this.options.get(selectedOptionIndex).execute(game);
             toggleMenu();
         }
     }
@@ -116,9 +112,9 @@ public abstract class AbstractMenu implements Menu {
                 verticalOffset += TEXT_VERTICAL_SPACING;
             }
 
-            for (int index = 0; index < optionsDescriptions.size(); index++) {
+            for (int index = 0; index < options.size(); index++) {
                 final String formattedText = selectedOptionIndex == index 
-                    ? applySelectedFormat(optionsDescriptions.get(index)) : optionsDescriptions.get(index);
+                    ? applySelectedFormat(options.get(index).desc()) : options.get(index).desc();
 
                 addText(textToShow, formattedText, verticalOffset, TEXT_SIZE);
                 verticalOffset += TEXT_VERTICAL_SPACING;
