@@ -17,8 +17,11 @@ public final class GamePlayMenu extends AbstractMenu {
      * @param game the game controller
      */
     public GamePlayMenu(final InputHandler input, final Game game) {
-        super(input, game, List.of("Resume", "Restart chapter", "Quit"), List.of(g -> { },
-        g -> game.restartCurrentChapter(), Game::exit), true, "", "Game paused");
+        super(input, game, List.of("Resume", "Restart chapter", "Home", "Quit"), List.of(g -> { },
+        g -> game.restartCurrentChapter(), g -> {
+            game.setNewChapter();
+            game.setMenu(new StartMenu(input, game));
+        }, Game::exit), true, "", "Game paused");
     }
 
     @Override

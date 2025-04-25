@@ -1,7 +1,7 @@
 package it.unibo.controller;
 
 import java.awt.Color;
-
+import java.util.Collections;
 import it.unibo.common.ChapterState;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
@@ -125,10 +125,11 @@ public final class Game implements Runnable {
     }
 
     /**
-     * Sets the new chapter.
+     * Sets the new chapter and clears the screen.
      */
     public void setNewChapter() {
         this.chapter = new ChapterImpl(inputHandler, 16, 16);
         this.isGameplayStarted = false;
+        this.screen.loadHumans(Collections.emptyList());
     }
 }
