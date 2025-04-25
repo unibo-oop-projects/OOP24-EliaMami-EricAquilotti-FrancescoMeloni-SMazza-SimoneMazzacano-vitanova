@@ -1,6 +1,8 @@
 package it.unibo.controller;
 
 import java.awt.Color;
+
+import it.unibo.common.ChapterState;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
@@ -66,6 +68,10 @@ public final class Game implements Runnable {
     }
 
     private void update() {
+        if (chapter.getState() == ChapterState.PLAYER_WON) {
+            this.exit();
+        }
+
         if (isGameplayStarted && !isGameplayPaused) {
             chapter.update();
         }

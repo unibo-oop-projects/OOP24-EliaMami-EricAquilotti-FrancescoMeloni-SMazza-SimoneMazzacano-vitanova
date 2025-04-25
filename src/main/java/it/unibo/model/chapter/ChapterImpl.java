@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import it.unibo.common.ChapterState;
 import it.unibo.common.Circle;
 import it.unibo.common.Position;
 import it.unibo.common.RectangleImpl;
@@ -53,9 +54,6 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public void update() {
-        if (gameWon()) {
-            System.exit(0);
-        }
         for (final Human human : humans) {
             human.move();
         }
@@ -149,5 +147,13 @@ public final class ChapterImpl implements Chapter {
     @Override
     public int getPopulationGoal() {
         return POPULATION_GOAL;
+    }
+
+    @Override
+    public ChapterState getState() {
+        if (gameWon()) {
+            return ChapterState.PLAYER_WON;
+        }
+        return ChapterState.IN_PROGRESS;
     }
 }

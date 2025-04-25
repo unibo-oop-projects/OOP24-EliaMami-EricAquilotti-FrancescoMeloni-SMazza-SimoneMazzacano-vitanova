@@ -2,6 +2,7 @@ package it.unibo.model.chapter;
 
 import java.util.List;
 
+import it.unibo.common.ChapterState;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 // import it.unibo.model.human.Player;
@@ -40,4 +41,10 @@ public interface Chapter {
      * @return the number of humans on the map to reach.
      */
     int getPopulationGoal();
+
+    /**
+     * 
+     * @return state of the chapter.
+     */
+    ChapterState getState();
 }
