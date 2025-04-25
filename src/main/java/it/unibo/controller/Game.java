@@ -21,7 +21,7 @@ public final class Game implements Runnable {
     private final Thread gameThread = new Thread(this);
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
-    private final Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
+    private Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
@@ -115,5 +115,13 @@ public final class Game implements Runnable {
      */
     public void exit() {
         System.exit(0);
+    }
+
+    /**
+     * Restarts the current chapter.
+     */
+    public void restartChapter() {
+        this.chapter = new ChapterImpl(inputHandler, 16, 16);
+        this.isGameplayStarted = false;
     }
 }

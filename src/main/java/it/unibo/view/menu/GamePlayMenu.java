@@ -7,7 +7,7 @@ import it.unibo.controller.InputHandler;
 
 
 /**
- * Class that handles the menu options, text and input.
+ * Class that handles the menu options during the gameplay.
  */
 public final class GamePlayMenu extends AbstractMenu {
 
@@ -17,7 +17,10 @@ public final class GamePlayMenu extends AbstractMenu {
      * @param game the game controller
      */
     public GamePlayMenu(final InputHandler input, final Game game) {
-        super(input, game, List.of("Play", "Quit"), List.of(g -> { }, Game::exit), true, "", "Game paused");
+        super(input, game, List.of("Resume", "Restart chapter", "Quit"), List.of(g -> { }, g -> {
+            game.restartChapter();
+            game.startGameplay();
+        }, Game::exit), true, "", "Game paused");
     }
 
     @Override
