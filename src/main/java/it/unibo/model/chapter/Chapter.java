@@ -6,7 +6,6 @@ import java.util.List;
 import it.unibo.common.ChapterState;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
-// import it.unibo.model.human.Player;
 
 /**
  * Models a chapter that will handle the map, all humans movements and
