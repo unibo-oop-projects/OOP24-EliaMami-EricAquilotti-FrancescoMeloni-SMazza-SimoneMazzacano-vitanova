@@ -12,14 +12,22 @@ public final class TimerImpl implements Timer {
     /**
      * Constructor for the timer.
      * @param targetTime the time to count down from.
+     * @throws IllegalArgumentException if the target time is negative.
      */
     public TimerImpl(final Duration targetTime) {
+        if (targetTime.isNegative()) {
+            throw new IllegalArgumentException("Target time cannot be negative");
+        }
         this.targetTime = targetTime;
         reset();
     }
 
     @Override
     public void update(final Duration deltaTime) {
+        if (deltaTime.compareTo(this.remainingTime) >= 0) {
+            this.remainingTime = Duration.ZERO;
+            return;
+        }
         this.remainingTime = this.remainingTime.minus(deltaTime);
     }
 

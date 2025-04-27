@@ -33,7 +33,7 @@ public final class ChapterImpl implements Chapter {
     private static final int STARTING_FEMALES = 5;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int POPULATION_GOAL = 100;
-    private static final Duration TIMER_VALUE = Duration.ofMinutes(2);
+    private static final Duration TIMER_VALUE = Duration.ofSeconds(10);
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
@@ -66,6 +66,10 @@ public final class ChapterImpl implements Chapter {
 
     private boolean gameWon() {
         return this.humans.size() >= POPULATION_GOAL;
+    }
+
+    private boolean gameLost() {
+        return timer.isOver();
     }
 
     private void spawnHumans(final InputHandler inputHandler) {
@@ -174,6 +178,9 @@ public final class ChapterImpl implements Chapter {
     public ChapterState getState() {
         if (gameWon()) {
             return ChapterState.PLAYER_WON;
+        }
+        if (gameLost()) {
+            return ChapterState.PLAYER_LOST;
         }
         return ChapterState.IN_PROGRESS;
     }

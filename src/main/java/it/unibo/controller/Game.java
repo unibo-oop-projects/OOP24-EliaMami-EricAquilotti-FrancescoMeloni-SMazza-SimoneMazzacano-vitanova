@@ -71,7 +71,8 @@ public final class Game implements Runnable {
     }
 
     private void update(final Duration gameDelta) {
-        if (chapter.getState() == ChapterState.PLAYER_WON) {
+        if (chapter.getState() == ChapterState.PLAYER_WON 
+                || chapter.getState() == ChapterState.PLAYER_LOST) {
             this.exit();
         }
 
