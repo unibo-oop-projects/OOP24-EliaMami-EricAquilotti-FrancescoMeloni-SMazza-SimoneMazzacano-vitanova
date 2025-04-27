@@ -1,5 +1,6 @@
 package it.unibo.model.chapter;
 
+import java.time.Duration;
 import java.util.List;
 
 import it.unibo.common.ChapterState;
@@ -15,8 +16,10 @@ public interface Chapter {
     /**
      * Goes to the next state i.e. moves all the humans and checks for
      * collisions.
+     * @param gameDeltaTime the game-time passed since the last update 
+     * (if the game is paused gameDeltaTime will be zero).
      */
-    void update();
+    void update(Duration gameDeltaTime);
 
     /**
      * 
@@ -52,4 +55,10 @@ public interface Chapter {
      * brings back the chapter to its initial state.
      */
     void restart();
+
+    /**
+     * 
+     * @return the timer value.
+     */
+    Duration getTimerValue();
 }

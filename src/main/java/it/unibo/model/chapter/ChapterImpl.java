@@ -1,5 +1,6 @@
 package it.unibo.model.chapter;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,8 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.HumanFactoryImpl;
+import it.unibo.model.timer.Timer;
+import it.unibo.model.timer.TimerImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.chapter.quadtree.Point;
@@ -30,6 +33,7 @@ public final class ChapterImpl implements Chapter {
     private static final int STARTING_FEMALES = 5;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int POPULATION_GOAL = 100;
+    private static final Duration TIMER_VALUE = Duration.ofMinutes(2);
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
@@ -37,6 +41,7 @@ public final class ChapterImpl implements Chapter {
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
     private final Random random = new Random();
+    private final Timer timer = new TimerImpl(TIMER_VALUE);
 
     /**
      * Sets up all the parameters.
@@ -51,11 +56,12 @@ public final class ChapterImpl implements Chapter {
     }
 
     @Override
-    public void update() {
+    public void update(final Duration gameDeltaTime) {
         for (final Human human : humans) {
             human.move();
         }
         solveCollisions();
+        timer.update(gameDeltaTime);
     }
 
     private boolean gameWon() {
@@ -176,5 +182,11 @@ public final class ChapterImpl implements Chapter {
     public void restart() {
         this.humans.clear();
         spawnHumans(this.inputHandler);
+        timer.reset();
+    }
+
+    @Override
+    public Duration getTimerValue() {
+        return timer.getRemainingTime();
     }
 }

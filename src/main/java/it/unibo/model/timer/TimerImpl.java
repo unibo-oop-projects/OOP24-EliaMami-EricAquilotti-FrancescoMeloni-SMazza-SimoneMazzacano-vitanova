@@ -7,10 +7,14 @@ import java.time.Duration;
  * It is used to manage the time in the game.
  */
 public final class TimerImpl implements Timer {
-    private final int targertTimeInSeconds;
+    private final Duration targetTime;
     private Duration remainingTime;
-    public TimerImpl(final int targertTimeInSeconds) {
-        this.targertTimeInSeconds = targertTimeInSeconds;
+    /**
+     * Constructor for the timer.
+     * @param targetTime the time to count down from.
+     */
+    public TimerImpl(final Duration targetTime) {
+        this.targetTime = targetTime;
         reset();
     }
 
@@ -26,7 +30,7 @@ public final class TimerImpl implements Timer {
 
     @Override
     public void reset() {
-        this.remainingTime = Duration.ofSeconds(targertTimeInSeconds);
+        this.remainingTime = targetTime;
     }
 
     @Override

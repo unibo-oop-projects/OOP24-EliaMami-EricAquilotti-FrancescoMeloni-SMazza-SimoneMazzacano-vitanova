@@ -8,8 +8,6 @@ import it.unibo.common.ChapterState;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
-import it.unibo.model.timer.Timer;
-import it.unibo.model.timer.TimerImpl;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
 import it.unibo.view.screen.Screen;
@@ -21,13 +19,11 @@ import it.unibo.view.screen.ScreenImpl;
 public final class Game implements Runnable {
     private static final int FPS = 60;
     private static final int NANO_IN_SEC = 1_000_000_000;
-    private static final int MAX_TIME_IN_SECONDS = 60 * 2;
     private final Thread gameThread = new Thread(this);
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
     private Menu menu = new StartMenu(inputHandler, this);
-    private final Timer gameTimer = new TimerImpl(MAX_TIME_IN_SECONDS);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
     /**
@@ -40,6 +36,7 @@ public final class Game implements Runnable {
     @Override
     public void run() {
         final double drawInterval = NANO_IN_SEC / FPS;
+        final Duration fixedGameTimeInterval = Duration.ofNanos((long) drawInterval);
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -50,18 +47,14 @@ public final class Game implements Runnable {
         while (gameThread != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
-            final Duration gameDelta =  Duration.ofNanos(this.isGameplayPaused || !this.isGameplayStarted
-            ? 0 : currentTime - lastTime);
             lastTime = currentTime;
 
             if (delta >= 1) {
-                update();
+                update(fixedGameTimeInterval);
                 draw();
                 delta--;
                 frameCount++;
             }
-
-            gameTimer.update(gameDelta);
 
             // Measure FPS every second
             if (System.currentTimeMillis() - timer >= 1000) {
@@ -69,7 +62,7 @@ public final class Game implements Runnable {
                 final Position textPosition = new Position(textSize, textSize);
                 final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount 
                 + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal() 
-                + " Time: " + gameTimer.getRemainingTime().toMinutesPart() + ":" + gameTimer.getRemainingTime().toSecondsPart();
+                + " Time: " + chapter.getTimerValue().toMinutesPart() + ":" + chapter.getTimerValue().toSecondsPart();
                 screen.loadText(content, textPosition, Color.RED, textSize);
                 frameCount = 0;
                 timer += 1000;
@@ -77,13 +70,13 @@ public final class Game implements Runnable {
         }
     }
 
-    private void update() {
+    private void update(final Duration gameDelta) {
         if (chapter.getState() == ChapterState.PLAYER_WON) {
             this.exit();
         }
 
         if (isGameplayStarted && !isGameplayPaused) {
-            chapter.update();
+            chapter.update(gameDelta);
         }
         menu.update();
         final Position playerPosition = chapter.getPlayer().getPosition();
