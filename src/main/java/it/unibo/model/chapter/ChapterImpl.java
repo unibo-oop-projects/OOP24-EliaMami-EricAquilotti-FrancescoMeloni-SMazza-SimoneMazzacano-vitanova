@@ -92,25 +92,21 @@ public final class ChapterImpl implements Chapter {
     private void solveCollisions() {
         final List<Human> generated = new ArrayList<>();
         final QuadTree tree = createTree();
-        for (final Human human : humans) {
-            if (human.getType() != HumanType.FEMALE) {
-                continue;
-            }
-            final Human female = human;
+        humans.stream()
+        .filter(h -> h.getType() == HumanType.FEMALE)
+        .forEach(female -> {
             final Position femalePosition = female.getPosition();
             final Circle range = female.reproductionArea();
             range.setRadius(range.getRadius() * 2);
-            final List<Human> closeMales = tree.query(range).stream().map(p -> (Human) p.data()).toList();
-            for (final Human closeMale : closeMales) {
-                if (female.collide(closeMale)) {
-                    generated.add(
-                        random.nextDouble() < MALE_SPAWNING_PROBABILITY
-                            ? humanFactory.male(randomPosition(femalePosition), map)
-                            : humanFactory.female(randomPosition(femalePosition), map)
-                    );
-                }
-            }
-        }
+            tree.query(range).stream()
+            .map(p -> (Human) p.data())
+            .filter(male -> female.collide(male))
+            .forEach(male -> generated.add(
+                random.nextDouble() < MALE_SPAWNING_PROBABILITY
+                    ? humanFactory.male(randomPosition(femalePosition), map)
+                    : humanFactory.female(randomPosition(femalePosition), map)
+            ));
+        });
         this.humans.addAll(generated);
     }
 
