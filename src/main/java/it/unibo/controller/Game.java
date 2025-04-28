@@ -8,6 +8,7 @@ import it.unibo.common.ChapterState;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
+import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
 import it.unibo.view.screen.Screen;
@@ -71,9 +72,12 @@ public final class Game implements Runnable {
     }
 
     private void update(final Duration gameDelta) {
-        if (chapter.getState() == ChapterState.PLAYER_WON 
-                || chapter.getState() == ChapterState.PLAYER_LOST) {
+        if (chapter.getState() == ChapterState.PLAYER_WON) {
             this.exit();
+        }
+
+        if (!isGameplayPaused && chapter.getState() == ChapterState.PLAYER_LOST) {
+            this.setMenu(new GameOverMenu(inputHandler, this));
         }
 
         if (isGameplayStarted && !isGameplayPaused) {
@@ -110,7 +114,7 @@ public final class Game implements Runnable {
     /**
      * Pauses the gameplay.
      */
-    public void toogleGameplayState() {
+    public void toggleGameplayState() {
         this.isGameplayPaused = !this.isGameplayPaused;
     }
 

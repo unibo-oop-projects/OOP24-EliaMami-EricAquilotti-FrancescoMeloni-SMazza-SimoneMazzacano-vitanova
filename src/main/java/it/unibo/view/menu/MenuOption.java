@@ -3,6 +3,7 @@ package it.unibo.view.menu;
 import java.util.function.Consumer;
 
 import it.unibo.controller.Game;
+import it.unibo.controller.InputHandler;
 
 /**
  * Class that handles the menu options, wraps the description and the action to be performed.
@@ -33,6 +34,18 @@ public record MenuOption(String desc, Consumer<Game> action) {
      */
     public static MenuOption emptyAction(final String desc) {
         return new MenuOption(desc, g -> { });
+    }
+
+    /**
+     * Static factory method for the home menu option.
+     * @param input the input handler
+     * @return a MenuOption to go back to the home menu
+     */
+    public static MenuOption home(final InputHandler input) {
+        return new MenuOption("Home", g -> {
+            g.setNewChapter();
+            g.setMenu(new StartMenu(input, g));
+        });
     }
 
     /**

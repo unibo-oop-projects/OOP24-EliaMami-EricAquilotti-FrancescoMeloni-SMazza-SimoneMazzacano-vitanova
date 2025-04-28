@@ -19,11 +19,8 @@ public final class GamePlayMenu extends AbstractMenu {
     public GamePlayMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
         MenuOption.emptyAction("Resume"),
-        MenuOption.of("Restart chapter", g -> game.restartCurrentChapter()), 
-        MenuOption.of("Home", g -> {
-            game.setNewChapter();
-            game.setMenu(new StartMenu(input, game));
-        }),
+        MenuOption.of("Restart chapter", Game::restartCurrentChapter), 
+        MenuOption.home(input),
         MenuOption.quit()),
         true, "", "Game paused");
     }
@@ -31,6 +28,6 @@ public final class GamePlayMenu extends AbstractMenu {
     @Override
     protected void toggleMenu() {
         super.toggleMenu();
-        getGame().toogleGameplayState();
+        getGame().toggleGameplayState();
     }
 }
