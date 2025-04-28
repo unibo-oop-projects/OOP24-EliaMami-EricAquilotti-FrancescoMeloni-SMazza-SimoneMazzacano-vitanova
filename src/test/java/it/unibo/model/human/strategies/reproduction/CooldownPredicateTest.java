@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.common.Circle;
 import it.unibo.common.Direction;
+import it.unibo.common.PausableClock;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
 import it.unibo.utils.MutableClock;
@@ -22,7 +22,8 @@ import it.unibo.view.sprite.Sprite;
 class CooldownPredicateTest {
 
     private static final Duration COOLDOWN = Duration.ofSeconds(2);
-    private Clock baseClock;
+    private final MutableClock mutableClock = new MutableClock(Instant.now(), ZoneId.systemDefault());
+
     private Human createHuman(final HumanType type) {
         return new Human() {
             @Override public HumanType getType() {
@@ -57,15 +58,10 @@ class CooldownPredicateTest {
         return new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, COOLDOWN, clock);
     }
 
-    @BeforeEach
-    void setup() {
-        baseClock = Clock.fixed(Instant.parse("2025-04-19T10:00:00Z"), ZoneOffset.UTC);
-    }
-
     @Test
     void testReproductionAndCooldown() {
         final Human male = createHuman(HumanType.MALE);
-        final CooldownReproductionPredicate predicate = noFemalePredicate(baseClock);
+        final CooldownReproductionPredicate predicate = noFemalePredicate(mutableClock);
         assertTrue(predicate.test(male), "Should reproduce initially");
 
         assertFalse(predicate.test(male), "Should be on cooldown");
@@ -73,7 +69,6 @@ class CooldownPredicateTest {
 
     @Test
     void testCooldownExpiresAndAllowsReproductionAgain() {
-        final MutableClock mutableClock = new MutableClock(baseClock.instant(), baseClock.getZone());
         final CooldownReproductionPredicate predicate = noFemalePredicate(mutableClock);
         final Human male = createHuman(HumanType.MALE);
 
@@ -89,7 +84,24 @@ class CooldownPredicateTest {
     @Test
     void testNoReproduction() {
         final Human female = createHuman(HumanType.FEMALE);
-        final CooldownReproductionPredicate predicate = noFemalePredicate(baseClock);
+        final CooldownReproductionPredicate predicate = noFemalePredicate(mutableClock);
         assertFalse(predicate.test(female));
+    }
+
+    @Test
+    void testPause() {
+        final PausableClock pausableClock = new PausableClock(mutableClock);
+        final Human male = createHuman(HumanType.MALE);
+        final CooldownReproductionPredicate predicate = noFemalePredicate(pausableClock);
+        assertTrue(predicate.test(male), "Should reproduce initially");
+
+        pausableClock.pause();
+        mutableClock.advance(Duration.ofSeconds(3));
+        assertFalse(predicate.test(male), "Time paused");
+
+        pausableClock.unpause();
+        assertFalse(predicate.test(male), "Cooldown");
+        mutableClock.advance(Duration.ofSeconds(2));
+        assertTrue(predicate.test(male), "Cooldown expired, can reproduce again");
     }
 }

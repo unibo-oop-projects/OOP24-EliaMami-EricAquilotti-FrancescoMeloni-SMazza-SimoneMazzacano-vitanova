@@ -9,44 +9,39 @@ import java.time.ZoneId;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.unibo.common.PausableClock;
 import it.unibo.utils.MutableClock;
 
 class CooldownGateTest {
 
-    private MutableClock mutableClock;
-
-    @BeforeEach
-    void setup() {
-        final Instant baseTime = Instant.parse("2025-04-20T10:00:00Z");
-        mutableClock = new MutableClock(baseTime, ZoneId.of("UTC"));
-    }
+    private final MutableClock mutableClock = new MutableClock(Instant.now(), ZoneId.systemDefault());
+    private final PausableClock pausableClock = new PausableClock(mutableClock);
 
     @Test
     void testInitialCooldownNotExpired() {
-        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), mutableClock);
+        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), pausableClock);
         assertFalse(gate.tryActivate(), "Should not activate immediately after creation");
     }
 
     @Test
     void testCooldownExpiredReturnsTrue() {
-        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), mutableClock);
+        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), pausableClock);
         mutableClock.advance(Duration.ofSeconds(3));
         assertTrue(gate.tryActivate(), "Should activate after cooldown has passed");
     }
 
     @Test
     void testCooldownNotExpiredReturnsFalse() {
-        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), mutableClock);
+        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), pausableClock);
         mutableClock.advance(Duration.ofSeconds(2));
         assertFalse(gate.tryActivate(), "Should not activate before cooldown");
     }
 
     @Test
     void testCooldownResetsAfterActivation() {
-        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), mutableClock);
+        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(3), pausableClock);
         mutableClock.advance(Duration.ofSeconds(3));
         assertTrue(gate.tryActivate());
         mutableClock.advance(Duration.ofSeconds(2));
@@ -59,7 +54,7 @@ class CooldownGateTest {
     void testDynamicCooldownChanges() {
         final AtomicInteger callCount = new AtomicInteger();
         final Supplier<Duration> dynamicCooldown = () -> Duration.ofSeconds(2 + callCount.getAndIncrement());
-        final CooldownGate gate = new CooldownGate(dynamicCooldown, mutableClock);
+        final CooldownGate gate = new CooldownGate(dynamicCooldown, pausableClock);
 
         // First: needs 2s
         mutableClock.advance(Duration.ofSeconds(2));
@@ -82,10 +77,22 @@ class CooldownGateTest {
 
     @Test
     void testZeroCooldownAlwaysActivates() {
-        final CooldownGate gate = new CooldownGate(Duration.ZERO, mutableClock);
+        final CooldownGate gate = new CooldownGate(Duration.ZERO, pausableClock);
         assertTrue(gate.tryActivate());
         assertTrue(gate.tryActivate());
         assertTrue(gate.tryActivate());
     }
 
+    @Test
+    void testPauseCooldownNotExpires() {
+        final CooldownGate gate = new CooldownGate(Duration.ofSeconds(2), pausableClock);
+        assertFalse(gate.tryActivate(), "Should wait for cooldown");
+        pausableClock.pause();
+        mutableClock.advance(Duration.ofSeconds(3));
+        assertFalse(gate.tryActivate(), "No activation because it's paused");
+        pausableClock.unpause();
+        assertFalse(gate.tryActivate(), "Still no activation because advanced but in pause");
+        mutableClock.advance(Duration.ofSeconds(2));
+        assertTrue(gate.tryActivate(), "Should activate, cooldown has passed");
+    }
 }

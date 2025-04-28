@@ -1,5 +1,6 @@
 package it.unibo.model.chapter;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,32 +37,34 @@ public final class ChapterImpl implements Chapter {
     private static final Duration TIMER_VALUE = Duration.ofSeconds(10);
     private final Map map;
     private final InputHandler inputHandler;
-    private final HumanFactory humanFactory = new HumanFactoryImpl();
+    private final HumanFactory humanFactory;
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
     private final Random random = new Random();
-    private final Timer timer = new TimerImpl(TIMER_VALUE);
+    private final Timer timer;
 
     /**
      * Sets up all the parameters.
      * @param inputHandler
      * @param rows the number of rows of the map.
      * @param coloumns the number of coloumns of the map.
+     * @param baseClock the clock used for the factories and the timer.
      */
-    public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns) {
-        map = new MapImpl(rows, coloumns);
+    public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns, final Clock baseClock) {
+        this.map = new MapImpl(rows, coloumns);
         this.inputHandler = inputHandler;
+        this.humanFactory = new HumanFactoryImpl(baseClock);
+        this.timer = new TimerImpl(TIMER_VALUE, baseClock);
         spawnHumans(inputHandler);
     }
 
     @Override
-    public void update(final Duration gameDeltaTime) {
+    public void update() {
         for (final Human human : humans) {
             human.move();
         }
         solveCollisions();
-        timer.update(gameDeltaTime);
     }
 
     private boolean gameWon() {
@@ -100,7 +103,7 @@ public final class ChapterImpl implements Chapter {
             range.setRadius(range.getRadius() * 2);
             tree.query(range).stream()
             .map(p -> (Human) p.data())
-            .filter(male -> female.collide(male))
+            .filter(female::collide)
             .forEach(male -> generated.add(
                 random.nextDouble() < MALE_SPAWNING_PROBABILITY
                     ? humanFactory.male(randomPosition(femalePosition), map)

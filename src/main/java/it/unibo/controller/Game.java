@@ -1,10 +1,11 @@
 package it.unibo.controller;
 
 import java.awt.Color;
-import java.time.Duration;
+import java.time.Clock;
 import java.util.Collections;
 
 import it.unibo.common.ChapterState;
+import it.unibo.common.PausableClock;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
@@ -23,7 +24,8 @@ public final class Game implements Runnable {
     private final Thread gameThread = new Thread(this);
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
-    private Chapter chapter = new ChapterImpl(inputHandler, 16, 16);
+    private final PausableClock baseClock = new PausableClock(Clock.systemUTC());
+    private Chapter chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
@@ -37,7 +39,6 @@ public final class Game implements Runnable {
     @Override
     public void run() {
         final double drawInterval = NANO_IN_SEC / FPS;
-        final Duration fixedGameTimeInterval = Duration.ofNanos((long) drawInterval);
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -51,7 +52,7 @@ public final class Game implements Runnable {
             lastTime = currentTime;
 
             if (delta >= 1) {
-                update(fixedGameTimeInterval);
+                update();
                 draw();
                 delta--;
                 frameCount++;
@@ -61,6 +62,7 @@ public final class Game implements Runnable {
             if (System.currentTimeMillis() - timer >= 1000) {
                 final int textSize = 32;
                 final Position textPosition = new Position(textSize, textSize);
+                // We should not show the timer when the chapter is not going.
                 final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount 
                 + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal() 
                 + " Time: " + chapter.getTimerValue().toMinutesPart() + ":" + chapter.getTimerValue().toSecondsPart();
@@ -71,7 +73,7 @@ public final class Game implements Runnable {
         }
     }
 
-    private void update(final Duration gameDelta) {
+    private void update() {
         if (chapter.getState() == ChapterState.PLAYER_WON) {
             this.exit();
         }
@@ -81,7 +83,7 @@ public final class Game implements Runnable {
         }
 
         if (isGameplayStarted && !isGameplayPaused) {
-            chapter.update(gameDelta);
+            chapter.update();
         }
         menu.update();
         final Position playerPosition = chapter.getPlayer().getPosition();
@@ -101,6 +103,7 @@ public final class Game implements Runnable {
      */
     public void startGameplay() {
         this.isGameplayStarted = true;
+        this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
     }
 
     /**
@@ -115,6 +118,13 @@ public final class Game implements Runnable {
      * Pauses the gameplay.
      */
     public void toggleGameplayState() {
+        if (isGameplayStarted) {
+            if (isGameplayPaused) {
+                baseClock.unpause();
+            } else {
+                baseClock.pause();
+            }
+        }
         this.isGameplayPaused = !this.isGameplayPaused;
     }
 
@@ -136,7 +146,7 @@ public final class Game implements Runnable {
      * Sets the new chapter and clears the screen.
      */
     public void setNewChapter() {
-        this.chapter = new ChapterImpl(inputHandler, 16, 16);
+        this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
         this.isGameplayStarted = false;
         this.screen.loadHumans(Collections.emptyList());
     }

@@ -1,49 +1,46 @@
 package it.unibo.model.timer;
 
+import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Timer implementation.
  * It is used to manage the time in the game.
  */
 public final class TimerImpl implements Timer {
+    private final Clock clock;
     private final Duration targetTime;
-    private Duration remainingTime;
+    private Instant startingTime;
     /**
      * Constructor for the timer.
      * @param targetTime the time to count down from.
+     * @param clock the clock used to tell the time.
      * @throws IllegalArgumentException if the target time is negative.
      */
-    public TimerImpl(final Duration targetTime) {
+    public TimerImpl(final Duration targetTime, final Clock clock) {
         if (targetTime.isNegative()) {
             throw new IllegalArgumentException("Target time cannot be negative");
         }
         this.targetTime = targetTime;
+        this.clock = clock;
+        this.startingTime = clock.instant();
         reset();
     }
 
     @Override
-    public void update(final Duration deltaTime) {
-        if (deltaTime.compareTo(this.remainingTime) >= 0) {
-            this.remainingTime = Duration.ZERO;
-            return;
-        }
-        this.remainingTime = this.remainingTime.minus(deltaTime);
-    }
-
-    @Override
     public boolean isOver() {
-        return this.remainingTime.isZero() || this.remainingTime.isNegative();
+        return getRemainingTime().isZero() || getRemainingTime().isNegative();
     }
 
     @Override
     public void reset() {
-        this.remainingTime = targetTime;
+        this.startingTime = clock.instant();
     }
 
     @Override
     public Duration getRemainingTime() {
-        return this.remainingTime;
+        return targetTime.minus(Duration.between(startingTime, clock.instant()));
     }
 
 }
