@@ -38,9 +38,14 @@ public final class TimerImpl implements Timer {
         this.startingTime = clock.instant();
     }
 
+    private Duration computeRemainingTime() {
+        return targetTime.minus(Duration.between(startingTime, clock.instant()));
+    }
+
     @Override
     public Duration getRemainingTime() {
-        return targetTime.minus(Duration.between(startingTime, clock.instant()));
+        final Duration remainingTime = computeRemainingTime();
+        return remainingTime.isNegative() ? Duration.ZERO : remainingTime;
     }
 
 }

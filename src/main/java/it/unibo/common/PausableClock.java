@@ -30,9 +30,10 @@ public final class PausableClock extends Clock {
 
     @Override
     public Instant instant() {
+        final Instant now = baseClock.instant().minus(pausedDuration);
         return paused
-            ? baseClock.instant().minus(Duration.between(pauseStart, baseClock.instant()))
-            : baseClock.instant().minus(pausedDuration);
+            ? now.minus(Duration.between(pauseStart, baseClock.instant()))
+            : now;
     }
 
     @Override
