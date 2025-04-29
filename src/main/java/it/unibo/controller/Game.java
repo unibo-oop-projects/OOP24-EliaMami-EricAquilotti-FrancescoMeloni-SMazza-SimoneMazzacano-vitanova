@@ -1,6 +1,8 @@
 package it.unibo.controller;
 
 import java.awt.Color;
+import java.io.UncheckedIOException;
+import java.rmi.UnexpectedException;
 import java.time.Clock;
 import java.util.Collections;
 import java.util.Optional;
@@ -147,6 +149,9 @@ public final class Game implements Runnable {
      * Sets the new chapter and clears the screen.
      */
     public void setNewChapter() {
+        if (isGameplayPaused) {
+            baseClock.unpause();
+        }
         this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
         this.isGameplayStarted = false;
         this.screen.loadHumans(Collections.emptyList());

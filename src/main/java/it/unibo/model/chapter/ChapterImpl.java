@@ -31,7 +31,7 @@ import it.unibo.view.sprite.HumanType;
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
-    private static final int STARTING_FEMALES = 5;
+    private static final int STARTING_FEMALES = 1;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int POPULATION_GOAL = 100;
     private static final Duration TIMER_VALUE = Duration.ofSeconds(10);
