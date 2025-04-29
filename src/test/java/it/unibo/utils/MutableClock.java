@@ -9,25 +9,17 @@ import java.time.ZoneId;
  * Implementation of a clock that can advance in time.
  */
 public final class MutableClock extends Clock {
-    private Instant instant;
+    private Instant currentTime;
     private final ZoneId zone;
 
     /**
      * 
-     * @param initial the starting instant.
-     * @param zone the time zone.
+     * @param initialTime the initial instant
+     * @param zone 
      */
-    public MutableClock(final Instant initial, final ZoneId zone) {
-        this.instant = initial;
+    public MutableClock(final Instant initialTime, final ZoneId zone) {
+        this.currentTime = initialTime;
         this.zone = zone;
-    }
-
-    /**
-     * 
-     * @param duration the time to skip.
-     */
-    public void advance(final Duration duration) {
-        this.instant = this.instant.plus(duration);
     }
 
     @Override
@@ -37,11 +29,20 @@ public final class MutableClock extends Clock {
 
     @Override
     public Clock withZone(final ZoneId zone) {
-        return new MutableClock(instant, zone);
+        return new MutableClock(currentTime, zone);
     }
 
     @Override
     public Instant instant() {
-        return instant;
+        return currentTime;
+    }
+
+    /**
+     * 
+     * @param duration the time to skip.
+     */
+    public void advance(final Duration duration) {
+        // don't know what to put here
+        currentTime = currentTime.plus(duration);
     }
 }

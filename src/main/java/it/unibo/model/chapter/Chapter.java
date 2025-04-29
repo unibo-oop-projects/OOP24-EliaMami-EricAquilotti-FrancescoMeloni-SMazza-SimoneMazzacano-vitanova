@@ -15,10 +15,8 @@ public interface Chapter {
     /**
      * Goes to the next state i.e. moves all the humans and checks for
      * collisions.
-     * @param gameDeltaTime the game-time passed since the last update 
-     * (if the game is paused gameDeltaTime will be zero).
      */
-    void update(Duration gameDeltaTime);
+    void update();
 
     /**
      * 
@@ -51,7 +49,7 @@ public interface Chapter {
     ChapterState getState();
 
     /**
-     * brings back the chapter to its initial state.
+     * Brings back the chapter to its initial state.
      */
     void restart();
 

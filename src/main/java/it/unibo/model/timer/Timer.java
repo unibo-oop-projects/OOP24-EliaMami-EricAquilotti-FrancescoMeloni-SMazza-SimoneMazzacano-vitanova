@@ -7,11 +7,6 @@ import java.time.Duration;
  * It is used to manage the time in the game.
  */
 public interface Timer {
-    /**
-     * Updates the timer with the given delta time from the last update.
-     * @param deltaTime the time to update the timer with.
-     */
-    void update(Duration deltaTime);
 
     /**
      * Resets the timer to the initial value.

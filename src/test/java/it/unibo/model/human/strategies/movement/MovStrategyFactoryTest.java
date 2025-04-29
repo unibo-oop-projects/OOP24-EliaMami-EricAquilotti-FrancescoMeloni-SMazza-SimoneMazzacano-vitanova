@@ -1,20 +1,20 @@
 package it.unibo.model.human.strategies.movement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.event.KeyEvent;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 
 import javax.swing.JPanel;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.common.Direction;
+import it.unibo.common.PausableClock;
 import it.unibo.controller.InputHandler;
 import it.unibo.controller.InputHandlerImpl;
 import it.unibo.utils.MutableClock;
@@ -23,16 +23,12 @@ class MovStrategyFactoryTest {
     private static final long MAX_COOLDOWN_MILLIS = 3000;
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final JPanel dummyPanel = new JPanel();
-    private MutableClock clock;
-
-    @BeforeEach
-    void setup() {
-        clock = new MutableClock(Instant.parse("2025-04-20T12:00:00Z"), ZoneId.of("UTC"));
-    }
+    private final MutableClock mutableClock = new MutableClock(Instant.now(), ZoneId.systemDefault());
 
     @Test
     void testUserInputMovementReturnsCurrentInputDirection() {
-        final MovStrategyFactory factory = new MovStrategyFactoryImpl(clock);
+        final PausableClock pausableClock = new PausableClock(mutableClock);
+        final MovStrategyFactory factory = new MovStrategyFactoryImpl(pausableClock);
         final MovStrategy strategy = factory.userInputMovement(inputHandler);
 
         final Direction up = new Direction(true, false, false, false);
@@ -58,12 +54,13 @@ class MovStrategyFactoryTest {
 
     @Test
     void testRandomMovementDirectionStaysBeforeCooldown() {
-        final MovStrategyFactory factory = new MovStrategyFactoryImpl(clock);
+        final PausableClock pausableClock = new PausableClock(mutableClock);
+        final MovStrategyFactory factory = new MovStrategyFactoryImpl(pausableClock);
         final MovStrategy strategy = factory.randomMovement();
 
         final Direction first = strategy.nextDirection();
         // Advance less than minimum cooldown
-        clock.advance(Duration.ofMillis(100));
+        mutableClock.advance(Duration.ofMillis(100));
         final Direction second = strategy.nextDirection();
 
         assertEquals(first, second, "Direction should not change before cooldown");
@@ -71,28 +68,43 @@ class MovStrategyFactoryTest {
 
     @Test
     void testRandomMovementDirectionEventuallyChangesAfterCooldown() {
-        final MovStrategyFactory factory = new MovStrategyFactoryImpl(clock);
+        final PausableClock pausableClock = new PausableClock(mutableClock);
+        final MovStrategyFactory factory = new MovStrategyFactoryImpl(pausableClock);
         final MovStrategy strategy = factory.randomMovement();
 
-        final Direction original = strategy.nextDirection();
-        clock.advance(Duration.ofMillis(MAX_COOLDOWN_MILLIS));
+        assertTrue(randomMovementDirectionChanged(strategy, 100),
+            "Direction should eventually change after multiple cooldowns");
+    }
 
-        boolean changed = false;
-        // Try several times in case of repeat. Chances are 1/16 each time.
-        for (int i = 0; i < 100; i++) {
-            final Direction next = strategy.nextDirection();
-            if (!next.equals(original)) {
-                changed = true;
-                break;
-            }
-            clock.advance(Duration.ofMillis(MAX_COOLDOWN_MILLIS));
-        }
-
-        assertTrue(changed, "Direction should eventually change after multiple cooldowns");
+    @Test
+    void testNoRandomMovementWhenPaused() {
+        final PausableClock pausableClock = new PausableClock(mutableClock);
+        final MovStrategyFactory factory = new MovStrategyFactoryImpl(pausableClock);
+        final MovStrategy strategy = factory.randomMovement();
+        pausableClock.pause();
+        assertFalse(randomMovementDirectionChanged(strategy, 100),
+            "Direction should not change because of the pause");
     }
 
     private KeyEvent getKeyEvent(final int id, final int keycode) {
         return new KeyEvent(dummyPanel, id, System.currentTimeMillis(), 0,
                             keycode, KeyEvent.CHAR_UNDEFINED);
+    }
+
+    private boolean randomMovementDirectionChanged(final MovStrategy strategy, final int iterations) {
+        final Direction original = strategy.nextDirection();
+        mutableClock.advance(Duration.ofMillis(MAX_COOLDOWN_MILLIS));
+
+        boolean changed = false;
+        // Try several times in case of repeat. Chances are 1/16 each time.
+        for (int i = 0; i < iterations; i++) {
+            final Direction next = strategy.nextDirection();
+            if (!next.equals(original)) {
+                changed = true;
+                break;
+            }
+            mutableClock.advance(Duration.ofMillis(MAX_COOLDOWN_MILLIS));
+        }
+        return changed;
     }
 }
