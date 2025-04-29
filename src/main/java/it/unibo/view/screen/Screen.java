@@ -1,7 +1,9 @@
 package it.unibo.view.screen;
 
 import java.awt.Color;
+import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.common.Position;
 import it.unibo.common.Text;
@@ -38,6 +40,12 @@ public interface Screen {
      * @param map the map to load.
      */
     void loadMap(Map map);
+
+    /**
+     * 
+     * @param timerValue the duration of the timer to load.
+     */
+    void loadTimer(Optional<Duration> timerValue);
 
     /**
      * Sets the offset for the rendering.

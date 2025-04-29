@@ -103,7 +103,7 @@ public abstract class AbstractMenu implements Menu {
     @Override
     public final List<Text> getText() {
         if (!isHidden) {
-            int verticalOffset = 0;
+            int verticalOffset = TEXT_VERTICAL_SPACING; // upper border of the menu options
             final List<Text> textToShow = new ArrayList<>();
             addText(textToShow, title, verticalOffset, TEXT_SIZE);
             verticalOffset += TEXT_VERTICAL_SPACING;

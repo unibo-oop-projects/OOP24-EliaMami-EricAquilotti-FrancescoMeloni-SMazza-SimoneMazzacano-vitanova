@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.model.tile.Tile;
 import it.unibo.view.sprite.HumanType;
+import it.unibo.view.timerdisplay.TimerDisplay;
 
 /**
  * Class that handles all the rendering on the screen.
@@ -64,6 +66,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient Optional<List<Text>> textToDraw = Optional.empty();
     private transient Optional<Map> mapToDraw = Optional.empty();
     private transient Optional<List<Text>> menuText = Optional.empty();
+    private transient Optional<Duration> timerValue = Optional.empty();
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
@@ -120,13 +123,27 @@ public final class ScreenImpl extends JPanel implements Screen {
         final Text txt = new Text(text, position, color, size);
         removeTextByPosition(txt);
         textToDraw.ifPresentOrElse(list -> list.add(txt), () -> {
-             textToDraw = Optional.of(new ArrayList<>(List.of(txt)));
+            textToDraw = Optional.of(new ArrayList<>(List.of(txt)));
         });
     }
 
     @Override
     public void loadMenu(final List<Text> texts) {
         menuText = Optional.of(texts);
+    }
+
+    @Override
+    public void loadTimer(final Optional<Duration> timerValue) {
+        this.timerValue = timerValue;
+    }
+
+    /**
+     * 
+     * @return the y offset that the justified texts are applied to.
+     *  It's fixed to 1/6 of the screen height.
+     */
+    private int computeTextUpperBorder() {
+        return this.centerY / 3;
     }
 
     private void updateCenter() {
@@ -144,7 +161,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         final int justifiedXPosition = Math.max(this.centerX - (textWidth / 2), 0);
 
         bufferGraphics.drawString(lineText.content(), isJustifiedCenter ? justifiedXPosition : (int) lineText.position().x(), 
-        (int) lineText.position().y() + (isJustifiedCenter ? this.centerY : 0) + textVerticalOffset);
+        (int) lineText.position().y() + (isJustifiedCenter ? computeTextUpperBorder() : 0) + textVerticalOffset);
     }
 
     private void drawText(final Optional<List<Text>> texts, final boolean isJustifiedCenter) {
@@ -193,6 +210,8 @@ public final class ScreenImpl extends JPanel implements Screen {
         });
 
         resetVerticalOffset();
+        drawText(timerValue.isPresent() ? Optional.of(List.of(TimerDisplay.text(timerValue.get()))) 
+        : Optional.empty(), true);
         drawText(textToDraw, false);
         drawText(menuText, true);
     }
@@ -242,4 +261,5 @@ public final class ScreenImpl extends JPanel implements Screen {
             );
         }
     }
+
 }

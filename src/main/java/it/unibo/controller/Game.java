@@ -3,6 +3,7 @@ package it.unibo.controller;
 import java.awt.Color;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Optional;
 
 import it.unibo.common.ChapterState;
 import it.unibo.common.Position;
@@ -62,8 +63,7 @@ public final class Game implements Runnable {
                 final int textSize = 32;
                 final Position textPosition = new Position(textSize, textSize);
                 final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount 
-                + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal() 
-                + " Time: " + chapter.getTimerValue().toMinutesPart() + ":" + chapter.getTimerValue().toSecondsPart();
+                + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal();
                 screen.loadText(content, textPosition, Color.RED, textSize);
                 frameCount = 0;
                 timer += 1000;
@@ -93,6 +93,7 @@ public final class Game implements Runnable {
         screen.loadMap(chapter.getMap());
         if (isGameplayStarted) {
             screen.loadHumans(chapter.getHumans());
+            screen.loadTimer(Optional.of(chapter.getTimerValue()));
         }
     }
 
@@ -139,5 +140,6 @@ public final class Game implements Runnable {
         this.chapter = new ChapterImpl(inputHandler, 16, 16);
         this.isGameplayStarted = false;
         this.screen.loadHumans(Collections.emptyList());
+        this.screen.loadTimer(Optional.empty());
     }
 }
