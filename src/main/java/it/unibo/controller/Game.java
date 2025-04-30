@@ -13,6 +13,7 @@ import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
+import it.unibo.view.menu.WinMenu;
 import it.unibo.view.screen.Screen;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -74,12 +75,12 @@ public final class Game implements Runnable {
     }
 
     private void update() {
-        if (chapter.getState() == ChapterState.PLAYER_WON) {
-            this.exit();
-        }
-
-        if (!isGameplayPaused && chapter.getState() == ChapterState.PLAYER_LOST) {
-            this.setMenu(new GameOverMenu(inputHandler, this));
+        if (!isGameplayPaused) {
+            if (chapter.getState() == ChapterState.PLAYER_WON) {
+                this.setMenu(new WinMenu(inputHandler, this));
+            } else if (chapter.getState() == ChapterState.PLAYER_LOST) {
+                this.setMenu(new GameOverMenu(inputHandler, this));
+            }
         }
 
         if (isGameplayStarted && !isGameplayPaused) {
