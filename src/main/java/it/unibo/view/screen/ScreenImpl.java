@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +64,10 @@ public final class ScreenImpl extends JPanel implements Screen {
 
 
     // Marked as transient because they don't need to be serialized.
-    private transient Optional<List<Human>> humansToDraw = Optional.empty();
-    private transient Optional<List<Text>> textToDraw = Optional.empty();
+    private final transient List<Text> textToDraw = new ArrayList<>();
+    private transient List<Human> humansToDraw = new ArrayList<>();
     private transient Optional<Map> mapToDraw = Optional.empty();
-    private transient Optional<List<Text>> menuText = Optional.empty();
+    private transient List<Text> menuText = new ArrayList<>();
     private transient Optional<Duration> timerValue = Optional.empty();
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
@@ -104,6 +106,13 @@ public final class ScreenImpl extends JPanel implements Screen {
         }
     }
 
+    // This is necessary to reinitialize the transient lists after deserialization
+    private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        humansToDraw = new ArrayList<>();
+        menuText = new ArrayList<>();
+    }
+
     @Override
     public void loadMap(final Map map) {
         mapToDraw = Optional.of(map);
@@ -111,25 +120,23 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     @Override
     public void loadHumans(final List<Human> humans) {
-        humansToDraw = Optional.of(humans);
+        humansToDraw = humans.stream().toList();
     }
 
     private void removeTextByPosition(final Text text) {
-        textToDraw.ifPresent(list -> list.removeIf(toDrawTxt -> toDrawTxt.position().equals(text.position())));
+        textToDraw.removeIf(toDrawTxt -> toDrawTxt.position().equals(text.position()));
     }
 
     @Override
     public void loadText(final String text, final Position position, final Color color, final int size) {
         final Text txt = new Text(text, position, color, size);
         removeTextByPosition(txt);
-        textToDraw.ifPresentOrElse(list -> list.add(txt), () -> {
-            textToDraw = Optional.of(new ArrayList<>(List.of(txt)));
-        });
+        textToDraw.add(txt);
     }
 
     @Override
     public void loadMenu(final List<Text> texts) {
-        menuText = Optional.of(texts);
+        menuText = texts.stream().toList();
     }
 
     @Override
@@ -164,9 +171,9 @@ public final class ScreenImpl extends JPanel implements Screen {
         (int) lineText.position().y() + (isJustifiedCenter ? computeTextUpperBorder() : 0) + textVerticalOffset);
     }
 
-    private void drawText(final Optional<List<Text>> texts, final boolean isJustifiedCenter) {
-        final Optional<List<Text>> copyTexts = texts.map(ArrayList::new); // to avoid concurrent modifications on iterated list
-        copyTexts.ifPresent(list -> list.forEach(text -> {
+    private void drawText(final List<Text> texts, final boolean isJustifiedCenter) {
+        final List<Text> copyTexts = texts.stream().toList(); // to avoid concurrent modifications on iterated list
+        copyTexts.forEach(text -> {
             final Font f = new Font("Verdana", Font.BOLD, text.size());
             bufferGraphics.setColor(text.color());
             bufferGraphics.setFont(f);
@@ -180,7 +187,7 @@ public final class ScreenImpl extends JPanel implements Screen {
                     incrementVerticalOffset();
                 }
             }
-        }));
+        });
     }
 
     private void redrawBuffer() {
@@ -200,18 +207,16 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
         });
 
-        humansToDraw.ifPresent(humans -> {
-            for (final Human human : humans) {
+        for (final Human human : humansToDraw) {
                 final Position screenPosition = (human.getType() == HumanType.PLAYER)
                     ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
             }
-        });
 
         resetVerticalOffset();
-        drawText(timerValue.isPresent() ? Optional.of(List.of(TimerDisplay.text(timerValue.get()))) 
-        : Optional.empty(), true);
+        timerValue.map(TimerDisplay::text)
+              .ifPresent(text -> drawText(List.of(text), true));
         drawText(textToDraw, false);
         drawText(menuText, true);
     }
