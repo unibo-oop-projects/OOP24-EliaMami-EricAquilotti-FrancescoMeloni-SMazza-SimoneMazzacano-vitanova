@@ -23,12 +23,6 @@ public final class GameOverMenu extends AbstractMenu {
             }),
             MenuOption.home(input),
             MenuOption.quit()
-            ), false, "", "Game Over");
-        getGame().toggleGameplayState();
-    }
-
-    @Override
-    protected void toggleMenu() { 
-        getGame().toggleGameplayState();
+            ), true, "", "Game Over");
     }
 }

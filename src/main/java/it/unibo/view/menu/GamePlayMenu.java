@@ -22,12 +22,12 @@ public final class GamePlayMenu extends AbstractMenu {
         MenuOption.of("Restart chapter", Game::restartCurrentChapter), 
         MenuOption.home(input),
         MenuOption.quit()),
-        true, "", "Game paused");
+        false, "", "Game paused");
     }
 
     @Override
     protected void toggleMenu() {
-        super.toggleMenu();
-        getGame().toggleGameplayState();
+        toggleVisibility();
+        getGame().setGameplayState(visibility());
     }
 }

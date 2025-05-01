@@ -22,9 +22,6 @@ public final class StartMenu extends AbstractMenu {
         }),
         MenuOption.of("Help", g -> g.setMenu(new HelpMenu(input, game))),
         MenuOption.quit()),
-        false, "Welcome to the game", "Vitanova");
+        true, "Welcome to the game", "Vitanova");
     }
-
-    @Override
-    protected void toggleMenu() { }
 }

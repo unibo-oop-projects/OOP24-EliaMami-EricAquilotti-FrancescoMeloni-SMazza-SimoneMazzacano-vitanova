@@ -26,7 +26,7 @@ public abstract class AbstractMenu implements Menu {
     private final String title;
     private final String subtitle;
     private int selectedOptionIndex;
-    private boolean isHidden;
+    private boolean isVisible;
     private int timer = TIMER_VALUE;
     private final InputHandler input;
     private final Game game;
@@ -34,14 +34,14 @@ public abstract class AbstractMenu implements Menu {
     /**
      * @return the input handler
      */
-    protected InputHandler getInput() {
+    protected final InputHandler getInput() {
         return input;
     }
 
     /**
      * @return the game controller
      */
-    protected Game getGame() {
+    protected final Game getGame() {
         return game;
     }
 
@@ -50,18 +50,19 @@ public abstract class AbstractMenu implements Menu {
      * @param input the input handler
      * @param game the game controller
      * @param options the list of MenuOption
-     * @param isInitiallyHidden the initial state of the menu
+     * @param isInitiallyVisible the initial state of the menu
      * @param subtitle the subtitle of the menu
      * @param title the title of the menu
      */
     protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
-    final boolean isInitiallyHidden, final String subtitle, final String title) {
+    final boolean isInitiallyVisible, final String subtitle, final String title) {
         this.title = title;
         this.subtitle = subtitle;
         this.input = input;
         this.game = game;
         this.options = options;
-        this.isHidden = isInitiallyHidden;
+        this.isVisible = isInitiallyVisible;
+        getGame().setGameplayState(isInitiallyVisible);
     }
 
     @Override
@@ -71,28 +72,47 @@ public abstract class AbstractMenu implements Menu {
         } else if (input.isKeyPressed(MENU_TOGGLE_KEY)) {
             toggleMenu();
             timer = TIMER_VALUE;
-        } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_DOWN)
+        } else if (this.isVisible && input.isKeyPressed(KeyEvent.VK_DOWN)
          && selectedOptionIndex + 1 < options.size()) {
             this.selectedOptionIndex++;
             timer = TIMER_VALUE;
-        } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_UP) && selectedOptionIndex > 0) {
+        } else if (this.isVisible && input.isKeyPressed(KeyEvent.VK_UP) && selectedOptionIndex > 0) {
             this.selectedOptionIndex--;
             timer = TIMER_VALUE;
-        } else if (!this.isHidden && input.isKeyPressed(KeyEvent.VK_ENTER)) {
+        } else if (this.isVisible && input.isKeyPressed(KeyEvent.VK_ENTER)) {
+            onExit();
             this.options.get(selectedOptionIndex).execute(game);
-            toggleMenu();
         }
     }
+
     private String applySelectedFormat(final String text) {
         return "> " + text + " <";
     }
 
     /**
-     * Toggles the menu visibility.
-     * Could be ovverriden in subclasses to implement custom behavior.
+     * Toggles the menu.
+     * Default behavior is to do nothing.
+     * Subclasses can override this method to provide custom behavior.
      */
-    protected void toggleMenu() {
-        isHidden = !isHidden;
+    protected void toggleMenu() { }
+
+    /**
+     * Toggles the visibility of the menu.
+     */
+    protected final void toggleVisibility() {
+        isVisible = !isVisible;
+    }
+
+    /**
+     * @return the whether the menu is visible or not
+     */
+    protected final boolean visibility() {
+        return isVisible;
+    }
+
+    private void onExit() {
+        isVisible = false;
+        getGame().setGameplayState(false);
     }
 
     private void addText(final List<Text> textToShow, final String text, final int verticalOffset, final int textSize) {
@@ -102,7 +122,7 @@ public abstract class AbstractMenu implements Menu {
 
     @Override
     public final List<Text> getText() {
-        if (!isHidden) {
+        if (isVisible) {
             int verticalOffset = TEXT_VERTICAL_SPACING; // upper border of the menu options
             final List<Text> textToShow = new ArrayList<>();
             addText(textToShow, title, verticalOffset, TEXT_SIZE);

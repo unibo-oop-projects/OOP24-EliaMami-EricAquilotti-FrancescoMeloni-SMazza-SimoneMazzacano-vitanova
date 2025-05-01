@@ -24,9 +24,6 @@ public class HelpMenu extends AbstractMenu {
     public HelpMenu(final InputHandler input, final Game game) {
         super(input, game, Collections.singletonList(
             MenuOption.of("Back", g -> g.setMenu(new StartMenu(input, g)))),
-         false, HELP_TEXT, "Help");
+         true, HELP_TEXT, "Help");
     }
-
-    @Override
-    protected void toggleMenu() { }
 }

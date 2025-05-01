@@ -23,12 +23,6 @@ public final class WinMenu extends AbstractMenu {
         }),
         MenuOption.home(input),
         MenuOption.quit()
-        ), false, "", "You won the Chapter!");
-        getGame().toggleGameplayState();
-    }
-
-    @Override
-    protected void toggleMenu() {
-        getGame().toggleGameplayState();
+        ), true, "", "You won the Chapter!");
     }
 }

@@ -66,7 +66,8 @@ public final class Game implements Runnable {
                 final Position textPosition = new Position(textSize, textSize);
                 // We should not show the timer when the chapter is not going.
                 final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount 
-                + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal();
+                + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal()
+                + " Timer: " + chapter.getTimerValue().toSecondsPart();
                 screen.loadText(content, textPosition, Color.RED, textSize);
                 frameCount = 0;
                 timer += 1000;
@@ -118,16 +119,15 @@ public final class Game implements Runnable {
 
     /**
      * Pauses the gameplay.
+     * @param paused true if the game is paused, false otherwise.
      */
-    public void toggleGameplayState() {
-        if (isGameplayStarted) {
-            if (isGameplayPaused) {
-                baseClock.unpause();
-            } else {
-                baseClock.pause();
-            }
+    public void setGameplayState(final boolean paused) {
+        if (paused) {
+            baseClock.pause();
+        } else {
+            baseClock.unpause();
         }
-        this.isGameplayPaused = !this.isGameplayPaused;
+        this.isGameplayPaused = paused;
     }
 
     /**
@@ -148,9 +148,6 @@ public final class Game implements Runnable {
      * Sets the new chapter and clears the screen.
      */
     public void setNewChapter() {
-        if (isGameplayPaused) {
-            baseClock.unpause();
-        }
         this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
         this.isGameplayStarted = false;
         this.screen.loadHumans(Collections.emptyList());
