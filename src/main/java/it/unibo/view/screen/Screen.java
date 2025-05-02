@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import it.unibo.common.Position;
 import it.unibo.common.Text;
+import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 
@@ -46,6 +47,15 @@ public interface Screen {
      * @param timerValue the duration of the timer to load.
      */
     void loadTimer(Optional<Duration> timerValue);
+
+    /**
+     * Loads the population counter to be displayed on the screen.
+     * The counter is rendered in a predefined position.
+     * 
+     * @param populationCounter the population counter to load.
+     * @see PopulationCounter
+     */
+    void loadPopulationCounter(Optional<PopulationCounter> populationCounter);
 
     /**
      * Sets the offset for the rendering.

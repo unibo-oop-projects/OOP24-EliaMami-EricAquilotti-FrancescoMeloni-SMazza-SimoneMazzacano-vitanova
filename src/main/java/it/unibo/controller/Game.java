@@ -10,6 +10,7 @@ import it.unibo.common.PausableClock;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
+import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -98,6 +99,10 @@ public final class Game implements Runnable {
         if (isGameplayStarted) {
             screen.loadHumans(chapter.getHumans());
             screen.loadTimer(Optional.of(chapter.getTimerValue()));
+            final int currentPopulation = chapter.getHumans().size();
+            final int populationGoal = chapter.getPopulationGoal();
+            final PopulationCounter populationCounter = new PopulationCounter(currentPopulation, populationGoal);
+            screen.loadPopulationCounter(Optional.of(populationCounter));
         }
     }
 
@@ -152,5 +157,6 @@ public final class Game implements Runnable {
         this.isGameplayStarted = false;
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
+        this.screen.loadPopulationCounter(Optional.empty());
     }
 }

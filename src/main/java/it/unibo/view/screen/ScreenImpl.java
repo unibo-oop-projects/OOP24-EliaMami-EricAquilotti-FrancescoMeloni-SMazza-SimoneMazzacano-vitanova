@@ -25,9 +25,11 @@ import javax.swing.JPanel;
 import it.unibo.common.Position;
 import it.unibo.common.Text;
 import it.unibo.controller.InputHandler;
+import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.model.tile.Tile;
+import it.unibo.view.population.PopulationCounterDisplay;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.timerdisplay.TimerDisplay;
 
@@ -41,6 +43,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int TEXT_VERTICAL_SPACING = 25;
+    private static final int TEXT_LATERAL_BORDER = 200;
     /**
      * Base window width, screen width.
      */
@@ -62,6 +65,11 @@ public final class ScreenImpl extends JPanel implements Screen {
     private final JFrame window = new JFrame();
     private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
+    private enum TextAlignment {
+        NONE,
+        CENTER,
+        RIGHT
+    }
 
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
@@ -69,6 +77,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient Optional<Map> mapToDraw = Optional.empty();
     private transient List<Text> menuText = new ArrayList<>();
     private transient Optional<Duration> timerValue = Optional.empty();
+    private transient Optional<PopulationCounter> populationCounter = Optional.empty();
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
@@ -144,6 +153,11 @@ public final class ScreenImpl extends JPanel implements Screen {
         this.timerValue = timerValue;
     }
 
+    @Override
+    public void loadPopulationCounter(final Optional<PopulationCounter> populationCounter) {
+        this.populationCounter = populationCounter;
+    }
+
     /**
      * 
      * @return the y offset that the justified texts are applied to.
@@ -163,15 +177,24 @@ public final class ScreenImpl extends JPanel implements Screen {
         return fontMetrics.stringWidth(text.content());
     }
 
-    private void drawLine(final Font f, final Text lineText, final boolean isJustifiedCenter) {
-        final int textWidth = calculateTextWidth(f, lineText, bufferGraphics);
-        final int justifiedXPosition = Math.max(this.centerX - (textWidth / 2), 0);
-
-        bufferGraphics.drawString(lineText.content(), isJustifiedCenter ? justifiedXPosition : (int) lineText.position().x(), 
-        (int) lineText.position().y() + (isJustifiedCenter ? computeTextUpperBorder() : 0) + textVerticalOffset);
+    private int adjustedXPosition(final int xPosition, final int textWidth, final TextAlignment alignment) {
+        if (alignment == TextAlignment.CENTER) {
+            return Math.max(this.centerX - (textWidth / 2), 0);
+        } else if (alignment == TextAlignment.RIGHT) {
+            return Math.max(this.window.getWidth() - textWidth - TEXT_LATERAL_BORDER, 0);
+        }
+        return xPosition;
     }
 
-    private void drawText(final List<Text> texts, final boolean isJustifiedCenter) {
+    private void drawLine(final Font f, final Text lineText, final TextAlignment alignment) {
+        final int textWidth = calculateTextWidth(f, lineText, bufferGraphics);
+        final int adjustedXPosition = adjustedXPosition((int) lineText.position().x(), textWidth, alignment);
+
+        bufferGraphics.drawString(lineText.content(), adjustedXPosition, 
+        (int) lineText.position().y() + (alignment != TextAlignment.NONE ? computeTextUpperBorder() : 0) + textVerticalOffset);
+    }
+
+    private void drawText(final List<Text> texts, final TextAlignment alignment) {
         final List<Text> copyTexts = texts.stream().toList(); // to avoid concurrent modifications on iterated list
         copyTexts.forEach(text -> {
             final Font f = new Font("Verdana", Font.BOLD, text.size());
@@ -181,7 +204,7 @@ public final class ScreenImpl extends JPanel implements Screen {
             final String[] lines = text.content().split("\\R");
             for (final String line : lines) {
                 final Text lineText = new Text(line, text.position(), text.color(), text.size());
-                drawLine(f, lineText, isJustifiedCenter);
+                drawLine(f, lineText, alignment);
 
                 if (lines.length > 1) {
                     incrementVerticalOffset();
@@ -216,9 +239,11 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         resetVerticalOffset();
         timerValue.map(TimerDisplay::text)
-              .ifPresent(text -> drawText(List.of(text), true));
-        drawText(textToDraw, false);
-        drawText(menuText, true);
+              .ifPresent(text -> drawText(List.of(text), TextAlignment.CENTER));
+        populationCounter.map(PopulationCounterDisplay::text)
+              .ifPresent(text -> drawText(List.of(text), TextAlignment.RIGHT));
+        drawText(textToDraw, TextAlignment.NONE);
+        drawText(menuText, TextAlignment.CENTER);
     }
 
     private void resetVerticalOffset() {
