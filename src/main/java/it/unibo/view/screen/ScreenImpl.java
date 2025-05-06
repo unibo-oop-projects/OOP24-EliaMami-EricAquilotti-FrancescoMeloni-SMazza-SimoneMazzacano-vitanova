@@ -136,7 +136,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void loadPickablePowerUp(List<PickablePowerUp> pickablePowerUps){
+    public void loadPickablePowerUp(final List<PickablePowerUp> pickablePowerUps) {
         pickableToDraw = pickablePowerUps.stream().toList();
     }
 

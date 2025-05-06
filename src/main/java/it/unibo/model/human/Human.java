@@ -45,7 +45,7 @@ public interface Human {
      * 
      * @return the human's stats.
      */
-    Stats getStats();
+    HumanStats getStats();
 
     /**
      * 

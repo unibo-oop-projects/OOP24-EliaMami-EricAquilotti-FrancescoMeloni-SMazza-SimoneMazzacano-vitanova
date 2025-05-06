@@ -5,14 +5,14 @@ import it.unibo.common.Circle;
 /**
  * Models stats of a human.
  */
-public interface Stats {
+public interface HumanStats {
 
     /**
      * 
      * @return the current speed of human.
      */
     double getSpeed();
-    
+
     /**
      * Used to increase speed after finishing the chapter.
      */
@@ -47,7 +47,25 @@ public interface Stats {
     double getFertility(); 
 
     /**
-     * Use to increase fertility after finishing the chapter.
+     * Used to increase fertility after finishing the chapter.
      */
     void increaseFertility();
+
+    /**
+     * @param multiplyValue is the value to multiply with.
+     * Used to apply power up and malus effects to speed's stat.
+     */
+    void applySpeedModifier(double multiplyValue);
+
+    /**
+     * @param multiplyValue is the value to multiply with.
+     * Used to apply power up and malus effects to reproduction range's stat.
+     */
+    void applyReproductionRangeModifier(double multiplyValue);
+
+    /**
+     * @param multiplyValue is the value to multiply with.
+     * Used to apply power up and malus effects to sickness resistence's stat.
+     */
+    void applySicknessResistenceModifier(double multiplyValue);
 }

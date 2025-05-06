@@ -69,9 +69,8 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
             }
 
             @Override
-            public Circle changeReproductionArea() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'changeReproductionArea'");
+            public Circle changeReproductionArea(final int changeValue) {
+                return new CircleImpl(reproductionArea.getCenter().x(), reproductionArea.getCenter().y(), changeValue);
             }
         };
     }

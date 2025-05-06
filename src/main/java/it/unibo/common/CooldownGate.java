@@ -39,7 +39,7 @@ public final class CooldownGate {
      */
     public boolean tryActivate() {
         final Instant now = clock.instant();
-        if (checkStatus()){
+        if (checkStatus()) {
             lastActivation = now;
             return true;
         }
@@ -52,9 +52,6 @@ public final class CooldownGate {
     public boolean checkStatus() {
         final Instant now = clock.instant();
         final Duration cooldown = cooldownSupplier.get();
-        if (Duration.between(lastActivation, now).compareTo(cooldown) >= 0) {
-            return true;
-        }
-        return false;
+        return Duration.between(lastActivation, now).compareTo(cooldown) >= 0;
     }
 }

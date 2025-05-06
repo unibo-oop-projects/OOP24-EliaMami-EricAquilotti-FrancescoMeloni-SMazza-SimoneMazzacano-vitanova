@@ -1,14 +1,15 @@
 package it.unibo.model.pickable;
 
 import java.time.Clock;
-import java.time.Duration;
 
-import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.PowerUpType;
 import it.unibo.view.sprite.Sprite;
 
-public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
+/**
+ * Pickable power up factory implementation.
+ */
+public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory {
 
     private final Clock clock;
 
@@ -21,13 +22,13 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
     }
 
     @Override
-    public PickablePowerUp speedBoost(Position spawnPosition, int duration, double boost) {
+    public PickablePowerUp speedBoost(final Position spawnPosition, final int duration, final double boost) {
         return new PickablePowerUp() {
-            private final String name = "Speed Boost";
-            private final int duration = 30; 
-            private CooldownGate cooldown;
-            private double x = spawnPosition.x();
-            private double y = spawnPosition.y();
+            private static final String NAME = "Speed Boost";
+            private static final int DURATION = 30; 
+            //private CooldownGate cooldown;
+            private final double x = spawnPosition.x();
+            private final double y = spawnPosition.y();
 
             @Override
             public Position getPosition() {
@@ -36,12 +37,12 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
 
             @Override
             public String getName() {
-                return this.name;
+                return NAME;
             }
 
             @Override
             public int getDuration() {
-                return this.duration;
+                return DURATION;
             }
 
             @Override
@@ -67,12 +68,12 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
     }
 
     @Override
-    public PickablePowerUp sicknessResistenceBoost(Position spawnPosition, int duration, double boost) {
+    public PickablePowerUp sicknessResistenceBoost(final Position spawnPosition, final int duration, final double boost) {
         return new PickablePowerUp() {
-            private final String name = "Sickness Resistence";
-            private final int duration = 30; 
-            private double x = spawnPosition.x();
-            private double y = spawnPosition.y();
+            private static final String NAME = "Sickness Resistence";
+            private static final int DURATION = 30; 
+            private final double x = spawnPosition.x();
+            private final double y = spawnPosition.y();
 
             @Override
             public Position getPosition() {
@@ -81,19 +82,19 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
 
             @Override
             public String getName() {
-                return this.name;
+                return NAME;
             }
 
             @Override
             public int getDuration() {
-                return this.duration;
+                return DURATION;
             }
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getTSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);    
+                return Sprite.getTSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);
             }
-            
+
             @Override
             public boolean isActive() {
                 // TODO Auto-generated method stub
@@ -109,12 +110,12 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
     }
 
     @Override
-    public PickablePowerUp reproductionRangeBoost(Position spawnPosition, int duration, double boost) {
+    public PickablePowerUp reproductionRangeBoost(final Position spawnPosition, final int duration, final double boost) {
         return new PickablePowerUp() {
-            private final String name = "Reproduction Range";
-            private final int duration = 30; 
-            private double x = spawnPosition.x();
-            private double y = spawnPosition.y();
+            private static final String NAME = "Reproduction Range";
+            private static final int DURATION = 30; 
+            private final double x = spawnPosition.x();
+            private final double y = spawnPosition.y();
 
             @Override
             public Position getPosition() {
@@ -123,19 +124,19 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
 
             @Override
             public String getName() {
-                return this.name;
+                return NAME;
             }
 
             @Override
             public int getDuration() {
-                return this.duration;
+                return DURATION;
             }
 
             @Override
             public Sprite getSprite() {
                 return Sprite.getTSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
             }
-            
+
             @Override
             public boolean isActive() {
                 // TODO Auto-generated method stub

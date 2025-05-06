@@ -39,7 +39,7 @@ public interface Screen {
 
     /**
      * 
-     * @param humans the humans to load.
+     * @param pickablePowerUps the pickable power ups to load.
      */
     void loadPickablePowerUp(List<PickablePowerUp> pickablePowerUps);
 

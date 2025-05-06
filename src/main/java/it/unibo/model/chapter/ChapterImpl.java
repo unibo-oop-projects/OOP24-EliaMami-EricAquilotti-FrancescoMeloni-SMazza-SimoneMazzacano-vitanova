@@ -65,45 +65,55 @@ public final class ChapterImpl implements Chapter {
         spawnHumans(inputHandler);
     }
 
-    int temporary = 0;
     @Override
     public void update() {
         for (final Human human : humans) {
             human.move();
         }
-        
-        // i use temporary just to try things and don't spawn powerup everytime 
-        if(temporary == 0){
-            spawnPickablePowerUp();
-            temporary = temporary + 1;
-        }
 
+        spawnPickablePowerUp();
         solveCollisions();
         solvePickablePowerUpCollisions();
-        
     }
 
-    private void solvePickablePowerUpCollisions(){
-        for(PickablePowerUp powerUp : pickablePowerUps){
-            if(Math.abs(humans.get(0).getPosition().x() - powerUp.getPosition().x()) <= ScreenImpl.TILE_SIZE/2 &&  
-                Math.abs(humans.get(0).getPosition().y()-powerUp.getPosition().y()) <=  ScreenImpl.TILE_SIZE/2){
-                
-                // still have to apply effects
-                pickablePowerUps.clear();
+    private void solvePickablePowerUpCollisions() {
+        for (final PickablePowerUp powerUp : pickablePowerUps) {
+            if (Math.abs(humans.get(0).getPosition().x() - powerUp.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
+                && Math.abs(humans.get(0).getPosition().y() - powerUp.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
+                switch (powerUp.getName()) {
+                    case "Speed Boost":
+                        humans.get(0).getStats().applySpeedModifier(1.25);
+                        break;
+                    case "Sickness Resistence":
+                        humans.get(0).getStats().applySicknessResistenceModifier(1.25);
+                        break;
+                    case "Reproduction Range":
+                        humans.get(0).getStats().applyReproductionRangeModifier(1.25);
+                        break;
+                    default:
+                        break;
+                }
+
+                pickablePowerUps.remove(powerUp);
             }
         }
     }
 
     private void spawnPickablePowerUp() {
         final List<PickablePowerUp> powerUps = new ArrayList<>();
-        for (int i = 0; i < (map.getColoumns()*map.getRows())*0.010 ; i++){
-            int randomPowerUp = random.nextInt(0,3);
-            switch(randomPowerUp){
-                case 0: powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(Position.getRandomWalkablePosition(map), 30, 5));
+        for (int i = 0; i < map.getColoumns() * map.getRows() * 0.010; i++) {
+            final int randomPowerUp = random.nextInt(0, 3);
+            switch (randomPowerUp) {
+                case 0: 
+                    powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(Position.getRandomWalkablePosition(map), 30, 5));
                     break;
-                case 1: powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(Position.getRandomWalkablePosition(map), 30, 5));
+                case 1: 
+                    powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(Position.getRandomWalkablePosition(map), 30, 5));
                     break;
-                case 2: powerUps.add(pickablePowerUpFactory.speedBoost(Position.getRandomWalkablePosition(map), 30, 5));
+                case 2: 
+                    powerUps.add(pickablePowerUpFactory.speedBoost(Position.getRandomWalkablePosition(map), 30, 5));
+                    break;
+                default:
                     break;
             }
         }

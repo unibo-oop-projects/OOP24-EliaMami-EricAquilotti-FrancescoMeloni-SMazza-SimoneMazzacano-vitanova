@@ -2,8 +2,11 @@ package it.unibo.model.malus;
 
 import it.unibo.model.pickable.PickablePowerUp;
 
+/**
+ * Malus factory interface.
+ */
 public interface MalusFactory {
-    
+
     /**
      * 
      * @param name the effect name

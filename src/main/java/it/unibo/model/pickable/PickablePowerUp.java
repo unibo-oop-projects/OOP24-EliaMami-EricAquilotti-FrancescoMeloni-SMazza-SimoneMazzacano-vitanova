@@ -3,6 +3,9 @@ package it.unibo.model.pickable;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.Sprite;
 
+/**
+ * Pickable power up interface.
+ */
 public interface PickablePowerUp {
     /**
      * 

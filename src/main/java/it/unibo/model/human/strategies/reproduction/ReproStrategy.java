@@ -29,8 +29,8 @@ public interface ReproStrategy {
     Circle getReproductionArea();
 
     /**
-     * 
+     * @param changeValue is the new radius value.
      * @return change the radius of the circle.
      */
-    Circle changeReproductionArea();
+    Circle changeReproductionArea(int changeValue);
 }

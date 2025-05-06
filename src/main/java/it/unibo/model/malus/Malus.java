@@ -1,7 +1,10 @@
 package it.unibo.model.malus;
 
+/**
+ * Malus interface.
+ */
 public interface Malus {
-    
+
     /**
      * 
      * @return the effect's name.

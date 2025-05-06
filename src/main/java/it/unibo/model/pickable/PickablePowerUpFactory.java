@@ -2,12 +2,14 @@ package it.unibo.model.pickable;
 
 import it.unibo.common.Position;
 
+/**
+ * Pickable power up factory.
+ */
 public interface PickablePowerUpFactory {
-    
+
     /**
      * 
      * @param spawnPosition the spawn position of the pickable power up 
-     * @param name the power up name
      * @param duration the duration in seconds
      * @param boost the value to multiply the parameter with
      * @return a power up that boost speed.
@@ -17,7 +19,6 @@ public interface PickablePowerUpFactory {
     /**
      * 
      * @param spawnPosition the spawn position of the pickable power up 
-     * @param name the power up name
      * @param duration the duration in seconds
      * @param boost the value to multiply the parameter with
      * @return a power up that boost the sickness resistance.
@@ -27,7 +28,6 @@ public interface PickablePowerUpFactory {
     /**
      * 
      * @param spawnPosition the spawn position of the pickable power up
-     * @param name the power up name
      * @param duration the duration in seconds
      * @param boost the value to multiply the parameter with
      * @return a power up that boost the reproduction range.
