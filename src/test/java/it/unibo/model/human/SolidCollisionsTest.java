@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.event.KeyEvent;
+import java.time.Clock;
 
 import javax.swing.JPanel;
 
@@ -25,7 +26,7 @@ class SolidCollisionsTest {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final JPanel dummyPanel = new JPanel();
     private final Map map = new MapImpl(32, 32);
-    private final HumanFactory humanFactory = new HumanFactoryImpl();
+    private final HumanFactory humanFactory = new HumanFactoryImpl(Clock.systemUTC());
     private Human human;
     private Position initialPosition;
 

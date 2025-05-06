@@ -19,7 +19,7 @@ public final class CooldownReproductionPredicate implements Predicate<Human> {
     /**
      * @param canReproduceWith tells if the current human can reproduce with another human.
      * @param cooldown the time to wait between reproductions.
-     * @param clock the clock used to get the time. (useful for testing).
+     * @param clock the clock used to get the time that can be paused. (useful for testing).
      */
     public CooldownReproductionPredicate(final Predicate<Human> canReproduceWith, final Duration cooldown, final Clock clock) {
         this.canReproduceWith = canReproduceWith;

@@ -1,10 +1,11 @@
 package it.unibo.model.chapter;
 
+import java.time.Duration;
 import java.util.List;
 
+import it.unibo.common.ChapterState;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
-// import it.unibo.model.human.Player;
 
 /**
  * Models a chapter that will handle the map, all humans movements and
@@ -34,4 +35,27 @@ public interface Chapter {
      * @return the player.
      */
     Human getPlayer();
+
+    /**
+     * 
+     * @return the number of humans on the map to reach.
+     */
+    int getPopulationGoal();
+
+    /**
+     * 
+     * @return state of the chapter.
+     */
+    ChapterState getState();
+
+    /**
+     * Brings back the chapter to its initial state.
+     */
+    void restart();
+
+    /**
+     * 
+     * @return the timer value.
+     */
+    Duration getTimerValue();
 }

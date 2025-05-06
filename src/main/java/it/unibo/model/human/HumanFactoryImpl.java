@@ -22,10 +22,17 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
-    private static final Clock BASE_CLOCK = Clock.systemUTC();
-    private static final ReproStrategyFactory REPRODUCTION_STRATEGY_FACTORY =
-        new ReproStrategyFactoryImpl(BASE_CLOCK);
-    private static final MovStrategyFactory MOVEMENT_STRATEGY_FACTORY = new MovStrategyFactoryImpl(BASE_CLOCK);
+    private final ReproStrategyFactory reproductionStrategyFactory;
+    private final MovStrategyFactory movementStrategyFactory;
+
+    /**
+     * 
+     * @param baseClock the clock to give to the strategies that may need cooldowns.
+     */
+    public HumanFactoryImpl(final Clock baseClock) {
+        reproductionStrategyFactory = new ReproStrategyFactoryImpl(baseClock);
+        movementStrategyFactory = new MovStrategyFactoryImpl(baseClock);
+    }
 
     @Override
     public Human male(final Position startingPosition, final Map map) {
@@ -33,8 +40,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.MALE,
-            MOVEMENT_STRATEGY_FACTORY.randomMovement(),
-            REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
+            movementStrategyFactory.randomMovement(),
+            reproductionStrategyFactory.maleReproStrategy(startingPosition)
         );
     }
 
@@ -44,8 +51,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.FEMALE,
-            MOVEMENT_STRATEGY_FACTORY.randomMovement(),
-            REPRODUCTION_STRATEGY_FACTORY.femaleReproStrategy(startingPosition)
+            movementStrategyFactory.randomMovement(),
+            reproductionStrategyFactory.femaleReproStrategy(startingPosition)
         );
     }
 
@@ -55,8 +62,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             startingPosition,
             map,
             HumanType.PLAYER,
-            MOVEMENT_STRATEGY_FACTORY.userInputMovement(inputHandler),
-            REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(startingPosition)
+            movementStrategyFactory.userInputMovement(inputHandler),
+            reproductionStrategyFactory.maleReproStrategy(startingPosition)
         );
     }
 
