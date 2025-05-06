@@ -55,7 +55,10 @@ public final class ChapterImpl implements Chapter {
         for (final Human human : humans) {
             human.move();
         }
+        //spawnEffect
         solveCollisions();
+        //solveEffectCollisions
+        
     }
 
     private void solveCollisions() {

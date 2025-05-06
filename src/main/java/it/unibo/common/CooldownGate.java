@@ -39,9 +39,20 @@ public final class CooldownGate {
      */
     public boolean tryActivate() {
         final Instant now = clock.instant();
+        if (checkStatus()){
+            lastActivation = now;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if cooldown expired.
+     */
+    public boolean checkStatus() {
+        final Instant now = clock.instant();
         final Duration cooldown = cooldownSupplier.get();
         if (Duration.between(lastActivation, now).compareTo(cooldown) >= 0) {
-            lastActivation = now;
             return true;
         }
         return false;
