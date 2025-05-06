@@ -112,7 +112,7 @@ public final class Game implements Runnable {
      */
     public void startGameplay() {
         this.isGameplayStarted = true;
-        this.chapter = new ChapterImpl(inputHandler, 64, 64, baseClock);
+        this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
     }
 
     /**

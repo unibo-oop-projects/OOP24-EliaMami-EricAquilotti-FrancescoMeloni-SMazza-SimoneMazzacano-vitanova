@@ -10,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import it.unibo.common.ChapterState;
 import it.unibo.common.Circle;
+import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
 import it.unibo.common.RectangleImpl;
 import it.unibo.controller.InputHandler;
@@ -39,8 +40,8 @@ public final class ChapterImpl implements Chapter {
     private static final int POPULATION_GOAL = 100;
     private static final double MULTIPLY_VALUE = 1.25;
     private static final int DURATION_VALUE = 30;
-    private static final double SPAWNING_INDEX_POWERUP = 0.010;
     private static final Duration TIMER_VALUE = Duration.ofSeconds(300);
+    private CooldownGate spawnPowerupRate;
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
@@ -51,7 +52,7 @@ public final class ChapterImpl implements Chapter {
     private final List<PickablePowerUp> pickablePowerUps = new CopyOnWriteArrayList<>();
     private final Random random = new Random();
     private final Timer timer;
-
+    private final Clock clock;
 
     /**
      * Sets up all the parameters.
@@ -63,8 +64,10 @@ public final class ChapterImpl implements Chapter {
     public ChapterImpl(final InputHandler inputHandler, final int rows, final int coloumns, final Clock baseClock) {
         this.map = new MapImpl(rows, coloumns);
         this.inputHandler = inputHandler;
+        this.clock = baseClock;
         this.humanFactory = new HumanFactoryImpl(baseClock);
         this.timer = new TimerImpl(TIMER_VALUE, baseClock);
+        this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), baseClock); 
         spawnHumans(inputHandler);
     }
 
@@ -73,8 +76,7 @@ public final class ChapterImpl implements Chapter {
         for (final Human human : humans) {
             human.move();
         }
-        //still have to implement spawn based on timer
-        spawnPickablePowerUp();
+        spawnPickablePowerUp(spawnPowerupRate.tryActivate());
         solveCollisions();
         solvePickablePowerUpCollisions();
     }
@@ -101,10 +103,13 @@ public final class ChapterImpl implements Chapter {
             }
         }
     }
-
-    private void spawnPickablePowerUp() {
+    
+    private void spawnPickablePowerUp(boolean isTime) {
         final List<PickablePowerUp> powerUps = new ArrayList<>();
-        for (int i = 0; i < map.getColoumns() * map.getRows() * SPAWNING_INDEX_POWERUP; i++) {
+        
+
+        System.out.println(isTime);
+        if (isTime) {
             final int randomPowerUp = random.nextInt(0, 3);
             switch (randomPowerUp) {
                 case 0: 
@@ -255,6 +260,7 @@ public final class ChapterImpl implements Chapter {
         this.pickablePowerUps.clear();
         spawnHumans(this.inputHandler);
         timer.reset();
+        this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), clock); 
     }
 
     @Override
