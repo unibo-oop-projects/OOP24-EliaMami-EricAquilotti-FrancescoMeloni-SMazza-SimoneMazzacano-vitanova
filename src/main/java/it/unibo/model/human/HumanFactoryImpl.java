@@ -85,7 +85,7 @@ public final class HumanFactoryImpl implements HumanFactory {
                 sprite = nextSprite();
                 direction = movementStrategy.nextDirection();
                 final Position nextPosition = nextPosition();
-                if (validPosition(nextPosition)) {
+                if (Position.isWalkable(map, nextPosition)) {
                     updateSpriteCounter();
                     this.x = nextPosition.x();
                     this.y = nextPosition.y();
@@ -116,10 +116,6 @@ public final class HumanFactoryImpl implements HumanFactory {
                     spriteCounter = 0;
                     numSprite = numSprite == 1 ? 2 : 1;
                 }
-            }
-
-            private boolean validPosition(final Position position) {
-                return map.getTileFromPixel(position.x(), position.y()).isWalkable();
             }
 
             private Position nextPosition() {

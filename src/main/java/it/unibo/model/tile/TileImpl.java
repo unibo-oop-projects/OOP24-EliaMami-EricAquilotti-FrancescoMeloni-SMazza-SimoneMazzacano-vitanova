@@ -53,7 +53,7 @@ public final class TileImpl implements Tile {
             throw new IllegalStateException("The tile has not been set.");
         }
         //not needed try-catch because the path will be always in the enum Sprite.
-        return Sprite.getSprite(getTileType().get());
+        return Sprite.getSprite(tile.get());
     }
 
     private Optional<TileType> getTileType() {
