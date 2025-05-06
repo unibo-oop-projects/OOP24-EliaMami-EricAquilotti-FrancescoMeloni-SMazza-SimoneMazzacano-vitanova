@@ -5,6 +5,8 @@ import java.time.Duration;
 
 import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
+import it.unibo.view.sprite.PowerUpType;
+import it.unibo.view.sprite.Sprite;
 
 public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
 
@@ -43,6 +45,11 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
             }
 
             @Override
+            public Sprite getSprite() {
+                return Sprite.getTSprite(PowerUpType.PICKABLE_SPEED_BOOST);
+            }
+
+            @Override
             public boolean isActive() {
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'isActive'");
@@ -53,6 +60,8 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'activate'");
             }
+
+
 
         };
     }
@@ -81,6 +90,11 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
             }
 
             @Override
+            public Sprite getSprite() {
+                return Sprite.getTSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);    
+            }
+            
+            @Override
             public boolean isActive() {
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'isActive'");
@@ -91,7 +105,6 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'activate'");
             }
-            
         };
     }
 
@@ -119,6 +132,11 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
             }
 
             @Override
+            public Sprite getSprite() {
+                return Sprite.getTSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
+            }
+            
+            @Override
             public boolean isActive() {
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'isActive'");
@@ -129,7 +147,6 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'activate'");
             }
-            
         };
     }
 }

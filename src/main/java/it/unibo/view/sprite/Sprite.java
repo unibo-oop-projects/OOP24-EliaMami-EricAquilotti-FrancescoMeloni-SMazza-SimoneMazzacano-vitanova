@@ -192,6 +192,7 @@ public enum Sprite {
     private final BufferedImage image;
     private static final Map<HumanType, Map<DirectionEnum, Sprite[]>> SPRITE_CHARACTERS_MAP = new EnumMap<>(HumanType.class);
     private static final Map<TileType, Sprite> SPRITE_TILES_MAP = new EnumMap<>(TileType.class);
+    private static final Map<PowerUpType, Sprite> SPRITE_POWER_UP = new EnumMap<>(PowerUpType.class);
     static {
         for (final HumanType type : HumanType.values()) {
             final Map<DirectionEnum, Sprite[]> directionMap = new EnumMap<>(DirectionEnum.class);
@@ -207,6 +208,9 @@ public enum Sprite {
         }
         for (final TileType tileType : TileType.values()) {
             SPRITE_TILES_MAP.put(tileType, valueOf(tileType.toString()));
+        }
+        for (final PowerUpType powerUpType : PowerUpType.values()) {
+            SPRITE_POWER_UP.put(powerUpType, valueOf(powerUpType.toString()));
         }
     }
 
@@ -248,9 +252,20 @@ public enum Sprite {
      * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
      * or the specified class object does not represent an enum type.
      * @param tileType the tile type we want to get the sprite of.
-     * @return the correct sprite if the human is moving.
+     * @return the tile's sprite.
      */
     public static Sprite getSprite(final TileType tileType) {
         return SPRITE_TILES_MAP.get(tileType);
+    }
+
+    /**
+     * Returns the {@code Sprite} of the tile type given.
+     * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
+     * or the specified class object does not represent an enum type.
+     * @param powerUpType the power up type we want to get the sprite of.
+     * @return the power up's sprite.
+     */
+    public static Sprite getTSprite(final PowerUpType powerUpType) {
+        return SPRITE_POWER_UP.get(powerUpType);
     }
 }

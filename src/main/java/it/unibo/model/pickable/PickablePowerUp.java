@@ -1,6 +1,7 @@
 package it.unibo.model.pickable;
 
 import it.unibo.common.Position;
+import it.unibo.view.sprite.Sprite;
 
 public interface PickablePowerUp {
     /**
@@ -20,6 +21,12 @@ public interface PickablePowerUp {
      * @return the power up's duration in seconds.
      */
     int getDuration();
+
+    /**
+     * 
+     * @return the relative sprite.
+     */
+    Sprite getSprite();
 
     /**
      * 
