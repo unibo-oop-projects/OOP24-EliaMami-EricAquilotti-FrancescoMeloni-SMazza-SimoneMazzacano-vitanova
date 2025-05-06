@@ -173,7 +173,20 @@ public enum Sprite {
     /**
      * Upper-Left2 coast tile.
      */
-    TILE_COAST_UP_LEFT2("tile/coastUpLeft2.png");
+    TILE_COAST_UP_LEFT2("tile/coastUpLeft2.png"),
+    /**
+     * Pickable speed boost.
+     */
+    PICKABLE_SPEED_BOOST("powerUp/speedBoost.png"),
+    /**
+     * Pickable sickness resistence boost.
+     */
+    PICKABLE_SICKNESS_RESISTENCE("powerUp/sicknessResistence.png"),
+     /**
+     * Pickable reproduction boost.
+     */
+    PICKABLE_REPRODUCTION_BOOST("powerUp/reproductionBoost.png");
+
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
