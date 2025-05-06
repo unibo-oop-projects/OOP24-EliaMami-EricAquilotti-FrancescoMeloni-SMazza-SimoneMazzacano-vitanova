@@ -12,7 +12,7 @@ public interface PickablePowerUpFactory {
      * @param boost the value to multiply the parameter with
      * @return a power up that boost speed.
      */
-    PickablePowerUp speedBoost(Position spawnPosition, String name, int duration, double boost);
+    PickablePowerUp speedBoost(Position spawnPosition, int duration, double boost);
 
     /**
      * 
@@ -22,7 +22,7 @@ public interface PickablePowerUpFactory {
      * @param boost the value to multiply the parameter with
      * @return a power up that boost the sickness resistance.
      */
-    PickablePowerUp sicknessResistenceBoost(Position spawnPosition, String name, int duration, double boost);
+    PickablePowerUp sicknessResistenceBoost(Position spawnPosition, int duration, double boost);
 
     /**
      * 
@@ -32,5 +32,5 @@ public interface PickablePowerUpFactory {
      * @param boost the value to multiply the parameter with
      * @return a power up that boost the reproduction range.
      */
-    PickablePowerUp reproductionRangeBoost(Position spawnPosition, String name, int duration, double boost);
+    PickablePowerUp reproductionRangeBoost(Position spawnPosition, int duration, double boost);
 }

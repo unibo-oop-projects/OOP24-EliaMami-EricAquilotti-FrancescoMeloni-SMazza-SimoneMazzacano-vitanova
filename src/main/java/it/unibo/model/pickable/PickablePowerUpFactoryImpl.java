@@ -19,7 +19,7 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
     }
 
     @Override
-    public PickablePowerUp speedBoost(Position spawnPosition, String name, int duration, double boost) {
+    public PickablePowerUp speedBoost(Position spawnPosition, int duration, double boost) {
         return new PickablePowerUp() {
             private final String name = "Speed Boost";
             private final int duration = 30; 
@@ -58,7 +58,7 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
     }
 
     @Override
-    public PickablePowerUp sicknessResistenceBoost(Position spawnPosition, String name, int duration, double boost) {
+    public PickablePowerUp sicknessResistenceBoost(Position spawnPosition, int duration, double boost) {
         return new PickablePowerUp() {
             private final String name = "Sickness Resistence";
             private final int duration = 30; 
@@ -96,7 +96,7 @@ public class PickablePowerUpFactoryImpl implements PickablePowerUpFactory{
     }
 
     @Override
-    public PickablePowerUp reproductionRangeBoost(Position spawnPosition, String name, int duration, double boost) {
+    public PickablePowerUp reproductionRangeBoost(Position spawnPosition, int duration, double boost) {
         return new PickablePowerUp() {
             private final String name = "Reproduction Range";
             private final int duration = 30; 
