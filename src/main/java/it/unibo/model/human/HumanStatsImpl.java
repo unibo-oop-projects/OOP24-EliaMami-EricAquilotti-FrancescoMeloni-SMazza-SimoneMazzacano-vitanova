@@ -48,7 +48,7 @@ public final class HumanStatsImpl implements HumanStats {
 
         @Override
         public Circle getReproductionAreaRadius() {
-            return this.reproductionAreaRadius;
+            return new CircleImpl(reproductionAreaRadius);
         }
 
         private void setReproductionAreaRadius(final Circle reproductionArea) {

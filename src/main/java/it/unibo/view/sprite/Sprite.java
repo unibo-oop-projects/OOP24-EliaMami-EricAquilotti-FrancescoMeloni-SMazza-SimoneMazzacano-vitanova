@@ -265,7 +265,7 @@ public enum Sprite {
      * @param powerUpType the power up type we want to get the sprite of.
      * @return the power up's sprite.
      */
-    public static Sprite getTSprite(final PowerUpType powerUpType) {
+    public static Sprite getPowerUpSprite(final PowerUpType powerUpType) {
         return SPRITE_POWER_UP.get(powerUpType);
     }
 }

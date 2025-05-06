@@ -37,6 +37,9 @@ public final class ChapterImpl implements Chapter {
     private static final int STARTING_FEMALES = 1;
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int POPULATION_GOAL = 100;
+    private static final double MULTIPLY_VALUE = 1.25;
+    private static final int DURATION_VALUE = 30;
+    private static final double SPAWNING_INDEX_POWERUP = 0.010;
     private static final Duration TIMER_VALUE = Duration.ofSeconds(300);
     private final Map map;
     private final InputHandler inputHandler;
@@ -70,7 +73,7 @@ public final class ChapterImpl implements Chapter {
         for (final Human human : humans) {
             human.move();
         }
-
+        //still have to implement spawn based on timer
         spawnPickablePowerUp();
         solveCollisions();
         solvePickablePowerUpCollisions();
@@ -82,13 +85,13 @@ public final class ChapterImpl implements Chapter {
                 && Math.abs(humans.get(0).getPosition().y() - powerUp.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
                 switch (powerUp.getName()) {
                     case "Speed Boost":
-                        humans.get(0).getStats().applySpeedModifier(1.25);
+                        humans.get(0).getStats().applySpeedModifier(powerUp.getBoostValue());
                         break;
                     case "Sickness Resistence":
-                        humans.get(0).getStats().applySicknessResistenceModifier(1.25);
+                        humans.get(0).getStats().applySicknessResistenceModifier(powerUp.getBoostValue());
                         break;
                     case "Reproduction Range":
-                        humans.get(0).getStats().applyReproductionRangeModifier(1.25);
+                        humans.get(0).getStats().applyReproductionRangeModifier(powerUp.getBoostValue());
                         break;
                     default:
                         break;
@@ -101,17 +104,20 @@ public final class ChapterImpl implements Chapter {
 
     private void spawnPickablePowerUp() {
         final List<PickablePowerUp> powerUps = new ArrayList<>();
-        for (int i = 0; i < map.getColoumns() * map.getRows() * 0.010; i++) {
+        for (int i = 0; i < map.getColoumns() * map.getRows() * SPAWNING_INDEX_POWERUP; i++) {
             final int randomPowerUp = random.nextInt(0, 3);
             switch (randomPowerUp) {
                 case 0: 
-                    powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(Position.getRandomWalkablePosition(map), 30, 5));
+                    powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(
+                            Position.getRandomWalkablePosition(map), DURATION_VALUE, MULTIPLY_VALUE));
                     break;
                 case 1: 
-                    powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(Position.getRandomWalkablePosition(map), 30, 5));
+                    powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(
+                            Position.getRandomWalkablePosition(map), DURATION_VALUE, MULTIPLY_VALUE));
                     break;
                 case 2: 
-                    powerUps.add(pickablePowerUpFactory.speedBoost(Position.getRandomWalkablePosition(map), 30, 5));
+                    powerUps.add(pickablePowerUpFactory.speedBoost(
+                            Position.getRandomWalkablePosition(map), DURATION_VALUE, MULTIPLY_VALUE));
                     break;
                 default:
                     break;

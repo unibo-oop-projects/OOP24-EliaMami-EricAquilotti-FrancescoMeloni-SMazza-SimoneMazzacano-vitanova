@@ -27,6 +27,12 @@ public interface PickablePowerUp {
 
     /**
      * 
+     * @return the power up's boost value.
+     */
+    double getBoostValue();
+
+    /**
+     * 
      * @return the relative sprite.
      */
     Sprite getSprite();

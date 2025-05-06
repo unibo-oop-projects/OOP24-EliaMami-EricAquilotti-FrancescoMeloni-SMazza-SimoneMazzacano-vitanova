@@ -25,7 +25,8 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
     public PickablePowerUp speedBoost(final Position spawnPosition, final int duration, final double boost) {
         return new PickablePowerUp() {
             private static final String NAME = "Speed Boost";
-            private static final int DURATION = 30; 
+            private final int powerUpDuration = duration;
+            private final double boostValue = boost;
             //private CooldownGate cooldown;
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
@@ -42,12 +43,17 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
 
             @Override
             public int getDuration() {
-                return DURATION;
+                return powerUpDuration;
+            }
+
+            @Override
+            public double getBoostValue() {
+                return this.boostValue;
             }
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getTSprite(PowerUpType.PICKABLE_SPEED_BOOST);
+                return Sprite.getPowerUpSprite(PowerUpType.PICKABLE_SPEED_BOOST);
             }
 
             @Override
@@ -61,9 +67,6 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'activate'");
             }
-
-
-
         };
     }
 
@@ -71,7 +74,8 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
     public PickablePowerUp sicknessResistenceBoost(final Position spawnPosition, final int duration, final double boost) {
         return new PickablePowerUp() {
             private static final String NAME = "Sickness Resistence";
-            private static final int DURATION = 30; 
+            private final int powerUpDuration = duration;
+            private final double boostValue = boost;
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
 
@@ -87,12 +91,17 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
 
             @Override
             public int getDuration() {
-                return DURATION;
+                return powerUpDuration;
+            }
+
+            @Override
+            public double getBoostValue() {
+                return this.boostValue;
             }
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getTSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);
+                return Sprite.getPowerUpSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);
             }
 
             @Override
@@ -113,7 +122,8 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
     public PickablePowerUp reproductionRangeBoost(final Position spawnPosition, final int duration, final double boost) {
         return new PickablePowerUp() {
             private static final String NAME = "Reproduction Range";
-            private static final int DURATION = 30; 
+            private final int powerUpDuration = duration;
+            private final double boostValue = boost;
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
 
@@ -129,12 +139,17 @@ public final class PickablePowerUpFactoryImpl implements PickablePowerUpFactory 
 
             @Override
             public int getDuration() {
-                return DURATION;
+                return powerUpDuration;
+            }
+
+            @Override
+            public double getBoostValue() {
+                return this.boostValue;
             }
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getTSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
+                return Sprite.getPowerUpSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
             }
 
             @Override
