@@ -188,6 +188,11 @@ public final class ChapterImpl implements Chapter {
     }
 
     @Override
+    public List<PickablePowerUp> getPickablePowerUp() {
+        return Collections.unmodifiableList(pickablePowerUps);
+    }
+
+    @Override
     public Human getPlayer() {
         return humans.get(0);
     }

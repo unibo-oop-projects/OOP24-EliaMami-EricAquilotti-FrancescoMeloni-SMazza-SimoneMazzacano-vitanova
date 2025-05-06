@@ -10,6 +10,7 @@ import it.unibo.common.Text;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
+import it.unibo.model.pickable.PickablePowerUp;
 
 /**
  * Models an Object that can render things on the screen.
@@ -35,6 +36,12 @@ public interface Screen {
      * @param humans the humans to load.
      */
     void loadHumans(List<Human> humans);
+
+    /**
+     * 
+     * @param humans the humans to load.
+     */
+    void loadPickablePowerUp(List<PickablePowerUp> pickablePowerUps);
 
     /**
      * 

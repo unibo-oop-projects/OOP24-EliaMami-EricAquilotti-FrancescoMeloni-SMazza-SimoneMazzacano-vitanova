@@ -28,6 +28,7 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
+import it.unibo.model.pickable.PickablePowerUp;
 import it.unibo.model.tile.Tile;
 import it.unibo.view.population.PopulationCounterDisplay;
 import it.unibo.view.sprite.HumanType;
@@ -74,6 +75,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
     private transient List<Human> humansToDraw = new ArrayList<>();
+    private transient List<PickablePowerUp> pickableToDraw = new ArrayList<>();
     private transient Optional<Map> mapToDraw = Optional.empty();
     private transient List<Text> menuText = new ArrayList<>();
     private transient Optional<Duration> timerValue = Optional.empty();
@@ -120,6 +122,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         in.defaultReadObject();
         humansToDraw = new ArrayList<>();
         menuText = new ArrayList<>();
+        pickableToDraw = new ArrayList<>();
     }
 
     @Override
@@ -130,6 +133,11 @@ public final class ScreenImpl extends JPanel implements Screen {
     @Override
     public void loadHumans(final List<Human> humans) {
         humansToDraw = humans.stream().toList();
+    }
+
+    @Override
+    public void loadPickablePowerUp(List<PickablePowerUp> pickablePowerUps){
+        pickableToDraw = pickablePowerUps.stream().toList();
     }
 
     private void removeTextByPosition(final Text text) {
@@ -230,12 +238,16 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
         });
 
+        for (final PickablePowerUp pickable : pickableToDraw) {
+            drawImage(bufferGraphics, pickable.getSprite().getImage(), screenPosition(pickable.getPosition()));
+        }
+
         for (final Human human : humansToDraw) {
                 final Position screenPosition = (human.getType() == HumanType.PLAYER)
                     ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
-            }
+        }
 
         resetVerticalOffset();
         timerValue.map(TimerDisplay::text)

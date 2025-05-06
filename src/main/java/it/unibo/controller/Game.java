@@ -98,6 +98,7 @@ public final class Game implements Runnable {
         screen.loadMap(chapter.getMap());
         if (isGameplayStarted) {
             screen.loadHumans(chapter.getHumans());
+            screen.loadPickablePowerUp(chapter.getPickablePowerUp());
             screen.loadTimer(Optional.of(chapter.getTimerValue()));
             final int currentPopulation = chapter.getHumans().size();
             final int populationGoal = chapter.getPopulationGoal();
@@ -111,7 +112,7 @@ public final class Game implements Runnable {
      */
     public void startGameplay() {
         this.isGameplayStarted = true;
-        this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
+        this.chapter = new ChapterImpl(inputHandler, 64, 64, baseClock);
     }
 
     /**
