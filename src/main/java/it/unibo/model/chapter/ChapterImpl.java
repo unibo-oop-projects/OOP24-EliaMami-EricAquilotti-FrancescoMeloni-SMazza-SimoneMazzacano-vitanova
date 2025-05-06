@@ -1,5 +1,6 @@
 package it.unibo.model.chapter;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,9 @@ import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.chapter.quadtree.Point;
 import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
+import it.unibo.model.pickable.PickablePowerUp;
+import it.unibo.model.pickable.PickablePowerUpFactory;
+import it.unibo.model.pickable.PickablePowerUpFactoryImpl;
 import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
@@ -30,10 +34,12 @@ public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private final Map map;
     private final HumanFactory humanFactory = new HumanFactoryImpl();
+    private final PickablePowerUpFactory pickablePowerUpFactory = new PickablePowerUpFactoryImpl(null);
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
     private final Random random = new Random();
+
 
     /**
      * Sets up all the parameters.
@@ -59,6 +65,21 @@ public final class ChapterImpl implements Chapter {
         solveCollisions();
         //solveEffectCollisions
         
+    }
+
+    private void spawnPickablePowerUp() {
+        final List<PickablePowerUp> powerUps = new ArrayList<>();
+        for (int i = 0; i < 200; i++){
+            int randomPowerUp = random.nextInt(3);
+            switch(randomPowerUp){
+                case 0: powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(null, "Reproduction Boost", randomPowerUp, randomPowerUp));
+                    break;
+                case 1: powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(null, "Sickness Resistence", randomPowerUp, randomPowerUp));
+                    break;
+                case 2: powerUps.add(pickablePowerUpFactory.speedBoost(null, "Speed Boost", randomPowerUp, randomPowerUp));
+                    break;
+            }
+        }
     }
 
     private void solveCollisions() {

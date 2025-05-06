@@ -1,6 +1,6 @@
 package it.unibo.model.malus;
 
-import it.unibo.model.effect.PickablePowerUp;
+import it.unibo.model.pickable.PickablePowerUp;
 
 public interface MalusFactory {
     

@@ -1,4 +1,4 @@
-package it.unibo.model.effect;
+package it.unibo.model.pickable;
 
 import it.unibo.common.Position;
 

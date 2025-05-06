@@ -1,4 +1,4 @@
-package it.unibo.model.effect;
+package it.unibo.model.pickable;
 
 import java.time.Clock;
 import java.time.Duration;
