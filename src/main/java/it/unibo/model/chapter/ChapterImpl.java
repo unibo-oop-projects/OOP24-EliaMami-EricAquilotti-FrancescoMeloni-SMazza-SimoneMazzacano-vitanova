@@ -128,7 +128,7 @@ public final class ChapterImpl implements Chapter {
     private void fillTree(final QuadTree tree) {
         humans.forEach(h -> {
             if (h.getType() == HumanType.MALE || h.getType() == HumanType.PLAYER) {
-                tree.insert(new Point(h.getPosition(), h));
+                tree.insert(new Point(h.reproductionArea().getCenter(), h));
             }
         });
     }
