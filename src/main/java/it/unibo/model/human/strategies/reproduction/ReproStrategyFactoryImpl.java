@@ -61,7 +61,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
 
             @Override
             public boolean collide(final Human other) {
-                return canReproduceWith.test(other) && reproductionArea.intersects(other.reproductionArea());
+                return reproductionArea.intersects(other.reproductionArea()) && canReproduceWith.test(other);
             }
 
             private void centerReproductionArea(final Position humanPosition) {
