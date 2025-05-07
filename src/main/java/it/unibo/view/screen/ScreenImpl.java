@@ -6,8 +6,11 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.geom.Ellipse2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -247,6 +250,12 @@ public final class ScreenImpl extends JPanel implements Screen {
                     ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
+
+                //to draw circle
+                bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Position screenPositionCircle = screenPosition(new Position(human.getStats().getReproductionAreaRadius().getCenter().x(), human.getStats().getReproductionAreaRadius().getCenter().y()));
+                Shape theCircle = new Ellipse2D.Double(screenPositionCircle.x(), screenPositionCircle.y(), 2.0 * human.getStats().getReproductionAreaRadius().getRadius(), 2.0 * human.getStats().getReproductionAreaRadius().getRadius());
+                bufferGraphics.draw(theCircle);
         }
 
         resetVerticalOffset();

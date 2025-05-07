@@ -8,6 +8,7 @@ import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
+import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
@@ -15,8 +16,8 @@ import it.unibo.view.sprite.HumanType;
  */
 public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     // I want the center to be around the legs of the human.
-    private static final int CIRCLE_X_OFFSET = 16;
-    private static final int CIRCLE_Y_OFFSET = 24;
+    private static final int CIRCLE_X_OFFSET = ScreenImpl.TILE_SIZE/2;
+    private static final int CIRCLE_Y_OFFSET = ScreenImpl.TILE_SIZE*3/4;
     private static final int CIRCLE_RADIUS = 20;
 
     private final Clock clock;

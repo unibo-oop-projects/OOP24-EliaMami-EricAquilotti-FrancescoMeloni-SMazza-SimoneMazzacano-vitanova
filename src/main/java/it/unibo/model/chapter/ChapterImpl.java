@@ -172,6 +172,9 @@ public final class ChapterImpl implements Chapter {
                     ? humanFactory.male(randomPosition(femalePosition), map)
                     : humanFactory.female(randomPosition(femalePosition), map)
             ));
+            System.out.println("x: " + female.getStats().getReproductionAreaRadius().getCenter().x());
+            System.out.println("y: " + female.getStats().getReproductionAreaRadius().getCenter().y());
+            System.out.println("radius: " + female.getStats().getReproductionAreaRadius().getRadius());
         });
         this.humans.addAll(generated);
     }
