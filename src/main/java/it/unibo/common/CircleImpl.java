@@ -45,11 +45,7 @@ public final class CircleImpl implements Circle {
 
         final double closestX = Math.max(rectX, Math.min(this.centerX, rectX + width));
         final double closestY = Math.max(rectY, Math.min(this.centerY, rectY + height));
-        return this.contains(new Position(closestX, closestY))
-            || (this.centerX - this.radius >= rectX)
-            && (this.centerX + this.radius <= rectX + width)
-            && (this.centerY - this.radius >= rectY)
-            && (this.centerY + this.radius <= rectY + height);
+        return this.contains(new Position(closestX, closestY));
     }
 
     @Override
