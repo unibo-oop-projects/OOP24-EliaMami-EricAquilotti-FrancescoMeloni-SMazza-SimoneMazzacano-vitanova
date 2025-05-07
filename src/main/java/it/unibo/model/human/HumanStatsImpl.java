@@ -101,11 +101,17 @@ public final class HumanStatsImpl implements HumanStats {
 
         @Override
         public void applyReproductionRangeModifier(final double moltiplyValue) {
-
+            setReproductionAreaRadius(
+                new CircleImpl(
+                    reproductionAreaRadius.getCenter().x(), 
+                    reproductionAreaRadius.getCenter().y(), 
+                    reproductionAreaRadius.getRadius() * moltiplyValue
+                )
+            );
         }
 
         @Override
         public void applySicknessResistenceModifier(final double moltiplyValue) {
-
+            this.sicknessResistence = this.sicknessResistence * moltiplyValue;
         }
 }

@@ -76,8 +76,8 @@ public final class ChapterImpl implements Chapter {
         for (final Human human : humans) {
             human.move();
         }
-        spawnPickablePowerUp(spawnPowerupRate.tryActivate());
         solveCollisions();
+        spawnPickablePowerUp(spawnPowerupRate.tryActivate());
         solvePickablePowerUpCollisions();
     }
 
@@ -106,9 +106,7 @@ public final class ChapterImpl implements Chapter {
     
     private void spawnPickablePowerUp(boolean isTime) {
         final List<PickablePowerUp> powerUps = new ArrayList<>();
-        
 
-        System.out.println(isTime);
         if (isTime) {
             final int randomPowerUp = random.nextInt(0, 3);
             switch (randomPowerUp) {
