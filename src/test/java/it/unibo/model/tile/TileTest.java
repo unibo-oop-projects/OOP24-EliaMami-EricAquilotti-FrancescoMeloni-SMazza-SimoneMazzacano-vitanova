@@ -20,18 +20,18 @@ import it.unibo.common.DirectionEnum;
  */
 class TileTest {
 
-    private Tile tile;
+    private WaveFunctionTile tile;
     private final Random rand = new Random();
 
     @BeforeEach
     void initialize() {
-        tile = new TileImpl();
+        tile = new WaveFunctionTileImpl();
     }
 
     @Test
     void neigboursTest() {
         assertTrue(tile.getNeighbours().isEmpty());
-        final var neighbour = new TileImpl();
+        final var neighbour = new WaveFunctionTileImpl();
         assertNotEquals(tile, neighbour);
         tile.addNeighbour(neighbour, DirectionEnum.UP);
         final var neighbours = tile.getNeighbours();
@@ -39,7 +39,7 @@ class TileTest {
         assertEquals(neighbour, neighbours.get(DirectionEnum.UP));
         tile.addNeighbour(neighbour, DirectionEnum.UP);
         assertEquals(1, tile.getNeighbours().size());
-        final var neighbour2 = new TileImpl();
+        final var neighbour2 = new WaveFunctionTileImpl();
         tile.addNeighbour(neighbour2, DirectionEnum.RIGHT);
         assertEquals(2, tile.getNeighbours().size());
     }
@@ -97,7 +97,7 @@ class TileTest {
 
     @Test 
     void costrainTest() {
-        final Tile tile2 = new TileImpl();
+        final WaveFunctionTile tile2 = new WaveFunctionTileImpl();
         final int entropyTile2 = tile2.getEntropy();
         tile2.addNeighbour(tile, DirectionEnum.RIGHT);
         assertEquals(tile.getEntropy(), entropyTile2);

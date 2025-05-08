@@ -12,19 +12,19 @@ import it.unibo.common.DirectionEnum;
 import it.unibo.view.sprite.Sprite;
 
 /**
- * Implementation of {@code Tile}.
- * @see Tile
+ * Implementation of {@code WaveFunctionTile}.
+ * @see WaveFunctionTile
  */
-public final class TileImpl implements Tile {
+public final class WaveFunctionTileImpl implements WaveFunctionTile {
 
     private List<TileType> possibleTiles;
     private int entropy;
-    private final Map<DirectionEnum, Tile> neighbours = new EnumMap<>(DirectionEnum.class);
+    private final Map<DirectionEnum, WaveFunctionTile> neighbours = new EnumMap<>(DirectionEnum.class);
 
     /**
      * Generating a tile with the default list of possible tile.
      */
-    public TileImpl() {
+    public WaveFunctionTileImpl() {
         this(new LinkedList<>(Arrays.asList(TileType.values())));
     }
 
@@ -32,7 +32,7 @@ public final class TileImpl implements Tile {
      * Generating a tile with a defined list of possible tile.
      * @param possibleTiles the list with a defined types of tile.
      */
-    public TileImpl(final List<TileType> possibleTiles) {
+    public WaveFunctionTileImpl(final List<TileType> possibleTiles) {
         this.possibleTiles = new LinkedList<>(possibleTiles);
         this.entropy = possibleTiles.size();
     }
@@ -73,12 +73,12 @@ public final class TileImpl implements Tile {
     }
 
     @Override
-    public void addNeighbour(final Tile tile, final DirectionEnum direction) {
+    public void addNeighbour(final WaveFunctionTile tile, final DirectionEnum direction) {
         this.neighbours.put(direction, tile);
     }
 
     @Override
-    public Map<DirectionEnum, Tile> getNeighbours() {
+    public Map<DirectionEnum, WaveFunctionTile> getNeighbours() {
         return new EnumMap<>(this.neighbours);
     }
 

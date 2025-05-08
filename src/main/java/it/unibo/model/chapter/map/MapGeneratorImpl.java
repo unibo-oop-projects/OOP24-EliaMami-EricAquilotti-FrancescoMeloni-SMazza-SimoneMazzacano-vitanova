@@ -7,9 +7,9 @@ import java.util.Random;
 import java.util.Stack;
 
 import it.unibo.common.DirectionEnum;
-import it.unibo.model.tile.Tile;
-import it.unibo.model.tile.TileImpl;
+import it.unibo.model.tile.WaveFunctionTileImpl;
 import it.unibo.model.tile.TileType;
+import it.unibo.model.tile.WaveFunctionTile;
 
 /**
  * Implementation of {@code MapGeneration}.
@@ -19,7 +19,7 @@ public final class MapGeneratorImpl implements MapGenerator {
 
     private final int rows;
     private final int coloumns;
-    private final Tile[][] tiles;
+    private final WaveFunctionTile[][] tiles;
     private final Random rand = new Random(System.currentTimeMillis());
 
     /**
@@ -30,7 +30,7 @@ public final class MapGeneratorImpl implements MapGenerator {
     public MapGeneratorImpl(final int rows, final int coloumns) {
         this.rows = rows;
         this.coloumns = coloumns;
-        this.tiles = new TileImpl[coloumns][rows];
+        this.tiles = new WaveFunctionTileImpl[coloumns][rows];
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < coloumns; x++) {
                 this.tiles[x][y] = newTile(x, y);
@@ -58,18 +58,18 @@ public final class MapGeneratorImpl implements MapGenerator {
         }
     }
 
-    private Tile newTile(final int x, final int y) {
+    private WaveFunctionTile newTile(final int x, final int y) {
         final int columnMargin = (int) Math.ceil(MapImpl.MARGIN_COLOUMNS / 2d);
         final int rowMargin = (int) Math.ceil(MapImpl.MARGIN_ROWS / 2d);
         if (x < columnMargin || x > coloumns - columnMargin
             || y < rowMargin || y > rows - rowMargin) {
-            return new TileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
+            return new WaveFunctionTileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
         }
-        return new TileImpl();
+        return new WaveFunctionTileImpl();
     }
 
     @Override
-    public Tile[][] generateMap() {
+    public WaveFunctionTile[][] generateMap() {
         boolean finished = false;
         while (!finished) {
             finished = waveFunctionCollapse();
@@ -85,7 +85,7 @@ public final class MapGeneratorImpl implements MapGenerator {
         final int index = Math.abs(rand.nextInt(0, tilesLowestEntropy.size()));
         final var tileCollapsed = tilesLowestEntropy.get(index);
         tileCollapsed.collapse(rand);
-        final List<Tile> stack = new Stack<>();
+        final List<WaveFunctionTile> stack = new Stack<>();
         stack.addFirst(tileCollapsed);
         while (!stack.isEmpty()) {
             final var currentTile = stack.removeLast();
@@ -98,9 +98,9 @@ public final class MapGeneratorImpl implements MapGenerator {
         return false;
     }
 
-    private List<Tile> getTilesLowestEntropy() {
+    private List<WaveFunctionTile> getTilesLowestEntropy() {
         var lowestEntropy = TileType.values().length;
-        final List<Tile> tilesLowestEntropy = new LinkedList<>();
+        final List<WaveFunctionTile> tilesLowestEntropy = new LinkedList<>();
         for (int y = 0; y < this.rows; y++) {
             for (int x = 0; x < this.coloumns; x++) {
                 final var currentTile = tiles[x][y];
