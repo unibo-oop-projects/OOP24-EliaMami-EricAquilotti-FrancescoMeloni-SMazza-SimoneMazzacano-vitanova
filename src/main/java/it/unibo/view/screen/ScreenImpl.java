@@ -44,7 +44,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int TEXT_VERTICAL_SPACING = 25;
-    private static final int TEXT_LATERAL_BORDER = 200;
+    private static final int TEXT_LATERAL_MARGIN = 200;
     private static final int TOP_MARGIN = 100;
     /**
      * Base window width, screen width.
@@ -84,6 +84,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
     private final transient TimerDisplay timerLabel = new TimerDisplay();
+    private final transient PopulationCounterDisplay populationCounterLabel = new PopulationCounterDisplay();
     private final transient JPanel topPanel = new JPanel(new SpringLayout());
 
     /**
@@ -131,6 +132,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         topPanel.setOpaque(false);
         topPanel.setBorder(BorderFactory.createEmptyBorder(TOP_MARGIN, 0, 0, 0));
         topPanel.add(timerLabel);
+        topPanel.add(populationCounterLabel);
 
         final SpringLayout layout = (SpringLayout) topPanel.getLayout();
         layout.putConstraint(
@@ -138,6 +140,13 @@ public final class ScreenImpl extends JPanel implements Screen {
             timerLabel,
             0,
             SpringLayout.HORIZONTAL_CENTER,
+            topPanel
+        );
+        layout.putConstraint(
+            SpringLayout.EAST,
+            populationCounterLabel,
+            -TEXT_LATERAL_MARGIN,
+            SpringLayout.EAST,
             topPanel
         );
         this.add(topPanel);
@@ -202,7 +211,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         if (alignment == TextAlignment.CENTER) {
             return Math.max(this.centerX - (textWidth / 2), 0);
         } else if (alignment == TextAlignment.RIGHT) {
-            return Math.max(this.window.getWidth() - textWidth - TEXT_LATERAL_BORDER, 0);
+            return Math.max(this.window.getWidth() - textWidth - TEXT_LATERAL_MARGIN, 0);
         }
         return xPosition;
     }
@@ -260,8 +269,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
         resetVerticalOffset();
         timerValue.ifPresent(timerLabel::update);
-        populationCounter.map(PopulationCounterDisplay::text)
-              .ifPresent(text -> drawText(List.of(text), TextAlignment.RIGHT));
+        populationCounter.ifPresent(populationCounterLabel::update);
         drawText(textToDraw, TextAlignment.NONE);
         drawText(menuText, TextAlignment.CENTER);
     }

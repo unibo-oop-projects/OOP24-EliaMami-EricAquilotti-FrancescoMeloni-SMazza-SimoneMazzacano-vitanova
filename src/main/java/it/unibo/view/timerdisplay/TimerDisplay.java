@@ -24,7 +24,7 @@ public final class TimerDisplay extends JLabel {
         this.setForeground(TEXT_COLOR);
     }
 
-    private static String format(final Duration duration) {
+    private String format(final Duration duration) {
         return String.format("%02d:%02d", duration.toMinutesPart(),
         duration.toSecondsPart());
     }

@@ -1,27 +1,37 @@
 package it.unibo.view.population;
 
 import java.awt.Color;
+import java.awt.Font;
 
-import it.unibo.common.Position;
-import it.unibo.common.Text;
+import javax.swing.JLabel;
+
 import it.unibo.model.chapter.PopulationCounter;
 
 /**
  * Models a population counter display for the view.
  */
-public final class PopulationCounterDisplay {
+public final class PopulationCounterDisplay extends JLabel {
+    private static final long serialVersionUID = 4L;
+
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final int TEXT_SIZE = 60;
 
-    private PopulationCounterDisplay() { }
+    /**
+     * Contructor for the population counter display.
+     */
+    public PopulationCounterDisplay() {
+        final Font font = new Font("Verdana", Font.BOLD, TEXT_SIZE);
+        this.setFont(font);
+        this.setForeground(TEXT_COLOR);
+    }
 
     /**
-     * Creates a Text object representing the population counter.
-     * @param populationCounter the population counter to display.
-     * @return a Text object representing the population counter.
+     * Sets the label text to show population counter display.
+     *
+     * @param populationCounter the population counter to set
      */
-    public static Text text(final PopulationCounter populationCounter) {
+    public void update(final PopulationCounter populationCounter) {
         final String counterString = populationCounter.population() + "/" + populationCounter.populationGoal();
-        return new Text(counterString, new Position(0, 0), TEXT_COLOR, TEXT_SIZE);
+        this.setText(counterString);
     }
 }
