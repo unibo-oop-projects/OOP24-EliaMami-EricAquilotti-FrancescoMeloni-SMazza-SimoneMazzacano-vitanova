@@ -12,7 +12,7 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 
 import it.unibo.common.DirectionEnum;
-import it.unibo.model.tile.TileType;
+import it.unibo.model.tile.wavefunction.TileType;
 
 /**
  * Set of sprites for the tiles and humans.

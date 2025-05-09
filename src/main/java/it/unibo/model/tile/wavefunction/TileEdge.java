@@ -1,4 +1,4 @@
-package it.unibo.model.tile;
+package it.unibo.model.tile.wavefunction;
 
 /**
  * Enum representing all types of edges.

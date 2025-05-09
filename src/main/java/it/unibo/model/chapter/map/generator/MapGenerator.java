@@ -1,4 +1,4 @@
-package it.unibo.model.chapter.map;
+package it.unibo.model.chapter.map.generator;
 
 import it.unibo.model.tile.Tile;
 

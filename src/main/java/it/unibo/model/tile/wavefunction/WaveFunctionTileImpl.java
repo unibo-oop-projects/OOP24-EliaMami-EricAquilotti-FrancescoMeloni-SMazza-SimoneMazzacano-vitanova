@@ -1,4 +1,4 @@
-package it.unibo.model.tile;
+package it.unibo.model.tile.wavefunction;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -43,7 +43,7 @@ public final class WaveFunctionTileImpl implements WaveFunctionTile {
         if (tile.isEmpty()) {
             throw new IllegalStateException("The tile has not been set.");
         }
-        return TileType.isWalkable(tile.get());
+        return TileRules.isWalkable(tile.get());
     }
 
     @Override
@@ -95,7 +95,7 @@ public final class WaveFunctionTileImpl implements WaveFunctionTile {
 
     private TileType choseTileType(final Random rand) {
         final List<Integer> weights = this.possibleTiles.stream()
-                .map(TileType::getWeight)
+                .map(TileRules::getWeight)
                 .toList();
         final int totalWeights = weights.stream()
                 .mapToInt(Integer::intValue)
@@ -115,11 +115,11 @@ public final class WaveFunctionTileImpl implements WaveFunctionTile {
             final var oppositeDirection = DirectionEnum.getOpposite(direction);
             final var connectors = this.neighbours.get(oppositeDirection).getPossibleTiles()
                     .stream()
-                    .map(p -> TileType.getEdges(p).get(direction))
+                    .map(p -> TileRules.getEdges(p).get(direction))
                     .toList();
             final List<TileType> tilesToRemove = new LinkedList<>();
             for (final TileType possibleTileType : this.possibleTiles) {
-                if (!connectors.contains(TileType.getEdges(possibleTileType).get(oppositeDirection))) {
+                if (!connectors.contains(TileRules.getEdges(possibleTileType).get(oppositeDirection))) {
                     tilesToRemove.add(possibleTileType);
                     reduced = true;
                 }

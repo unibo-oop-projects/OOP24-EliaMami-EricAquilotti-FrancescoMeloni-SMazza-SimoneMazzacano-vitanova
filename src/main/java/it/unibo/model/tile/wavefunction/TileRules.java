@@ -1,80 +1,22 @@
-package it.unibo.model.tile;
+package it.unibo.model.tile.wavefunction;
 
 import java.util.Map;
 
 import it.unibo.common.DirectionEnum;
 
 /**
- * Enum representing all types of tiles.
+ * Represent the rules for the types of tile (edges, weight, if it's walkable or not and image path of a type of tile).
+ * @see TileType
+ * @see TileEdge
  */
-public enum TileType {
-    /**
-     * Grass tile.
-     */
-    TILE_GRASS,
-    /**
-     * Water tile.
-     */
-    TILE_WATER,
-    /**
-     * Rock tile.
-     */
-    TILE_ROCK,
-    /**
-     * Upper coast tile.
-     */
-    TILE_COAST_UP,
-    /**
-     * Right coast tile.
-     */
-    TILE_COAST_RIGHT,
-    /**
-     * Down coast tile.
-     */
-    TILE_COAST_DOWN,
-    /**
-     * Left coast tile.
-     */
-    TILE_COAST_LEFT,
-    /**
-     * Upper-Right coast tile.
-     */
-    TILE_COAST_UP_RIGHT,
-    /**
-     * Right-Down coast tile.
-     */
-    TILE_COAST_RIGHT_DOWN,
-    /**
-     * Down-Left coast tile.
-     */
-    TILE_COAST_DOWN_LEFT,
-    /**
-     * Upper-Left coast tile.
-     */
-    TILE_COAST_UP_LEFT,
-    /**
-     * Upper-Right2 coast tile.
-     */
-    TILE_COAST_UP_RIGHT2,
-    /**
-     * Right-Down2 coast tile.
-     */
-    TILE_COAST_RIGHT_DOWN2,
-    /**
-     * Down-Left2 coast tile.
-     */
-    TILE_COAST_DOWN_LEFT2,
-    /**
-     * Upper-Left2 coast tile.
-     */
-    TILE_COAST_UP_LEFT2;
+public interface TileRules {
 
     /**
      * Returns a Map describing the edges of a type of tile.
      * @param tileType the tile's type we want to know the edges.
      * @return a Map of all the edges, on the directions [UP, RIGHT, DOWN, LEFT], of {@code tileType}.
      */
-    public static Map<DirectionEnum, TileEdge> getEdges(final TileType tileType) {
+    static Map<DirectionEnum, TileEdge> getEdges(final TileType tileType) {
         switch (tileType) {
             case TILE_WATER:
                 return Map.of(DirectionEnum.UP, TileEdge.EDGE_WATER,
@@ -154,7 +96,7 @@ public enum TileType {
      * @param tileType the tile's type we want to know the weight. 
      * @return the weight of the {@code tileType}.
      */
-    public static int getWeight(final TileType tileType) {
+    static int getWeight(final TileType tileType) {
         final int weightTileGrass = 750;
         final int weightTileWater = 4;
         final int weightTileRock = 5;
@@ -188,7 +130,7 @@ public enum TileType {
      * @param tileType the tile's type we want to know if it is walkable.
      * @return true if a human can walk on the {@code tileType}.
      */
-    public static boolean isWalkable(final TileType tileType) {
+    static boolean isWalkable(final TileType tileType) {
         switch (tileType) {
             case TILE_GRASS:
                 return true;
@@ -202,7 +144,7 @@ public enum TileType {
      * @param tileType the tile's type we want to have the image path.
      * @return the image path that corresponds to {@code tileType}.
      */
-    public static String getPath(final TileType tileType) {
+    static String getPath(final TileType tileType) {
         switch (tileType) {
             case TILE_GRASS:
                 return "tile/grass.png";
