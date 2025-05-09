@@ -45,7 +45,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int TEXT_VERTICAL_SPACING = 25;
     private static final int TEXT_LATERAL_MARGIN = 200;
-    private static final int TOP_MARGIN = 100;
+    private static final int TOP_MARGIN = 150;
     /**
      * Base window width, screen width.
      */
@@ -149,7 +149,21 @@ public final class ScreenImpl extends JPanel implements Screen {
             SpringLayout.EAST,
             topPanel
         );
-        this.add(topPanel);
+        layout.putConstraint(
+            SpringLayout.SOUTH,
+            timerLabel,
+            0,
+            SpringLayout.SOUTH,
+            topPanel
+        );
+        layout.putConstraint(
+            SpringLayout.SOUTH,
+            populationCounterLabel,
+            0,
+            SpringLayout.SOUTH,
+            topPanel
+        );
+        this.add(topPanel, BorderLayout.NORTH);
     }
 
     @Override
