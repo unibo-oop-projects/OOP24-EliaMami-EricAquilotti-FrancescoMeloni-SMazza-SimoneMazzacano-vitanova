@@ -8,10 +8,15 @@ import it.unibo.model.human.strategies.reproduction.ReproStrategy;
  * Implementation of human stats that handles all human's stats.
  */
 public final class HumanStatsImpl implements HumanStats {
-        private double speed;
-        private double sicknessResistence;
+        private double baseSpeed;
+        private double actualSpeed;
+        private double baseSicknessResistence;
+        private double actualSicknessResistence;
         private double fertility;
-        private Circle reproductionAreaRadius;
+        //private boolean isSick = false;
+        private ReproStrategy reproStrategy;
+        private double baseRadius;
+        private double actualRadius;
         private static final double SPEED_UPGRADE_VALUE = .5;
         private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .05;
         private static final double FERTILITY_UPGRADE_VALUE = .05;
@@ -29,55 +34,66 @@ public final class HumanStatsImpl implements HumanStats {
             setSpeed(speed);
             setSicknessResistence(sicknessResistence);
             setFertility(fertility);
-            setReproductionAreaRadius(reproStrategy.getReproductionArea());
+            setReproStrategy(reproStrategy);
+        }
+
+        private void setReproStrategy(final ReproStrategy newReproStrategy) {
+            this.reproStrategy = newReproStrategy;
+            this.baseRadius = reproStrategy.getReproductionArea().getRadius();
+            this.actualRadius = this.baseRadius;
+        }
+
+        @Override
+        public ReproStrategy getReproStrategy() {
+            return this.reproStrategy;
         }
 
         @Override
         public double getSpeed() {
-            return this.speed;
+            return this.actualSpeed;
         }
 
         private void setSpeed(final double newSpeed) {
-            this.speed = newSpeed;
+            this.baseSpeed = newSpeed;
+            this.actualSpeed = newSpeed;
         }
 
         @Override
         public void increaseSpeed() {
-            setSpeed(speed + SPEED_UPGRADE_VALUE);
+            baseSpeed = baseSpeed + SPEED_UPGRADE_VALUE;
         }
 
         @Override
         public Circle getReproductionAreaRadius() {
-            return new CircleImpl(reproductionAreaRadius);
+            return new CircleImpl(
+                getReproStrategy().getReproductionArea().getCenter().x(), 
+                getReproStrategy().getReproductionArea().getCenter().y(), 
+                actualRadius
+            );
         }
 
-        private void setReproductionAreaRadius(final Circle reproductionArea) {
-            reproductionAreaRadius = new CircleImpl(reproductionArea);
+        private void setReproductionAreaRadius(final double newRadius) {
+            getReproStrategy().changeReproductionArea(newRadius);
         }
 
         @Override
         public void increaseReproductionAreaRadius() {
-            setReproductionAreaRadius(
-                new CircleImpl(
-                    this.reproductionAreaRadius.getCenter().x(), 
-                    this.reproductionAreaRadius.getCenter().y(), 
-                    this.reproductionAreaRadius.getRadius() + RADIUS_UPGRADE_VALUE
-                )
-            );
+            setReproductionAreaRadius(getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE);
         }
 
         @Override
         public double getSicknessResistence() {
-            return this.sicknessResistence;
+            return this.actualSicknessResistence;
         }
 
         private void setSicknessResistence(final double newSicknessResistence) {
-            this.sicknessResistence = newSicknessResistence;
+            this.baseSicknessResistence = newSicknessResistence;
+            this.actualSicknessResistence = newSicknessResistence;
         }
 
         @Override
         public void increaseSicknessResistence() {
-            setSicknessResistence(this.sicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE);
+            baseSicknessResistence = this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE;
         }
 
         @Override
@@ -96,22 +112,31 @@ public final class HumanStatsImpl implements HumanStats {
 
         @Override
         public void applySpeedModifier(final double moltiplyValue) {
-            this.speed = this.speed * moltiplyValue;
+            actualSpeed = this.baseSpeed * moltiplyValue;
         }
 
         @Override
         public void applyReproductionRangeModifier(final double moltiplyValue) {
-            setReproductionAreaRadius(
-                new CircleImpl(
-                    reproductionAreaRadius.getCenter().x(), 
-                    reproductionAreaRadius.getCenter().y(), 
-                    reproductionAreaRadius.getRadius() * moltiplyValue
-                )
-            );
+            actualRadius = baseRadius * moltiplyValue;
         }
 
         @Override
         public void applySicknessResistenceModifier(final double moltiplyValue) {
-            this.sicknessResistence = this.sicknessResistence * moltiplyValue;
+            actualSicknessResistence = this.baseSicknessResistence * moltiplyValue;
+        }
+
+        @Override
+        public void resetToBaseSpeed() {
+            this.actualSpeed = this.baseSpeed;
+        }
+
+        @Override
+        public void resetToBaseSicknessResistence() {
+            this.actualSicknessResistence = this.baseSicknessResistence;
+        }
+
+        @Override
+        public void resetToBaseReproductionRange() {
+            actualRadius = baseRadius;
         }
 }

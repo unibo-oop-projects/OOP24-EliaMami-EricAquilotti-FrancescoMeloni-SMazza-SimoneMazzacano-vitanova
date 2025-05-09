@@ -90,7 +90,7 @@ public final class HumanFactoryImpl implements HumanFactory {
                     this.x = nextPosition.x();
                     this.y = nextPosition.y();
                 }
-                reproductionStrategy.update(new Position(x, y));
+                humanStats.getReproStrategy().update(new Position(x, y));
             }
 
             @Override

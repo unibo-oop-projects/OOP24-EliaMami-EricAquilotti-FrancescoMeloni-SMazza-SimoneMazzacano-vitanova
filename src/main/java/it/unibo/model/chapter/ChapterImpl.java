@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -24,9 +25,9 @@ import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.chapter.quadtree.Point;
 import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
-import it.unibo.model.pickable.PickablePowerUp;
-import it.unibo.model.pickable.PickablePowerUpFactory;
-import it.unibo.model.pickable.PickablePowerUpFactoryImpl;
+import it.unibo.model.pickable.Pickable;
+import it.unibo.model.pickable.PickableFactory;
+import it.unibo.model.pickable.PickableFactoryImpl;
 import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
@@ -39,17 +40,18 @@ public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int POPULATION_GOAL = 100;
     private static final double MULTIPLY_VALUE = 1.25;
-    private static final int DURATION_VALUE = 30;
+    private static final Duration DURATION_EFFECT_VALUE = Duration.ofSeconds(5);
     private static final Duration TIMER_VALUE = Duration.ofSeconds(300);
     private CooldownGate spawnPowerupRate;
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
-    private final PickablePowerUpFactory pickablePowerUpFactory = new PickablePowerUpFactoryImpl(null);
+    private final PickableFactory pickablePowerUpFactory;
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
-    private final List<PickablePowerUp> pickablePowerUps = new CopyOnWriteArrayList<>();
+    private final List<Pickable> pickablePowerUps = new CopyOnWriteArrayList<>();
+    private final List<Pickable> activatedPowerUps = new CopyOnWriteArrayList<>();
     private final Random random = new Random();
     private final Timer timer;
     private final Clock clock;
@@ -67,6 +69,7 @@ public final class ChapterImpl implements Chapter {
         this.clock = baseClock;
         this.humanFactory = new HumanFactoryImpl(baseClock);
         this.timer = new TimerImpl(TIMER_VALUE, baseClock);
+        this.pickablePowerUpFactory = new PickableFactoryImpl(baseClock);
         this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), baseClock); 
         spawnHumans(inputHandler);
     }
@@ -77,58 +80,98 @@ public final class ChapterImpl implements Chapter {
             human.move();
         }
         solveCollisions();
-        spawnPickablePowerUp(spawnPowerupRate.tryActivate());
+        if (spawnPowerupRate.tryActivate()) {
+            spawnPickablePowerUp(); 
+        }
         solvePickablePowerUpCollisions();
+        checkPlayerStatusEffect();
+    }
+
+    private void spawnPickablePowerUp() {
+        final List<Pickable> powerUps = new ArrayList<>();
+
+        final int randomPowerUp = random.nextInt(0, 3);
+        switch (randomPowerUp) {
+            case 0: 
+                powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(
+                        Position.getRandomWalkablePosition(map), DURATION_EFFECT_VALUE, MULTIPLY_VALUE));
+                break;
+            case 1: 
+                powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(
+                        Position.getRandomWalkablePosition(map), DURATION_EFFECT_VALUE, MULTIPLY_VALUE));
+                break;
+            case 2: 
+                powerUps.add(pickablePowerUpFactory.speedBoost(
+                        Position.getRandomWalkablePosition(map), DURATION_EFFECT_VALUE, MULTIPLY_VALUE));
+                break;
+            default:
+                break;
+        }
+
+        this.pickablePowerUps.addAll(powerUps);
     }
 
     private void solvePickablePowerUpCollisions() {
-        for (final PickablePowerUp powerUp : pickablePowerUps) {
+        for (final Pickable powerUp : pickablePowerUps) {
             if (Math.abs(humans.get(0).getPosition().x() - powerUp.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
                 && Math.abs(humans.get(0).getPosition().y() - powerUp.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
-                switch (powerUp.getName()) {
-                    case "Speed Boost":
-                        humans.get(0).getStats().applySpeedModifier(powerUp.getBoostValue());
-                        break;
-                    case "Sickness Resistence":
-                        humans.get(0).getStats().applySicknessResistenceModifier(powerUp.getBoostValue());
-                        break;
-                    case "Reproduction Range":
-                        humans.get(0).getStats().applyReproductionRangeModifier(powerUp.getBoostValue());
-                        break;
-                    default:
-                        break;
+
+                Optional<Pickable> tmp = Optional.empty();
+                for (final Pickable activatedPowerUp : activatedPowerUps) {
+                    if (activatedPowerUp.getEffect().getName().equals(powerUp.getEffect().getName())) {
+                        tmp = Optional.of(activatedPowerUp);
+                    }
+                }
+
+                if (tmp.isPresent()) {
+                    tmp.get().getEffect().refresh();
+                } else {
+                    powerUp.getEffect().activate();
+                    activatedPowerUps.add(powerUp);
+                    switch (powerUp.getEffect().getName()) {
+                        case "Speed Boost":
+                            humans.get(0).getStats().applySpeedModifier(powerUp.getEffect().getMultiplyValue());
+                            break;
+                        case "Sickness Resistence":
+                            humans.get(0).getStats().applySicknessResistenceModifier(powerUp.getEffect().getMultiplyValue());
+                            break;
+                        case "Reproduction Range":
+                            humans.get(0).getStats().applyReproductionRangeModifier(powerUp.getEffect().getMultiplyValue());
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 pickablePowerUps.remove(powerUp);
             }
         }
     }
-    
-    private void spawnPickablePowerUp(boolean isTime) {
-        final List<PickablePowerUp> powerUps = new ArrayList<>();
 
-        if (isTime) {
-            final int randomPowerUp = random.nextInt(0, 3);
-            switch (randomPowerUp) {
-                case 0: 
-                    powerUps.add(pickablePowerUpFactory.reproductionRangeBoost(
-                            Position.getRandomWalkablePosition(map), DURATION_VALUE, MULTIPLY_VALUE));
-                    break;
-                case 1: 
-                    powerUps.add(pickablePowerUpFactory.sicknessResistenceBoost(
-                            Position.getRandomWalkablePosition(map), DURATION_VALUE, MULTIPLY_VALUE));
-                    break;
-                case 2: 
-                    powerUps.add(pickablePowerUpFactory.speedBoost(
-                            Position.getRandomWalkablePosition(map), DURATION_VALUE, MULTIPLY_VALUE));
-                    break;
-                default:
-                    break;
+    private void checkPlayerStatusEffect() {
+        for (final Pickable powerUp : activatedPowerUps) {
+            if (powerUp.getEffect().isExpired()) {
+                switch (powerUp.getEffect().getName()) {
+                    case "Speed Boost":
+                        humans.get(0).getStats().resetToBaseSpeed();
+                        break;
+                    case "Sickness Resistence":
+                        humans.get(0).getStats().resetToBaseSicknessResistence();
+                        break;
+                    case "Reproduction Range":
+                        humans.get(0).getStats().resetToBaseReproductionRange();
+                        break;
+                    default:
+                        break;
+                }
+                activatedPowerUps.remove(powerUp);
             }
         }
+    } 
 
-        this.pickablePowerUps.addAll(powerUps);
-    }
+    // private void checkIfGetSick(){
+
+    // }
 
     private boolean gameWon() {
         return this.humans.size() >= POPULATION_GOAL;
@@ -172,9 +215,6 @@ public final class ChapterImpl implements Chapter {
                     ? humanFactory.male(randomPosition(femalePosition), map)
                     : humanFactory.female(randomPosition(femalePosition), map)
             ));
-            System.out.println("x: " + female.getStats().getReproductionAreaRadius().getCenter().x());
-            System.out.println("y: " + female.getStats().getReproductionAreaRadius().getCenter().y());
-            System.out.println("radius: " + female.getStats().getReproductionAreaRadius().getRadius());
         });
         this.humans.addAll(generated);
     }
@@ -194,7 +234,7 @@ public final class ChapterImpl implements Chapter {
     private void fillTree(final QuadTree tree) {
         humans.forEach(h -> {
             if (h.getType() == HumanType.MALE || h.getType() == HumanType.PLAYER) {
-                tree.insert(new Point(h.reproductionArea().getCenter(), h));
+                tree.insert(new Point(h.getStats().getReproductionAreaRadius().getCenter(), h));
             }
         });
     }
@@ -210,7 +250,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     @Override
-    public List<PickablePowerUp> getPickablePowerUp() {
+    public List<Pickable> getPickablePowerUp() {
         return Collections.unmodifiableList(pickablePowerUps);
     }
 

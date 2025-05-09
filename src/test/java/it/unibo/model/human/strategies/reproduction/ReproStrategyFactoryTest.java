@@ -54,7 +54,73 @@ class ReproStrategyFactoryTest {
             }
             @Override
             public HumanStats getStats() {
-                return null;
+                return new HumanStats() {
+
+                    @Override
+                    public double getSpeed() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void increaseSpeed() {
+                    }
+
+                    @Override
+                    public ReproStrategy getReproStrategy() {
+                        return null;
+                    }
+
+                    @Override
+                    public Circle getReproductionAreaRadius() {
+                        return area;
+                    }
+
+                    @Override
+                    public void increaseReproductionAreaRadius() {
+                    }
+
+                    @Override
+                    public double getSicknessResistence() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void increaseSicknessResistence() {
+                    }
+
+                    @Override
+                    public double getFertility() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void increaseFertility() {
+                    }
+
+                    @Override
+                    public void applySpeedModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void applyReproductionRangeModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void applySicknessResistenceModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void resetToBaseSpeed() {
+                    }
+
+                    @Override
+                    public void resetToBaseSicknessResistence() {
+                    }
+
+                    @Override
+                    public void resetToBaseReproductionRange() {
+                    }
+                };
             }
         };
     }

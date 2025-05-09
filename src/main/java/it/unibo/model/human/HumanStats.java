@@ -1,6 +1,7 @@
 package it.unibo.model.human;
 
 import it.unibo.common.Circle;
+import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 
 /**
  * Models stats of a human.
@@ -17,6 +18,12 @@ public interface HumanStats {
      * Used to increase speed after finishing the chapter.
      */
     void increaseSpeed();
+
+    /**
+     * 
+     * @return the reproStrategy.
+     */
+    ReproStrategy getReproStrategy();
 
     /**
      * 
@@ -68,4 +75,19 @@ public interface HumanStats {
      * Used to apply power up and malus effects to sickness resistence's stat.
      */
     void applySicknessResistenceModifier(double multiplyValue);
+
+    /**
+     * Resets actual speed to base speed.
+     */
+    void resetToBaseSpeed();
+
+    /**
+     * Resets actual sickness resistence to base sickness resistence.
+     */
+    void resetToBaseSicknessResistence();
+
+    /**
+     * Resets actual reproduction range to base reproduction range.
+     */
+    void resetToBaseReproductionRange();
 }

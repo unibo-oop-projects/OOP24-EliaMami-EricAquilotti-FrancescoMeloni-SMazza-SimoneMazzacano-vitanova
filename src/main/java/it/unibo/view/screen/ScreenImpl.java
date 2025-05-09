@@ -31,7 +31,7 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
-import it.unibo.model.pickable.PickablePowerUp;
+import it.unibo.model.pickable.Pickable;
 import it.unibo.model.tile.Tile;
 import it.unibo.view.population.PopulationCounterDisplay;
 import it.unibo.view.sprite.HumanType;
@@ -78,7 +78,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
     private transient List<Human> humansToDraw = new ArrayList<>();
-    private transient List<PickablePowerUp> pickableToDraw = new ArrayList<>();
+    private transient List<Pickable> pickableToDraw = new ArrayList<>();
     private transient Optional<Map> mapToDraw = Optional.empty();
     private transient List<Text> menuText = new ArrayList<>();
     private transient Optional<Duration> timerValue = Optional.empty();
@@ -139,7 +139,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void loadPickablePowerUp(final List<PickablePowerUp> pickablePowerUps) {
+    public void loadPickablePowerUp(final List<Pickable> pickablePowerUps) {
         pickableToDraw = pickablePowerUps.stream().toList();
     }
 
@@ -241,7 +241,7 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
         });
 
-        for (final PickablePowerUp pickable : pickableToDraw) {
+        for (final Pickable pickable : pickableToDraw) {
             drawImage(bufferGraphics, pickable.getSprite().getImage(), screenPosition(pickable.getPosition()));
         }
 
@@ -251,11 +251,15 @@ public final class ScreenImpl extends JPanel implements Screen {
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
 
-                //to draw circle
                 bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Position screenPositionCircle = screenPosition(new Position(human.getStats().getReproductionAreaRadius().getCenter().x(), human.getStats().getReproductionAreaRadius().getCenter().y()));
-                Shape theCircle = new Ellipse2D.Double(screenPositionCircle.x(), screenPositionCircle.y(), 2.0 * human.getStats().getReproductionAreaRadius().getRadius(), 2.0 * human.getStats().getReproductionAreaRadius().getRadius());
-                bufferGraphics.draw(theCircle);
+                final Position screenPositionCircle = screenPosition(human.getStats().getReproductionAreaRadius().getCenter());
+                final double diam = 2.0 * human.getStats().getReproductionAreaRadius().getRadius();
+                final Shape circle = new Ellipse2D.Double(
+                    screenPositionCircle.x() - diam / 2,
+                    screenPositionCircle.y() - diam / 2, diam,
+                    diam
+                );
+                bufferGraphics.draw(circle);
         }
 
         resetVerticalOffset();

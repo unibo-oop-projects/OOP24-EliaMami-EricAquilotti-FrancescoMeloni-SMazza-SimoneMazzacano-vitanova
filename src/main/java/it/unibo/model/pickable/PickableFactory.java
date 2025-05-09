@@ -1,11 +1,13 @@
 package it.unibo.model.pickable;
 
+import java.time.Duration;
+
 import it.unibo.common.Position;
 
 /**
  * Pickable power up factory.
  */
-public interface PickablePowerUpFactory {
+public interface PickableFactory {
 
     /**
      * 
@@ -14,7 +16,7 @@ public interface PickablePowerUpFactory {
      * @param boost the value to multiply the parameter with
      * @return a power up that boost speed.
      */
-    PickablePowerUp speedBoost(Position spawnPosition, int duration, double boost);
+    Pickable speedBoost(Position spawnPosition, Duration duration, double boost);
 
     /**
      * 
@@ -23,7 +25,7 @@ public interface PickablePowerUpFactory {
      * @param boost the value to multiply the parameter with
      * @return a power up that boost the sickness resistance.
      */
-    PickablePowerUp sicknessResistenceBoost(Position spawnPosition, int duration, double boost);
+    Pickable sicknessResistenceBoost(Position spawnPosition, Duration duration, double boost);
 
     /**
      * 
@@ -32,5 +34,5 @@ public interface PickablePowerUpFactory {
      * @param boost the value to multiply the parameter with
      * @return a power up that boost the reproduction range.
      */
-    PickablePowerUp reproductionRangeBoost(Position spawnPosition, int duration, double boost);
+    Pickable reproductionRangeBoost(Position spawnPosition, Duration duration, double boost);
 }

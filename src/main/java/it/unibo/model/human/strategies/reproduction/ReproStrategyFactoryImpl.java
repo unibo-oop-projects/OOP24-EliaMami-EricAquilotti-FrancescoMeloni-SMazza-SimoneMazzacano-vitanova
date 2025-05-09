@@ -18,7 +18,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     // I want the center to be around the legs of the human.
     private static final double CIRCLE_X_OFFSET = ScreenImpl.TILE_SIZE / 2.0;
     private static final double CIRCLE_Y_OFFSET = ScreenImpl.TILE_SIZE * 3.0 / 4.0;
-    private static final double CIRCLE_RADIOUS = ScreenImpl.TILE_SIZE / 5.0;
+    private static final double CIRCLE_RADIUS = ScreenImpl.TILE_SIZE / 5.0;
 
     private final Clock clock;
 
@@ -49,6 +49,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
             startingPosition.y() + CIRCLE_Y_OFFSET,
             CIRCLE_RADIUS
         );
+
         return new ReproStrategy() {
             @Override
             public void update(final Position humanPosition) {
@@ -62,7 +63,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
 
             @Override
             public boolean collide(final Human other) {
-                return reproductionArea.intersects(other.reproductionArea()) && canReproduceWith.test(other);
+                return reproductionArea.intersects(other.getStats().getReproductionAreaRadius()) && canReproduceWith.test(other);
             }
 
             private void centerReproductionArea(final Position humanPosition) {
@@ -70,8 +71,8 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
             }
 
             @Override
-            public Circle changeReproductionArea(final int changeValue) {
-                return new CircleImpl(reproductionArea.getCenter().x(), reproductionArea.getCenter().y(), changeValue);
+            public void changeReproductionArea(final double changeValue) {
+                reproductionArea.setRadius(changeValue);
             }
         };
     }
