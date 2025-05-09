@@ -34,4 +34,11 @@ public final class PopulationCounterDisplay extends JLabel {
         final String counterString = populationCounter.population() + "/" + populationCounter.populationGoal();
         this.setText(counterString);
     }
+
+    /**
+     * Clears the population counter display.
+     */
+    public void clear() {
+        this.setText("");
+    }
 }

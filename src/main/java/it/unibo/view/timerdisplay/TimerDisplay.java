@@ -37,4 +37,11 @@ public final class TimerDisplay extends JLabel {
     public void update(final Duration duration) {
         this.setText(format(duration));
     }
+
+    /**
+     * Clears the timer display.
+     */
+    public void clear() {
+        this.setText("");
+    }
 }

@@ -282,8 +282,8 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
 
         resetVerticalOffset();
-        timerValue.ifPresent(timerLabel::update);
-        populationCounter.ifPresent(populationCounterLabel::update);
+        timerValue.ifPresentOrElse(timerLabel::update, timerLabel::clear);
+        populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);
         drawText(textToDraw, TextAlignment.NONE);
         drawText(menuText, TextAlignment.CENTER);
     }
