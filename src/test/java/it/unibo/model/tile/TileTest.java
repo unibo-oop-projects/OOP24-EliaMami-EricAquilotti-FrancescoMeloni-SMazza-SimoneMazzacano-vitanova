@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import it.unibo.common.DirectionEnum;
+import it.unibo.model.tile.wavefunction.TileType;
+import it.unibo.model.tile.wavefunction.WaveFunctionTile;
+import it.unibo.model.tile.wavefunction.WaveFunctionTileImpl;
 
 /**
  * Class that tests the Tile class.

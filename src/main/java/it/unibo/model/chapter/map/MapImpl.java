@@ -2,6 +2,8 @@ package it.unibo.model.chapter.map;
 
 import java.util.Arrays;
 
+import it.unibo.model.chapter.map.generator.MapGenerator;
+import it.unibo.model.chapter.map.generator.WaveFunctionCollapse;
 import it.unibo.model.tile.Tile;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -26,14 +28,14 @@ public final class MapImpl implements Map {
     /**
      * Sets {@code rows}, {@code coloums} and generate {@code tiles}.
      * @see MapGenerator
-     * @see MapGeneratorImpl
+     * @see WaveFunctionCollapse
      * @param rows number of the rows of the map
      * @param coloumns number of the coloumns of the map
      */
     public MapImpl(final int rows, final int coloumns) {
         this.rows = rows + MARGIN_ROWS;
         this.coloumns = coloumns + MARGIN_COLOUMNS;
-        this.tiles = new MapGeneratorImpl(this.rows, this.coloumns).generateMap();
+        this.tiles = new WaveFunctionCollapse(this.rows, this.coloumns).generateMap();
     }
 
     @Override

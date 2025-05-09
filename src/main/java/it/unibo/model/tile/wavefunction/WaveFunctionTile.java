@@ -1,13 +1,14 @@
-package it.unibo.model.tile;
+package it.unibo.model.tile.wavefunction;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import it.unibo.common.DirectionEnum;
+import it.unibo.model.tile.Tile;
 
 /**
- * Class representing a Tile used by the Wave function collapse algorithm.
+ * Representing a Tile used by the Wave function collapse algorithm.
  * @see Tile
  */
 public interface WaveFunctionTile extends Tile {

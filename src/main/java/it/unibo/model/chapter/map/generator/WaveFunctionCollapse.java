@@ -1,4 +1,4 @@
-package it.unibo.model.chapter.map;
+package it.unibo.model.chapter.map.generator;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -7,15 +7,18 @@ import java.util.Random;
 import java.util.Stack;
 
 import it.unibo.common.DirectionEnum;
-import it.unibo.model.tile.WaveFunctionTileImpl;
-import it.unibo.model.tile.TileType;
-import it.unibo.model.tile.WaveFunctionTile;
+import it.unibo.model.chapter.map.MapImpl;
+import it.unibo.model.tile.Tile;
+import it.unibo.model.tile.wavefunction.TileType;
+import it.unibo.model.tile.wavefunction.WaveFunctionTile;
+import it.unibo.model.tile.wavefunction.WaveFunctionTileImpl;
 
 /**
- * Implementation of {@code MapGeneration}.
+ * Implementation of {@code MapGeneration} with the Wave Function Collapse Algorithm (Gumin's implementation).
  * @see MapGenerator
+ * @see https://en.wikipedia.org/wiki/Model_synthesis (Wave Function Collapse Algorithm)
  */
-public final class MapGeneratorImpl implements MapGenerator {
+public final class WaveFunctionCollapse implements MapGenerator {
 
     private final int rows;
     private final int coloumns;
@@ -27,7 +30,7 @@ public final class MapGeneratorImpl implements MapGenerator {
      * @param rows number of the rows of the map
      * @param coloumns number of the coloumns of the map
      */
-    public MapGeneratorImpl(final int rows, final int coloumns) {
+    public WaveFunctionCollapse(final int rows, final int coloumns) {
         this.rows = rows;
         this.coloumns = coloumns;
         this.tiles = new WaveFunctionTileImpl[coloumns][rows];
@@ -37,6 +40,15 @@ public final class MapGeneratorImpl implements MapGenerator {
             }
         }
         addNeighbours();
+    }
+
+    @Override
+    public Tile[][] generateMap() {
+        boolean finished = false;
+        while (!finished) {
+            finished = waveFunctionCollapse();
+        }
+        return Arrays.copyOf(this.tiles, this.coloumns);
     }
 
     private void addNeighbours() {
@@ -66,15 +78,6 @@ public final class MapGeneratorImpl implements MapGenerator {
             return new WaveFunctionTileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
         }
         return new WaveFunctionTileImpl();
-    }
-
-    @Override
-    public WaveFunctionTile[][] generateMap() {
-        boolean finished = false;
-        while (!finished) {
-            finished = waveFunctionCollapse();
-        }
-        return Arrays.copyOf(this.tiles, this.coloumns);
     }
 
     private boolean waveFunctionCollapse() {
