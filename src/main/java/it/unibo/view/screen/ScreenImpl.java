@@ -19,9 +19,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import javax.swing.SpringLayout;
 import it.unibo.common.Position;
 import it.unibo.common.Text;
 import it.unibo.controller.InputHandler;
@@ -44,6 +45,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int TEXT_VERTICAL_SPACING = 25;
     private static final int TEXT_LATERAL_BORDER = 200;
+    private static final int TOP_MARGIN = 100;
     /**
      * Base window width, screen width.
      */
@@ -81,7 +83,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     // Buffered Image for optimized rendering
     private transient BufferedImage bufferedImage;
     private transient Graphics2D bufferGraphics;
-
+    private final transient TimerDisplay timerLabel = new TimerDisplay();
+    private final transient JPanel topPanel = new JPanel(new SpringLayout());
 
     /**
      * 
@@ -90,6 +93,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     public ScreenImpl(final InputHandler inputHandler) {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
+        this.setLayout(new BorderLayout());
+        initializeInnerComponents();
 
         window.setLayout(new BorderLayout());
         window.setSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
@@ -120,6 +125,22 @@ public final class ScreenImpl extends JPanel implements Screen {
         in.defaultReadObject();
         humansToDraw = new ArrayList<>();
         menuText = new ArrayList<>();
+    }
+
+    private void initializeInnerComponents() {
+        topPanel.setOpaque(false);
+        topPanel.setBorder(BorderFactory.createEmptyBorder(TOP_MARGIN, 0, 0, 0));
+        topPanel.add(timerLabel);
+
+        final SpringLayout layout = (SpringLayout) topPanel.getLayout();
+        layout.putConstraint(
+            SpringLayout.HORIZONTAL_CENTER,
+            timerLabel,
+            0,
+            SpringLayout.HORIZONTAL_CENTER,
+            topPanel
+        );
+        this.add(topPanel);
     }
 
     @Override
@@ -238,8 +259,7 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
 
         resetVerticalOffset();
-        timerValue.map(TimerDisplay::text)
-              .ifPresent(text -> drawText(List.of(text), TextAlignment.CENTER));
+        timerValue.ifPresent(timerLabel::update);
         populationCounter.map(PopulationCounterDisplay::text)
               .ifPresent(text -> drawText(List.of(text), TextAlignment.RIGHT));
         drawText(textToDraw, TextAlignment.NONE);

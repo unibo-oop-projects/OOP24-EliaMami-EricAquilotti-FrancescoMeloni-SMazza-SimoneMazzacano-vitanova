@@ -1,19 +1,28 @@
 package it.unibo.view.timerdisplay;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.time.Duration;
 
-import it.unibo.common.Position;
-import it.unibo.common.Text;
+import javax.swing.JLabel;
 
 /**
  * Class that handles the timer display.
  */
-public final class TimerDisplay {
+public final class TimerDisplay extends JLabel {
+    private static final long serialVersionUID = 3L;
+
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final int TEXT_SIZE = 60;
 
-    private TimerDisplay() { }
+    /**
+     * Constructor for the timer display.
+     */
+    public TimerDisplay() {
+        final Font font = new Font("Verdana", Font.BOLD, TEXT_SIZE);
+        this.setFont(font);
+        this.setForeground(TEXT_COLOR);
+    }
 
     private static String format(final Duration duration) {
         return String.format("%02d:%02d", duration.toMinutesPart(),
@@ -21,12 +30,11 @@ public final class TimerDisplay {
     }
 
     /**
-     * Creates a Text object that represents the timer.
-     * @param timerValue the duration of the timer
-     * @return a Text object that represents the timer
+     * Sets the duration of the timer display.
+     *
+     * @param duration the timer duration to set
      */
-    public static Text text(final Duration timerValue) {
-        final String time = format(timerValue);
-        return new Text(time, new Position(0, 0), TEXT_COLOR, TEXT_SIZE);
+    public void update(final Duration duration) {
+        this.setText(format(duration));
     }
 }
