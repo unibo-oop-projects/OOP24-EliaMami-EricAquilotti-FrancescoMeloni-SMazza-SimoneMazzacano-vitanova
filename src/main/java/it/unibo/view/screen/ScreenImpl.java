@@ -5,8 +5,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.geom.Ellipse2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,6 +31,7 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
+import it.unibo.model.pickable.Pickable;
 import it.unibo.model.tile.Tile;
 import it.unibo.view.menu.MenuContent;
 import it.unibo.view.menudisplay.MenuDisplay;
@@ -69,6 +73,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
     private transient List<Human> humansToDraw = new ArrayList<>();
+    private transient List<Pickable> pickableToDraw = new ArrayList<>();
     private transient Optional<Map> mapToDraw = Optional.empty();
     private transient MenuContent menuContent = MenuContent.empty();
     private transient Optional<Duration> timerValue = Optional.empty();
@@ -119,6 +124,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         humansToDraw = new ArrayList<>();
+        pickableToDraw = new ArrayList<>();
     }
 
     private void initializeInnerComponents() {
@@ -168,6 +174,11 @@ public final class ScreenImpl extends JPanel implements Screen {
     @Override
     public void loadHumans(final List<Human> humans) {
         humansToDraw = humans.stream().toList();
+    }
+
+    @Override
+    public void loadPickablePowerUp(final List<Pickable> pickablePowerUps) {
+        pickableToDraw = pickablePowerUps.stream().toList();
     }
 
     private void removeTextByPosition(final Text text) {
@@ -229,13 +240,27 @@ public final class ScreenImpl extends JPanel implements Screen {
                 }
             }
         });
-        
+
+        for (final Pickable pickable : pickableToDraw) {
+            drawImage(bufferGraphics, pickable.getSprite().getImage(), screenPosition(pickable.getPosition()));
+        }
+
         for (final Human human : humansToDraw) {
                 final Position screenPosition = (human.getType() == HumanType.PLAYER)
                     ? new Position(centerX, centerY)
                     : screenPosition(human.getPosition());
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
-            }
+
+                bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                final Position screenPositionCircle = screenPosition(human.getStats().getReproductionAreaRadius().getCenter());
+                final double diam = 2.0 * human.getStats().getReproductionAreaRadius().getRadius();
+                final Shape circle = new Ellipse2D.Double(
+                    screenPositionCircle.x() - diam / 2,
+                    screenPositionCircle.y() - diam / 2, diam,
+                    diam
+                );
+                bufferGraphics.draw(circle);
+        }
 
         timerValue.ifPresentOrElse(timerLabel::update, timerLabel::clear);
         populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);

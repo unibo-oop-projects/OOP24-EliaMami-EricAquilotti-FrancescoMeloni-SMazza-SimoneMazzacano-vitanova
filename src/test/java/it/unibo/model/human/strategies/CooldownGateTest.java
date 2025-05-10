@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.common.PausableClock;
+import it.unibo.common.CooldownGate;
 import it.unibo.utils.MutableClock;
 
 class CooldownGateTest {

@@ -15,6 +15,7 @@ import it.unibo.common.Circle;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
+import it.unibo.model.human.HumanStats;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 
@@ -31,9 +32,6 @@ class ReproStrategyFactoryTest {
         return new Human() {
             @Override public HumanType getType() {
                 return type;
-            }
-            @Override public Circle reproductionArea() {
-                return area;
             }
             @Override
             public void move() {
@@ -53,6 +51,76 @@ class ReproStrategyFactoryTest {
             @Override
             public boolean collide(final Human other) {
                 return false;
+            }
+            @Override
+            public HumanStats getStats() {
+                return new HumanStats() {
+
+                    @Override
+                    public double getSpeed() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void increaseSpeed() {
+                    }
+
+                    @Override
+                    public ReproStrategy getReproStrategy() {
+                        return null;
+                    }
+
+                    @Override
+                    public Circle getReproductionAreaRadius() {
+                        return area;
+                    }
+
+                    @Override
+                    public void increaseReproductionAreaRadius() {
+                    }
+
+                    @Override
+                    public double getSicknessResistence() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void increaseSicknessResistence() {
+                    }
+
+                    @Override
+                    public double getFertility() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void increaseFertility() {
+                    }
+
+                    @Override
+                    public void applySpeedModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void applyReproductionRangeModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void applySicknessResistenceModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void resetToBaseSpeed() {
+                    }
+
+                    @Override
+                    public void resetToBaseSicknessResistence() {
+                    }
+
+                    @Override
+                    public void resetToBaseReproductionRange() {
+                    }
+                };
             }
         };
     }

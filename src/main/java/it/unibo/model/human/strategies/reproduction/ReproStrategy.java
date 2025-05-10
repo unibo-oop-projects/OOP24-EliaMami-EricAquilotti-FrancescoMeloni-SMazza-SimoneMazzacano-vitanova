@@ -27,4 +27,9 @@ public interface ReproStrategy {
      * @return the current circle representing the reproduction area.
      */
     Circle getReproductionArea();
+
+    /**
+     * @param changeValue is the new radius value.
+     */
+    void changeReproductionArea(double changeValue);
 }

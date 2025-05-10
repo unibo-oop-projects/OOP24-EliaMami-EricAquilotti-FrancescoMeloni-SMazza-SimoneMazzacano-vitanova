@@ -2,8 +2,6 @@ package it.unibo.model.human;
 
 import java.time.Clock;
 
-import it.unibo.common.Circle;
-import it.unibo.common.CircleImpl;
 import it.unibo.common.Direction;
 import it.unibo.common.DirectionEnum;
 import it.unibo.common.Position;
@@ -72,7 +70,6 @@ public final class HumanFactoryImpl implements HumanFactory {
                                 final ReproStrategy reproductionStrategy) {
         return new Human() {
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
-            private static final double SPEED = 4.0;
             // private boolean canReproduce = true;
             private double x = startingPosition.x();
             private double y = startingPosition.y();
@@ -81,6 +78,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             private int numSprite = 1;
             private int spriteCounter;
             private Sprite sprite = nextSprite();
+            private final HumanStats humanStats = new HumanStatsImpl(4.5, .1, .1, reproductionStrategy);
 
             @Override
             public void move() {
@@ -92,7 +90,7 @@ public final class HumanFactoryImpl implements HumanFactory {
                     this.x = nextPosition.x();
                     this.y = nextPosition.y();
                 }
-                reproductionStrategy.update(new Position(x, y));
+                humanStats.getReproStrategy().update(new Position(x, y));
             }
 
             @Override
@@ -103,12 +101,6 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public Sprite getSprite() {
                 return sprite;
-            }
-
-            @Override
-            public Circle reproductionArea() {
-                // Put here the logic for radius multipliers and then remove this comment.
-                return new CircleImpl(reproductionStrategy.getReproductionArea());
             }
 
             private Sprite nextSprite() {
@@ -128,8 +120,8 @@ public final class HumanFactoryImpl implements HumanFactory {
 
             private Position nextPosition() {
                 return new Position(
-                    this.x + SPEED * direction.getDx(),
-                    this.y + SPEED * direction.getDy()
+                    this.x + getStats().getSpeed() * direction.getDx(),
+                    this.y + getStats().getSpeed() * direction.getDy()
                 );
             }
 
@@ -141,6 +133,11 @@ public final class HumanFactoryImpl implements HumanFactory {
             @Override
             public HumanType getType() {
                 return humanType;
+            }
+
+            @Override
+            public HumanStats getStats() {
+                return this.humanStats;
             }
 
             @Override

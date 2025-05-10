@@ -98,6 +98,7 @@ public final class Game implements Runnable {
         screen.loadMap(chapter.getMap());
         if (isGameplayStarted) {
             screen.loadHumans(chapter.getHumans());
+            screen.loadPickablePowerUp(chapter.getPickablePowerUp());
             screen.loadTimer(Optional.of(chapter.getTimerValue()));
             final int currentPopulation = chapter.getHumans().size();
             final int populationGoal = chapter.getPopulationGoal();

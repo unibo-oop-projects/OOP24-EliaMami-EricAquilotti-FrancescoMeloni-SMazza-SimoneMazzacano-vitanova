@@ -6,6 +6,7 @@ import java.util.List;
 import it.unibo.common.ChapterState;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
+import it.unibo.model.pickable.Pickable;
 
 /**
  * Models a chapter that will handle the map, all humans movements and
@@ -29,6 +30,12 @@ public interface Chapter {
      * @return the list of humans except player that are currently on the map.
      */
     List<Human> getHumans();
+
+    /**
+     * 
+     * @return the list of pickable power up that are currently on the map.
+     */
+    List<Pickable> getPickablePowerUp();
 
     /**
      * 

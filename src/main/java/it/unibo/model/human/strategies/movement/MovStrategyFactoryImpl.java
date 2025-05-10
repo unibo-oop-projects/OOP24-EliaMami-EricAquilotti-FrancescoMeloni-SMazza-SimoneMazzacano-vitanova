@@ -5,9 +5,9 @@ import java.time.Duration;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import it.unibo.common.CooldownGate;
 import it.unibo.common.Direction;
 import it.unibo.controller.InputHandler;
-import it.unibo.model.human.strategies.CooldownGate;
 
 /**
  * Implementation of a factory that produces movements' strategies for the humans.
