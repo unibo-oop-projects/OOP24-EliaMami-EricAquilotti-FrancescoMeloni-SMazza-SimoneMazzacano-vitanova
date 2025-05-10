@@ -30,11 +30,12 @@ public record Position(double x, double y) {
     }
 
     /**
-     * Returns a boolean representing if the tile on the position {@code pos} is walkable.
+     * Returns a boolean representing if the tile on the current position is walkable.
      * @throws IllegalArgumentException if the coordinates are not in the map.
+     * @param map the map we want to know if the current position is walkable.
      * @return true if the tile is walkable.
      */
-    public static boolean isWalkable(final Map map, final Position pos) {
-        return map.getTileFromPixel(pos.x(), pos.y()).isWalkable();
+    public boolean isWalkable(final Map map) {
+        return map.getTileFromPixel(x, y).isWalkable();
     }
 }

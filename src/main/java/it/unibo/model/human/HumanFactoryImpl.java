@@ -85,7 +85,7 @@ public final class HumanFactoryImpl implements HumanFactory {
                 sprite = nextSprite();
                 direction = movementStrategy.nextDirection();
                 final Position nextPosition = nextPosition();
-                if (Position.isWalkable(map, nextPosition)) {
+                if (nextPosition.isWalkable(map)) {
                     updateSpriteCounter();
                     this.x = nextPosition.x();
                     this.y = nextPosition.y();
