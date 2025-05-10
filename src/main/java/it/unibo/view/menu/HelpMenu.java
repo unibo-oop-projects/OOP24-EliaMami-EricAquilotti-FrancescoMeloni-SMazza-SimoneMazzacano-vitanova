@@ -9,12 +9,11 @@ import it.unibo.controller.InputHandler;
  */
 public class HelpMenu extends AbstractMenu {
     private static final String HELP_TEXT = """
-        W - move forward\n
-        S - move backward\n
-        D - move right\n
-        A - move left\n
-        Esc - opens pause menu
-        """;
+        W - move forward
+        S - move backward
+        D - move right
+        A - move left
+        Esc - opens pause menu""";
 
     /**
      * Constructor for the HelpMenu class.

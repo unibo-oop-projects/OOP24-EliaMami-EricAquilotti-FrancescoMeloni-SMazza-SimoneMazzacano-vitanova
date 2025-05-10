@@ -94,7 +94,7 @@ public final class Game implements Runnable {
     }
 
     private void draw() {
-        screen.loadMenu(menu.getText());
+        screen.loadMenu(menu.getContent());
         screen.loadMap(chapter.getMap());
         if (isGameplayStarted) {
             screen.loadHumans(chapter.getHumans());

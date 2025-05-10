@@ -3,7 +3,6 @@ package it.unibo.view.screen;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Graphics;
@@ -30,6 +29,7 @@ import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.model.tile.Tile;
+import it.unibo.view.menu.MenuContent;
 import it.unibo.view.menudisplay.MenuDisplay;
 import it.unibo.view.population.PopulationCounterDisplay;
 import it.unibo.view.sprite.HumanType;
@@ -44,7 +44,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
-    private static final int TEXT_VERTICAL_SPACING = 25;
     private static final int TEXT_LATERAL_MARGIN = 200;
     private static final int TOP_MARGIN = 150;
     /**
@@ -64,21 +63,14 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     private int xOffset;
     private int yOffset;
-    private int textVerticalOffset;
     private final JFrame window = new JFrame();
     private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-
-    private enum TextAlignment {
-        NONE,
-        CENTER,
-        RIGHT
-    }
 
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
     private transient List<Human> humansToDraw = new ArrayList<>();
     private transient Optional<Map> mapToDraw = Optional.empty();
-    private transient List<Text> menuText = new ArrayList<>();
+    private transient MenuContent menuContent = MenuContent.empty();
     private transient Optional<Duration> timerValue = Optional.empty();
     private transient Optional<PopulationCounter> populationCounter = Optional.empty();
     // Buffered Image for optimized rendering
@@ -127,7 +119,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         humansToDraw = new ArrayList<>();
-        menuText = new ArrayList<>();
     }
 
     private void initializeInnerComponents() {
@@ -191,72 +182,34 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void loadMenu(final List<Text> texts) {
-        menuText = texts.stream().toList();
+    public void loadMenu(final MenuContent content) {
+        menuContent = content;
     }
 
     @Override
     public void loadTimer(final Optional<Duration> timerValue) {
         this.timerValue = timerValue;
     }
-
+    
     @Override
     public void loadPopulationCounter(final Optional<PopulationCounter> populationCounter) {
         this.populationCounter = populationCounter;
     }
-
-    /**
-     * 
-     * @return the y offset that the justified texts are applied to.
-     *  It's fixed to 1/6 of the screen height.
-     */
-    private int computeTextUpperBorder() {
-        return this.centerY / 3;
-    }
-
+    
     private void updateCenter() {
         centerX = window.getWidth() / 2 - TILE_SIZE / 2;
         centerY = window.getHeight() / 2 - TILE_SIZE / 2;
     }
-
-    private int calculateTextWidth(final Font font, final Text text, final Graphics2D g) {
-        final FontMetrics fontMetrics = g.getFontMetrics(font);
-        return fontMetrics.stringWidth(text.content());
-    }
-
-    private int adjustedXPosition(final int xPosition, final int textWidth, final TextAlignment alignment) {
-        if (alignment == TextAlignment.CENTER) {
-            return Math.max(this.centerX - (textWidth / 2), 0);
-        } else if (alignment == TextAlignment.RIGHT) {
-            return Math.max(this.window.getWidth() - textWidth - TEXT_LATERAL_MARGIN, 0);
-        }
-        return xPosition;
-    }
-
-    private void drawLine(final Font f, final Text lineText, final TextAlignment alignment) {
-        final int textWidth = calculateTextWidth(f, lineText, bufferGraphics);
-        final int adjustedXPosition = adjustedXPosition((int) lineText.position().x(), textWidth, alignment);
-
-        bufferGraphics.drawString(lineText.content(), adjustedXPosition, 
-        (int) lineText.position().y() + (alignment != TextAlignment.NONE ? computeTextUpperBorder() : 0) + textVerticalOffset);
-    }
-
-    private void drawText(final List<Text> texts, final TextAlignment alignment) {
+    
+    private void drawText(final List<Text> texts) {
         final List<Text> copyTexts = texts.stream().toList(); // to avoid concurrent modifications on iterated list
         copyTexts.forEach(text -> {
             final Font f = new Font("Verdana", Font.BOLD, text.size());
             bufferGraphics.setColor(text.color());
             bufferGraphics.setFont(f);
-
-            final String[] lines = text.content().split("\\R");
-            for (final String line : lines) {
-                final Text lineText = new Text(line, text.position(), text.color(), text.size());
-                drawLine(f, lineText, alignment);
-
-                if (lines.length > 1) {
-                    incrementVerticalOffset();
-                }
-            }
+            
+            bufferGraphics.drawString(text.content(), (int) text.position().x(), 
+            (int) text.position().y());
         });
     }
 
@@ -276,7 +229,7 @@ public final class ScreenImpl extends JPanel implements Screen {
                 }
             }
         });
-
+        
         for (final Human human : humansToDraw) {
                 final Position screenPosition = (human.getType() == HumanType.PLAYER)
                     ? new Position(centerX, centerY)
@@ -284,19 +237,10 @@ public final class ScreenImpl extends JPanel implements Screen {
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
             }
 
-        resetVerticalOffset();
         timerValue.ifPresentOrElse(timerLabel::update, timerLabel::clear);
         populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);
-        drawText(textToDraw, TextAlignment.NONE);
-        menuDisplay.update(menuText);
-    }
-
-    private void resetVerticalOffset() {
-        this.textVerticalOffset = 0;
-    }
-
-    private void incrementVerticalOffset() {
-        this.textVerticalOffset += TEXT_VERTICAL_SPACING;
+        drawText(textToDraw);
+        menuDisplay.update(menuContent);
     }
 
     private Position screenPosition(final Position position) {

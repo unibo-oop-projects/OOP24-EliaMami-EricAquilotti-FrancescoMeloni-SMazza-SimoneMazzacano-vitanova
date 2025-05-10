@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 import it.unibo.common.Position;
-import it.unibo.common.Text;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
+import it.unibo.view.menu.MenuContent;
 
 /**
  * Models an Object that can render things on the screen.
@@ -26,9 +26,9 @@ public interface Screen {
 
     /**
      * 
-     * @param texts content that represent the menu
+     * @param content content that represent the menu
      */
-    void loadMenu(List<Text> texts);
+    void loadMenu(MenuContent content);
 
     /**
      * 

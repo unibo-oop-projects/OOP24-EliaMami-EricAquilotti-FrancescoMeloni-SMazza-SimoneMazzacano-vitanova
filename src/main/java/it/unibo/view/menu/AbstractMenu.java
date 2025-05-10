@@ -1,13 +1,10 @@
 package it.unibo.view.menu;
 
-import it.unibo.common.Position;
-import it.unibo.common.Text;
 import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 /**
@@ -15,11 +12,6 @@ import java.util.List;
  */
 public abstract class AbstractMenu implements Menu {
     private static final int TIMER_VALUE = 10;
-    private static final int TEXT_VERTICAL_SPACING = 100;
-    private static final int TEXT_SIZE = 60;
-    private static final int TEXT_SUBTITLE_SIZE = 40;
-    private static final int TEXT_HORIZONTAL_OFFSET = 0;
-    private static final Color TEXT_COLOR = Color.WHITE;
     private static final int MENU_TOGGLE_KEY = KeyEvent.VK_ESCAPE;
 
     private final List<MenuOption> options;
@@ -115,32 +107,19 @@ public abstract class AbstractMenu implements Menu {
         getGame().setGameplayState(false);
     }
 
-    private void addText(final List<Text> textToShow, final String text, final int verticalOffset, final int textSize) {
-        textToShow.add(new Text(text, 
-        new Position(TEXT_HORIZONTAL_OFFSET, verticalOffset), TEXT_COLOR, textSize));
+    private String formatOptionText(final int index) {
+        return selectedOptionIndex == index 
+            ? applySelectedFormat(options.get(index).desc()) 
+            : options.get(index).desc();
     }
 
     @Override
-    public final List<Text> getText() {
+    public final MenuContent getContent() {
         if (isVisible) {
-            int verticalOffset = TEXT_VERTICAL_SPACING; // upper border of the menu options
-            final List<Text> textToShow = new ArrayList<>();
-            addText(textToShow, title, verticalOffset, TEXT_SIZE);
-            verticalOffset += TEXT_VERTICAL_SPACING;
-            if (!subtitle.isEmpty()) {
-                addText(textToShow, subtitle, verticalOffset, TEXT_SUBTITLE_SIZE);
-                verticalOffset += TEXT_VERTICAL_SPACING;
-            }
-
-            for (int index = 0; index < options.size(); index++) {
-                final String formattedText = selectedOptionIndex == index 
-                    ? applySelectedFormat(options.get(index).desc()) : options.get(index).desc();
-
-                addText(textToShow, formattedText, verticalOffset, TEXT_SIZE);
-                verticalOffset += TEXT_VERTICAL_SPACING;
-            }
-            return textToShow;
+            final List<String> list = IntStream.range(0, options.size())
+                .mapToObj(this::formatOptionText).toList();
+            return new MenuContent(title, subtitle, list);
         }
-        return List.of();
+        return MenuContent.empty();
     }
 }
