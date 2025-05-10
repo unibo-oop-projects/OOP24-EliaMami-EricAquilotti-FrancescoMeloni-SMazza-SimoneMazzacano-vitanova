@@ -30,6 +30,7 @@ import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.model.tile.Tile;
+import it.unibo.view.menudisplay.MenuDisplay;
 import it.unibo.view.population.PopulationCounterDisplay;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.timerdisplay.TimerDisplay;
@@ -86,6 +87,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private final transient TimerDisplay timerLabel = new TimerDisplay();
     private final transient PopulationCounterDisplay populationCounterLabel = new PopulationCounterDisplay();
     private final transient JPanel topPanel = new JPanel(new SpringLayout());
+    private final transient MenuDisplay menuDisplay = new MenuDisplay();
 
     /**
      * 
@@ -164,6 +166,7 @@ public final class ScreenImpl extends JPanel implements Screen {
             topPanel
         );
         this.add(topPanel, BorderLayout.NORTH);
+        this.add(menuDisplay, BorderLayout.CENTER);
     }
 
     @Override
@@ -285,7 +288,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         timerValue.ifPresentOrElse(timerLabel::update, timerLabel::clear);
         populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);
         drawText(textToDraw, TextAlignment.NONE);
-        drawText(menuText, TextAlignment.CENTER);
+        menuDisplay.update(menuText);
     }
 
     private void resetVerticalOffset() {
