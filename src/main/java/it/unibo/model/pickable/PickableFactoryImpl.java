@@ -77,7 +77,7 @@ public final class PickableFactoryImpl implements PickableFactory {
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getPowerUpSprite(PowerUpType.PICKABLE_SPEED_BOOST);
+                return Sprite.getSprite(PowerUpType.PICKABLE_SPEED_BOOST);
             }
 
             @Override
@@ -140,7 +140,7 @@ public final class PickableFactoryImpl implements PickableFactory {
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getPowerUpSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);
+                return Sprite.getSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);
             }
 
             @Override
@@ -203,7 +203,7 @@ public final class PickableFactoryImpl implements PickableFactory {
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getPowerUpSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
+                return Sprite.getSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
             }
 
             @Override

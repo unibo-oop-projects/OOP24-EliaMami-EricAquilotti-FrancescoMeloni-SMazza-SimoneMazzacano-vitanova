@@ -248,24 +248,19 @@ public enum Sprite {
     }
 
     /**
-     * Returns the {@code Sprite} of the tile type given.
+     * Returns the {@code Sprite} of the corresponding type given, can only be {@code TileType} or {@code PowerUpType}.
      * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
      * or the specified class object does not represent an enum type.
-     * @param tileType the tile type we want to get the sprite of.
+     * @param <T> the type ({@code TileType} or {@code PowerUpType}) we want to get the sprite of.
+     * @param t the enumType we want to get the sprite of.
      * @return the tile's sprite.
      */
-    public static Sprite getSprite(final TileType tileType) {
-        return SPRITE_TILES_MAP.get(tileType);
-    }
-
-    /**
-     * Returns the {@code Sprite} of the tile type given.
-     * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
-     * or the specified class object does not represent an enum type.
-     * @param powerUpType the power up type we want to get the sprite of.
-     * @return the power up's sprite.
-     */
-    public static Sprite getPowerUpSprite(final PowerUpType powerUpType) {
-        return SPRITE_POWER_UP.get(powerUpType);
+    public static <T> Sprite getSprite(final T t) {
+        if (t instanceof TileType) {
+            return SPRITE_TILES_MAP.get(t);
+        } else if (t instanceof PowerUpType) {
+            return SPRITE_POWER_UP.get(t);
+        }
+        throw new IllegalArgumentException("The specified class object does not represent an enum type");
     }
 }

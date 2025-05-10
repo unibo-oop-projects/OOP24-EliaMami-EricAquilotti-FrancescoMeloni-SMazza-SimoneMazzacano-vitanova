@@ -35,7 +35,8 @@ public final class MapImpl implements Map {
     public MapImpl(final int rows, final int coloumns) {
         this.rows = rows + MARGIN_ROWS;
         this.coloumns = coloumns + MARGIN_COLOUMNS;
-        this.tiles = new WaveFunctionCollapse(this.rows, this.coloumns).generateMap();
+        final MapGenerator mapGenerator = new WaveFunctionCollapse(this.rows, this.coloumns);
+        this.tiles = mapGenerator.generateMap();
     }
 
     @Override
