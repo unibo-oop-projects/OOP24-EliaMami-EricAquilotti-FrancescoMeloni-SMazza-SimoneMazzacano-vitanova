@@ -9,6 +9,8 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.strategies.movement.MovStrategyFactory;
 import it.unibo.model.human.strategies.movement.MovStrategyFactoryImpl;
+import it.unibo.model.human.solidcollisions.SimpleSolidCollisions;
+import it.unibo.model.human.solidcollisions.SolidCollisions;
 import it.unibo.model.human.strategies.movement.MovStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
@@ -79,13 +81,14 @@ public final class HumanFactoryImpl implements HumanFactory {
             private int spriteCounter;
             private Sprite sprite = nextSprite();
             private final HumanStats humanStats = new HumanStatsImpl(4.5, .1, .1, reproductionStrategy);
+            private final SolidCollisions solidCollisions = new SimpleSolidCollisions(map);
 
             @Override
             public void move() {
                 sprite = nextSprite();
                 direction = movementStrategy.nextDirection();
                 final Position nextPosition = nextPosition();
-                if (nextPosition.isWalkable(map)) {
+                if (solidCollisions.isWalkable(nextPosition)) {
                     updateSpriteCounter();
                     this.x = nextPosition.x();
                     this.y = nextPosition.y();
