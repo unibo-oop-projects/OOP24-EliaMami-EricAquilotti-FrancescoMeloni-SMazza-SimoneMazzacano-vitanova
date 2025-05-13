@@ -200,7 +200,7 @@ public final class ChapterImpl implements Chapter {
 
     private void solveCollisions() {
         final List<Human> generated = new ArrayList<>();
-        final QuadTree tree = createTree();
+        final QuadTree<Human> tree = createTree();
         humans.stream()
         .filter(h -> h.getType() == HumanType.FEMALE)
         .forEach(female -> {
@@ -208,7 +208,7 @@ public final class ChapterImpl implements Chapter {
             final Circle range = female.getStats().getReproductionAreaRadius();
             range.setRadius(range.getRadius() * 2);
             tree.query(range).stream()
-            .map(p -> (Human) p.data())
+            .map(Point::data)
             .filter(female::collide)
             .forEach(male -> generated.add(
                 random.nextDouble() < MALE_SPAWNING_PROBABILITY
@@ -219,8 +219,8 @@ public final class ChapterImpl implements Chapter {
         this.humans.addAll(generated);
     }
 
-    private QuadTree createTree() {
-        final QuadTree tree = new QuadTreeImpl(
+    private QuadTree<Human> createTree() {
+        final QuadTree<Human> tree = new QuadTreeImpl<>(
             new RectangleImpl(
                 new Position(0, 0),
                 map.getRows() * ScreenImpl.TILE_SIZE,
@@ -231,10 +231,10 @@ public final class ChapterImpl implements Chapter {
         return tree;
     }
 
-    private void fillTree(final QuadTree tree) {
+    private void fillTree(final QuadTree<Human> tree) {
         humans.forEach(h -> {
             if (h.getType() == HumanType.MALE || h.getType() == HumanType.PLAYER) {
-                tree.insert(new Point(h.getStats().getReproductionAreaRadius().getCenter(), h));
+                tree.insert(new Point<>(h.getStats().getReproductionAreaRadius().getCenter(), h));
             }
         });
     }
