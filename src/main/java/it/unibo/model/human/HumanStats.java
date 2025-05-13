@@ -20,6 +20,12 @@ public interface HumanStats {
     void increaseSpeed();
 
     /**
+     * @param multiplyValue is the value to multiply with.
+     * Used to apply power up and malus effects to speed's stat.
+     */
+    void applySpeedModifier(double multiplyValue);
+
+    /**
      * 
      * @return the reproStrategy.
      */
@@ -37,6 +43,12 @@ public interface HumanStats {
     void increaseReproductionAreaRadius();
 
     /**
+     * @param multiplyValue is the value to multiply with.
+     * Used to apply power up and malus effects to reproduction range's stat.
+     */
+    void applyReproductionRangeModifier(double multiplyValue);
+
+    /**
      * 
      * @return the probability to resiste sickness effect.
      */
@@ -46,6 +58,12 @@ public interface HumanStats {
      * Used to increase sickness resistence after finishing the chapter.
      */
     void increaseSicknessResistence();
+
+    /**
+     * @param multiplyValue is the value to multiply with.
+     * Used to apply power up and malus effects to sickness resistence's stat.
+     */
+    void applySicknessResistenceModifier(double multiplyValue);
 
     /**
      * 
@@ -60,21 +78,9 @@ public interface HumanStats {
 
     /**
      * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to speed's stat.
+     * Used to apply power up and malus effects to fertility's stat.
      */
-    void applySpeedModifier(double multiplyValue);
-
-    /**
-     * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to reproduction range's stat.
-     */
-    void applyReproductionRangeModifier(double multiplyValue);
-
-    /**
-     * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to sickness resistence's stat.
-     */
-    void applySicknessResistenceModifier(double multiplyValue);
+    void applyFertilityModifier(double multiplyValue);
 
     /**
      * Resets actual speed to base speed.
@@ -90,4 +96,9 @@ public interface HumanStats {
      * Resets actual reproduction range to base reproduction range.
      */
     void resetToBaseReproductionRange();
+
+    /**
+     * Resets actual fertility to base fertility.
+     */
+    void resetToBaseFertility();
 }

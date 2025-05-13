@@ -12,7 +12,8 @@ public final class HumanStatsImpl implements HumanStats {
         private double actualSpeed;
         private double baseSicknessResistence;
         private double actualSicknessResistence;
-        private double fertility;
+        private double baseFertility;
+        private double actualFertility;
         //private boolean isSick = false;
         private ReproStrategy reproStrategy;
         private double baseRadius;
@@ -37,17 +38,6 @@ public final class HumanStatsImpl implements HumanStats {
             setReproStrategy(reproStrategy);
         }
 
-        private void setReproStrategy(final ReproStrategy newReproStrategy) {
-            this.reproStrategy = newReproStrategy;
-            this.baseRadius = reproStrategy.getReproductionArea().getRadius();
-            this.actualRadius = this.baseRadius;
-        }
-
-        @Override
-        public ReproStrategy getReproStrategy() {
-            return this.reproStrategy;
-        }
-
         @Override
         public double getSpeed() {
             return this.actualSpeed;
@@ -64,12 +54,28 @@ public final class HumanStatsImpl implements HumanStats {
         }
 
         @Override
+        public void applySpeedModifier(final double moltiplyValue) {
+            this.actualSpeed = this.baseSpeed * moltiplyValue;
+        }
+
+        @Override
+        public ReproStrategy getReproStrategy() {
+            return this.reproStrategy;
+        }
+
+        @Override
         public Circle getReproductionAreaRadius() {
             return new CircleImpl(
                 getReproStrategy().getReproductionArea().getCenter().x(), 
                 getReproStrategy().getReproductionArea().getCenter().y(), 
                 this.actualRadius
             );
+        }
+
+        private void setReproStrategy(final ReproStrategy newReproStrategy) {
+            this.reproStrategy = newReproStrategy;
+            this.baseRadius = reproStrategy.getReproductionArea().getRadius();
+            this.actualRadius = this.baseRadius;
         }
 
         private void setReproductionAreaRadius(final double newRadius) {
@@ -79,6 +85,11 @@ public final class HumanStatsImpl implements HumanStats {
         @Override
         public void increaseReproductionAreaRadius() {
             setReproductionAreaRadius(getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE);
+        }
+
+        @Override
+        public void applyReproductionRangeModifier(final double moltiplyValue) {
+            this.actualRadius = this.baseRadius * moltiplyValue;
         }
 
         @Override
@@ -97,32 +108,28 @@ public final class HumanStatsImpl implements HumanStats {
         }
 
         @Override
+        public void applySicknessResistenceModifier(final double moltiplyValue) {
+            this.actualSicknessResistence = this.baseSicknessResistence * moltiplyValue;
+        }
+
+        @Override
         public double getFertility() {
-            return this.fertility;
+            return this.actualFertility;
         }
 
         private void setFertility(final double newFertility) {
-            this.fertility = newFertility;
+            this.baseFertility = newFertility;
+            this.actualFertility = newFertility;
+        }
+
+        @Override
+        public void applyFertilityModifier(final double moltiplyValue) {
+            this.actualFertility = this.baseFertility * moltiplyValue;
         }
 
         @Override
         public void increaseFertility() {
-            setFertility(fertility + FERTILITY_UPGRADE_VALUE);
-        }
-
-        @Override
-        public void applySpeedModifier(final double moltiplyValue) {
-            this.actualSpeed = this.baseSpeed * moltiplyValue;
-        }
-
-        @Override
-        public void applyReproductionRangeModifier(final double moltiplyValue) {
-            this.actualRadius = this.baseRadius * moltiplyValue;
-        }
-
-        @Override
-        public void applySicknessResistenceModifier(final double moltiplyValue) {
-            this.actualSicknessResistence = this.baseSicknessResistence * moltiplyValue;
+            setFertility(baseFertility + FERTILITY_UPGRADE_VALUE);
         }
 
         @Override
@@ -138,5 +145,10 @@ public final class HumanStatsImpl implements HumanStats {
         @Override
         public void resetToBaseReproductionRange() {
             this.actualRadius = this.baseRadius;
+        }
+
+        @Override
+        public void resetToBaseFertility() {
+            this.actualFertility = this.baseFertility;
         }
 }
