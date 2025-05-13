@@ -2,11 +2,11 @@ package it.unibo.model.pickable;
 
 import java.time.Clock;
 import java.time.Duration;
-import java.util.Optional;
 
-import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
 import it.unibo.model.effect.Effect;
+import it.unibo.model.effect.EffectFactory;
+import it.unibo.model.effect.EffectFactoryImpl;
 import it.unibo.view.sprite.PowerUpType;
 import it.unibo.view.sprite.Sprite;
 
@@ -15,14 +15,14 @@ import it.unibo.view.sprite.Sprite;
  */
 public final class PickableFactoryImpl implements PickableFactory {
 
-    private final Clock clock;
+    private final EffectFactory effectFactory;
 
     /**
      * 
      * @param clock the clock to get the current time.
      */
     public PickableFactoryImpl(final Clock clock) {
-        this.clock = clock;
+        this.effectFactory = new EffectFactoryImpl(clock);
     }
 
     @Override
@@ -30,45 +30,7 @@ public final class PickableFactoryImpl implements PickableFactory {
         return new Pickable() {
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
-            private final Effect speedBoost = new Effect() {
-                private static final String NAME = "Speed Boost";
-                private final Duration powerUpDuration = duration;
-                private final double boostValue = boost;
-                private Optional<CooldownGate> cooldown = Optional.empty();
-                @Override
-                public String getName() {
-                    return NAME;
-                }
-
-                @Override
-                public Duration getDuration() {
-                    return powerUpDuration;
-                }
-
-                @Override
-                public double getMultiplyValue() {
-                    return boostValue;
-                }
-
-                @Override
-                public boolean isExpired() {
-                    return cooldown.isEmpty() || cooldown.get().checkStatus();
-                }
-
-                @Override
-                public void activate() {
-                    if (cooldown.isEmpty()) {
-                        cooldown = Optional.of(new CooldownGate(powerUpDuration, clock));
-                    } else {
-                        cooldown.get().tryActivate();
-                    }
-                }
-
-                @Override
-                public void refresh() {
-                    cooldown = Optional.of(new CooldownGate(powerUpDuration, clock));
-                }
-            };
+            private final Effect speedBoost = effectFactory.speedEffect(duration, boost);
 
             @Override
             public Position getPosition() {
@@ -92,46 +54,7 @@ public final class PickableFactoryImpl implements PickableFactory {
         return new Pickable() {
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
-            private final Effect sicknessResistence = new Effect() {
-                private static final String NAME = "Sickness Resistence";
-                private final Duration powerUpDuration = duration;
-                private final double boostValue = boost;
-                private Optional<CooldownGate> cooldown = Optional.empty();
-
-                @Override
-                public String getName() {
-                    return NAME;
-                }
-
-                @Override
-                public Duration getDuration() {
-                    return powerUpDuration;
-                }
-
-                @Override
-                public double getMultiplyValue() {
-                    return boostValue;
-                }
-
-                @Override
-                public boolean isExpired() {
-                    return cooldown.isEmpty() || cooldown.get().checkStatus();
-                }
-
-                @Override
-                public void activate() {
-                    if (cooldown.isEmpty()) {
-                        cooldown = Optional.of(new CooldownGate(powerUpDuration, clock));
-                    } else {
-                        cooldown.get().tryActivate();
-                    }
-                }
-
-                @Override
-                public void refresh() {
-                    cooldown = Optional.of(new CooldownGate(powerUpDuration, clock));
-                }
-            };
+            private final Effect sicknessResistence = effectFactory.sicknessResistenceEffect(duration, boost);
 
             @Override
             public Position getPosition() {
@@ -155,46 +78,7 @@ public final class PickableFactoryImpl implements PickableFactory {
         return new Pickable() {
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
-            private final Effect reproductionAreaEffect = new Effect() {
-                private static final String NAME = "Reproduction Range";
-                private final Duration powerUpDuration = duration;
-                private final double boostValue = boost;
-                private Optional<CooldownGate> cooldown = Optional.empty();
-
-                @Override
-                public String getName() {
-                    return NAME;
-                }
-
-                @Override
-                public Duration getDuration() {
-                    return powerUpDuration;
-                }
-
-                @Override
-                public double getMultiplyValue() {
-                    return boostValue;
-                }
-
-                @Override
-                public boolean isExpired() {
-                    return cooldown.isEmpty() || cooldown.get().checkStatus();
-                }
-
-                @Override
-                public void activate() {
-                    if (cooldown.isEmpty()) {
-                        cooldown = Optional.of(new CooldownGate(powerUpDuration, clock));
-                    } else {
-                        cooldown.get().tryActivate();
-                    }
-                }
-
-                @Override
-                public void refresh() {
-                    cooldown = Optional.of(new CooldownGate(powerUpDuration, clock));
-                }
-            };
+            private final Effect reproductionAreaEffect = effectFactory.reproductionRangeEffect(duration, boost);
 
             @Override
             public Position getPosition() {

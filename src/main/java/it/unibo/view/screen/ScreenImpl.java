@@ -201,24 +201,23 @@ public final class ScreenImpl extends JPanel implements Screen {
     public void loadTimer(final Optional<Duration> timerValue) {
         this.timerValue = timerValue;
     }
-    
+
     @Override
     public void loadPopulationCounter(final Optional<PopulationCounter> populationCounter) {
         this.populationCounter = populationCounter;
     }
-    
+
     private void updateCenter() {
         centerX = window.getWidth() / 2 - TILE_SIZE / 2;
         centerY = window.getHeight() / 2 - TILE_SIZE / 2;
     }
-    
+
     private void drawText(final List<Text> texts) {
         final List<Text> copyTexts = texts.stream().toList(); // to avoid concurrent modifications on iterated list
         copyTexts.forEach(text -> {
             final Font f = new Font("Verdana", Font.BOLD, text.size());
             bufferGraphics.setColor(text.color());
             bufferGraphics.setFont(f);
-            
             bufferGraphics.drawString(text.content(), (int) text.position().x(), 
             (int) text.position().y());
         });

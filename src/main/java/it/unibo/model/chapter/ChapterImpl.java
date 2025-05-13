@@ -115,35 +115,36 @@ public final class ChapterImpl implements Chapter {
         for (final Pickable powerUp : pickablePowerUps) {
             if (Math.abs(humans.get(0).getPosition().x() - powerUp.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
                 && Math.abs(humans.get(0).getPosition().y() - powerUp.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
-
-                Optional<Pickable> tmp = Optional.empty();
-                for (final Pickable activatedPowerUp : activatedPowerUps) {
-                    if (activatedPowerUp.getEffect().getName().equals(powerUp.getEffect().getName())) {
-                        tmp = Optional.of(activatedPowerUp);
-                    }
-                }
-
-                if (tmp.isPresent()) {
-                    tmp.get().getEffect().refresh();
-                } else {
-                    powerUp.getEffect().activate();
-                    activatedPowerUps.add(powerUp);
-                    switch (powerUp.getEffect().getName()) {
-                        case "Speed Boost":
-                            humans.get(0).getStats().applySpeedModifier(powerUp.getEffect().getMultiplyValue());
-                            break;
-                        case "Sickness Resistence":
-                            humans.get(0).getStats().applySicknessResistenceModifier(powerUp.getEffect().getMultiplyValue());
-                            break;
-                        case "Reproduction Range":
-                            humans.get(0).getStats().applyReproductionRangeModifier(powerUp.getEffect().getMultiplyValue());
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
+                checkAndActivate(powerUp);
                 pickablePowerUps.remove(powerUp);
+            }
+        }
+    }
+
+    private void checkAndActivate(final Pickable powerUp) {
+        Optional<Pickable> tmp = Optional.empty();
+        for (final Pickable activatedPowerUp : activatedPowerUps) {
+            if (activatedPowerUp.getEffect().getType().equals(powerUp.getEffect().getType())) {
+                tmp = Optional.of(activatedPowerUp);
+            }
+        }
+        if (tmp.isPresent()) {
+            tmp.get().getEffect().refresh();
+        } else {
+            powerUp.getEffect().activate();
+            activatedPowerUps.add(powerUp);
+            switch (powerUp.getEffect().getType()) {
+                case SPEED:
+                    humans.get(0).getStats().applySpeedModifier(powerUp.getEffect().getMultiplyValue());
+                    break;
+                case SICKNESS_RESISTENCE:
+                    humans.get(0).getStats().applySicknessResistenceModifier(powerUp.getEffect().getMultiplyValue());
+                    break;
+                case REPRODUCTION_RANGE:
+                    humans.get(0).getStats().applyReproductionRangeModifier(powerUp.getEffect().getMultiplyValue());
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -151,14 +152,14 @@ public final class ChapterImpl implements Chapter {
     private void checkPlayerStatusEffect() {
         for (final Pickable powerUp : activatedPowerUps) {
             if (powerUp.getEffect().isExpired()) {
-                switch (powerUp.getEffect().getName()) {
-                    case "Speed Boost":
+                switch (powerUp.getEffect().getType()) {
+                    case SPEED:
                         humans.get(0).getStats().resetToBaseSpeed();
                         break;
-                    case "Sickness Resistence":
+                    case SICKNESS_RESISTENCE:
                         humans.get(0).getStats().resetToBaseSicknessResistence();
                         break;
-                    case "Reproduction Range":
+                    case REPRODUCTION_RANGE:
                         humans.get(0).getStats().resetToBaseReproductionRange();
                         break;
                     default:
