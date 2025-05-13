@@ -68,7 +68,7 @@ public final class HumanStatsImpl implements HumanStats {
             return new CircleImpl(
                 getReproStrategy().getReproductionArea().getCenter().x(), 
                 getReproStrategy().getReproductionArea().getCenter().y(), 
-                actualRadius
+                this.actualRadius
             );
         }
 
@@ -93,7 +93,7 @@ public final class HumanStatsImpl implements HumanStats {
 
         @Override
         public void increaseSicknessResistence() {
-            baseSicknessResistence = this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE;
+            this.baseSicknessResistence = this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE;
         }
 
         @Override
@@ -112,17 +112,17 @@ public final class HumanStatsImpl implements HumanStats {
 
         @Override
         public void applySpeedModifier(final double moltiplyValue) {
-            actualSpeed = this.baseSpeed * moltiplyValue;
+            this.actualSpeed = this.baseSpeed * moltiplyValue;
         }
 
         @Override
         public void applyReproductionRangeModifier(final double moltiplyValue) {
-            actualRadius = baseRadius * moltiplyValue;
+            this.actualRadius = this.baseRadius * moltiplyValue;
         }
 
         @Override
         public void applySicknessResistenceModifier(final double moltiplyValue) {
-            actualSicknessResistence = this.baseSicknessResistence * moltiplyValue;
+            this.actualSicknessResistence = this.baseSicknessResistence * moltiplyValue;
         }
 
         @Override
@@ -137,6 +137,6 @@ public final class HumanStatsImpl implements HumanStats {
 
         @Override
         public void resetToBaseReproductionRange() {
-            actualRadius = baseRadius;
+            this.actualRadius = this.baseRadius;
         }
 }
