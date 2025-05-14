@@ -64,14 +64,14 @@ public abstract class AbstractMenu implements Menu {
         } else if (input.isKeyPressed(MENU_TOGGLE_KEY)) {
             toggleMenu();
             timer = TIMER_VALUE;
-        } else if (this.isVisible && input.isKeyPressed(KeyEvent.VK_DOWN)
+        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S))
          && selectedOptionIndex + 1 < options.size()) {
             this.selectedOptionIndex++;
             timer = TIMER_VALUE;
-        } else if (this.isVisible && input.isKeyPressed(KeyEvent.VK_UP) && selectedOptionIndex > 0) {
+        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W)) && selectedOptionIndex > 0) {
             this.selectedOptionIndex--;
             timer = TIMER_VALUE;
-        } else if (this.isVisible && input.isKeyPressed(KeyEvent.VK_ENTER)) {
+        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE))) {
             onExit();
             this.options.get(selectedOptionIndex).execute(game);
         }

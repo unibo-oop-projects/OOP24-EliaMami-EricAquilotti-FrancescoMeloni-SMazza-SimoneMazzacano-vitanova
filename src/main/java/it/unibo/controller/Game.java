@@ -11,6 +11,7 @@ import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
+import it.unibo.model.human.HumanStats;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -84,7 +85,6 @@ public final class Game implements Runnable {
                 this.setMenu(new GameOverMenu(inputHandler, this));
             }
         }
-
         if (isGameplayStarted && !isGameplayPaused) {
             chapter.update();
         }
@@ -158,6 +158,11 @@ public final class Game implements Runnable {
         this.isGameplayStarted = false;
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
+        this.screen.loadPickablePowerUp(Collections.emptyList());
         this.screen.loadPopulationCounter(Optional.empty());
+    }
+
+    public HumanStats getPlayerStats(){
+        return chapter.getHumans().get(0).getStats();
     }
 }
