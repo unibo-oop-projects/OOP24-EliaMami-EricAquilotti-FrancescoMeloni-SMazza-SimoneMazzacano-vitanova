@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.time.Duration;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 /**
  * Class that handles the timer display.
@@ -35,13 +36,17 @@ public final class TimerDisplay extends JLabel {
      * @param duration the timer duration to set
      */
     public void update(final Duration duration) {
-        this.setText(format(duration));
+        SwingUtilities.invokeLater(() -> {
+            this.setText(format(duration));
+        });
     }
 
     /**
      * Clears the timer display.
      */
     public void clear() {
-        this.setText("");
+        SwingUtilities.invokeLater(() -> {
+            this.setText("");
+        });
     }
 }

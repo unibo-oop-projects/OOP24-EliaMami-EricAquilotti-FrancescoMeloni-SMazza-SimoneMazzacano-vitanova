@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
+import javax.swing.SwingUtilities;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -74,9 +75,8 @@ public final class MenuDisplay extends JPanel {
             menu.options().stream()
         ).collect(Collectors.joining("\n"));
 
-        if (textPane.getText().equals(toDraw)) {
-            return;
-        }
-        textPane.setText(toDraw);
+        SwingUtilities.invokeLater(() -> {
+            textPane.setText(toDraw);
+        });
     }
 }

@@ -194,17 +194,29 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     @Override
     public void loadMenu(final MenuContent content) {
+        if (menuContent.equals(content)) {
+            return;
+        }
         menuContent = content;
+        menuDisplay.update(content);
     }
 
     @Override
     public void loadTimer(final Optional<Duration> timerValue) {
+        if (timerValue.equals(this.timerValue)) {
+            return;
+        }
         this.timerValue = timerValue;
+        timerValue.ifPresentOrElse(timerLabel::update, timerLabel::clear);
     }
 
     @Override
     public void loadPopulationCounter(final Optional<PopulationCounter> populationCounter) {
+        if (populationCounter.equals(this.populationCounter)) {
+            return;
+        }
         this.populationCounter = populationCounter;
+        populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);
     }
 
     private void updateCenter() {
@@ -261,10 +273,7 @@ public final class ScreenImpl extends JPanel implements Screen {
                 bufferGraphics.draw(circle);
         }
 
-        timerValue.ifPresentOrElse(timerLabel::update, timerLabel::clear);
-        populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);
         drawText(textToDraw);
-        menuDisplay.update(menuContent);
     }
 
     private Position screenPosition(final Position position) {
