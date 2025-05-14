@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import it.unibo.model.chapter.PopulationCounter;
 
@@ -32,13 +33,17 @@ public final class PopulationCounterDisplay extends JLabel {
      */
     public void update(final PopulationCounter populationCounter) {
         final String counterString = populationCounter.population() + "/" + populationCounter.populationGoal();
-        this.setText(counterString);
+        SwingUtilities.invokeLater(() -> {
+            this.setText(counterString);
+        });
     }
 
     /**
      * Clears the population counter display.
      */
     public void clear() {
-        this.setText("");
+        SwingUtilities.invokeLater(() -> {
+            this.setText("");
+        });
     }
 }
