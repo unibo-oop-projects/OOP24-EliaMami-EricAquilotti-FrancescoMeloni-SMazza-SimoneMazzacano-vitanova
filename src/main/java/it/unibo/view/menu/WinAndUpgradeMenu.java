@@ -1,6 +1,7 @@
 package it.unibo.view.menu;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
@@ -17,32 +18,27 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     public WinAndUpgradeMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
         MenuOption.of("Speed: " + updateSpeedText(game), g -> {
-            if (g.getSkillPoint() > 0) {
-                g.getPlayerStats().increaseSpeed();
-            }
-            g.updateSkillPoint();
+            checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSpeed(), g);
         }),
         MenuOption.of("Resistence: " + updateSicknessResistenceText(game), g -> {
-            if (g.getSkillPoint() > 0) {
-                g.getPlayerStats().increaseSicknessResistence();
-            }
-            g.updateSkillPoint();
+            checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSicknessResistence(), g);
         }),
         MenuOption.of("Area: " + updateReproductionAreaText(game), g -> {
-            if (g.getSkillPoint() > 0) {
-                g.getPlayerStats().increaseReproductionAreaRadius();
-            }
-            g.updateSkillPoint();
+            checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseReproductionAreaRadius(), g);
         }), 
         MenuOption.of("Fertility: " + updateFertilityText(game), g -> {
-            if (g.getSkillPoint() > 0) {
-                g.getPlayerStats().increaseFertility();
-            }
-            g.updateSkillPoint();
+            checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseFertility(), g);
         }),
         MenuOption.home(input),
         MenuOption.quit()), 
         true, "You have " + game.getSkillPoint() + " skill point.", "You won the Chapter! Upgrade your skills.", AbstractMenu.getSelectedOptionIndex());
+    }
+
+    private static void checkAndUpdateSkillPoint(final Consumer<Game> c, final Game g){
+        if (g.getSkillPoint() > 0) {
+            c.accept(g);    
+        }
+        g.updateSkillPoint();
     }
 
     private static int updateSpeedText(Game game){
