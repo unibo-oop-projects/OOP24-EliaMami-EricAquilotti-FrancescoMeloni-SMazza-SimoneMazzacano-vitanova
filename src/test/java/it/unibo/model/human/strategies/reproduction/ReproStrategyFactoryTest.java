@@ -120,6 +120,14 @@ class ReproStrategyFactoryTest {
                     @Override
                     public void resetToBaseReproductionRange() {
                     }
+
+                    @Override
+                    public void applyFertilityModifier(final double multiplyValue) {
+                    }
+
+                    @Override
+                    public void resetToBaseFertility() {
+                    }
                 };
             }
         };

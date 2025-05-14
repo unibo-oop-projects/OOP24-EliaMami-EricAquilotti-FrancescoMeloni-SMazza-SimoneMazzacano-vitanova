@@ -11,7 +11,7 @@ public interface Effect {
      * 
      * @return the effect's name.
      */
-    String getName();
+    EffectType getType();
 
     /**
      * 
