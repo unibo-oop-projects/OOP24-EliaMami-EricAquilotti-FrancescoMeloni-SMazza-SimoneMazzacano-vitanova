@@ -17,11 +17,15 @@ public abstract class AbstractMenu implements Menu {
     private final List<MenuOption> options;
     private final String title;
     private final String subtitle;
-    private int selectedOptionIndex;
+    private static int selectedOptionIndex;
     private boolean isVisible;
     private int timer = TIMER_VALUE;
     private final InputHandler input;
     private final Game game;
+
+    public static int getSelectedOptionIndex(){
+        return selectedOptionIndex;
+    }
 
     /**
      * @return the input handler
@@ -48,6 +52,11 @@ public abstract class AbstractMenu implements Menu {
      */
     protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
     final boolean isInitiallyVisible, final String subtitle, final String title) {
+        this(input, game, options, isInitiallyVisible, subtitle, title, 0);
+    }
+
+    protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
+    final boolean isInitiallyVisible, final String subtitle, final String title, final int newSelectedOptionIndex) {
         this.title = title;
         this.subtitle = subtitle;
         this.input = input;
@@ -55,6 +64,7 @@ public abstract class AbstractMenu implements Menu {
         this.options = options;
         this.isVisible = isInitiallyVisible;
         getGame().setGameplayState(isInitiallyVisible);
+        selectedOptionIndex = newSelectedOptionIndex;
     }
 
     @Override
@@ -66,14 +76,14 @@ public abstract class AbstractMenu implements Menu {
             timer = TIMER_VALUE;
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S))
          && selectedOptionIndex + 1 < options.size()) {
-            this.selectedOptionIndex++;
+            selectedOptionIndex++;
             timer = TIMER_VALUE;
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W)) && selectedOptionIndex > 0) {
-            this.selectedOptionIndex--;
+            selectedOptionIndex--;
             timer = TIMER_VALUE;
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE))) {
             onExit();
-            this.options.get(selectedOptionIndex).execute(game);
+            options.get(selectedOptionIndex).execute(game);
         }
     }
 

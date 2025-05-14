@@ -18,10 +18,9 @@ public class StatsMenu extends AbstractMenu{
     }
 
     private static String setStatsText(HumanStats playerStats){
-        String STATS_TEXT = "Speed: " + playerStats.getSpeed() + "\n" + 
+        return "Speed: " + playerStats.getSpeed() + "\n" + 
         "Reproduction range: " + playerStats.getReproductionAreaRadius().getRadius() + "\n" + 
         "Sickness resistence: " + playerStats.getSicknessResistence() + "\n" + 
-        "Fertility: " + playerStats.getFertility() + "\n";
-        return STATS_TEXT;
+        "Fertility: " + playerStats.getFertility();
     }
 }

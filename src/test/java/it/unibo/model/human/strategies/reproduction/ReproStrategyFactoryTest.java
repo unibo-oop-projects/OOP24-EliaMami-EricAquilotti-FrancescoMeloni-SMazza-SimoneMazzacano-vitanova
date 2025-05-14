@@ -128,6 +128,47 @@ class ReproStrategyFactoryTest {
                     @Override
                     public void resetToBaseFertility() {
                     }
+
+                    @Override
+                    public int getActualSpeedUpgrade() {
+                        // TODO Auto-generated method stub
+                        throw new UnsupportedOperationException("Unimplemented method 'getActualSpeedUpgrade'");
+                    }
+
+                    @Override
+                    public int getActualSicknessResistenceUpgrade() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getActualReproductionRangeUpgrade() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getActualFertilityUpgrade() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getMaxSpeedUpgrade() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getMaxSicknessResistenceUpgrade() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getMaxReproductionRangeUpgrade() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getMaxFertilityUpgrade() {
+                        return 0;
+                    }
                 };
             }
         };

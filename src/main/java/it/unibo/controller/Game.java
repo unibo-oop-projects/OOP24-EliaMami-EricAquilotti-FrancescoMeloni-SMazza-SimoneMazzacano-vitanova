@@ -15,7 +15,7 @@ import it.unibo.model.human.HumanStats;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
-import it.unibo.view.menu.WinMenu;
+import it.unibo.view.menu.WinAndUpgradeMenu;
 import it.unibo.view.screen.Screen;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -33,6 +33,8 @@ public final class Game implements Runnable {
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
+    private Optional<Integer> skillPoints = Optional.empty();
+
     /**
      * Starts the game engine.
      */
@@ -80,7 +82,8 @@ public final class Game implements Runnable {
     private void update() {
         if (!isGameplayPaused) {
             if (chapter.getState() == ChapterState.PLAYER_WON) {
-                this.setMenu(new WinMenu(inputHandler, this));
+                setSkillPoint(3);
+                this.setMenu(new WinAndUpgradeMenu(inputHandler, this));
             } else if (chapter.getState() == ChapterState.PLAYER_LOST) {
                 this.setMenu(new GameOverMenu(inputHandler, this));
             }
@@ -156,6 +159,7 @@ public final class Game implements Runnable {
     public void setNewChapter() {
         this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
         this.isGameplayStarted = false;
+        this.skillPoints = Optional.empty();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
         this.screen.loadPickablePowerUp(Collections.emptyList());
@@ -164,5 +168,17 @@ public final class Game implements Runnable {
 
     public HumanStats getPlayerStats(){
         return chapter.getHumans().get(0).getStats();
+    }
+
+    public void setSkillPoint(int value) { 
+        skillPoints = skillPoints.or(() -> Optional.of(value));
+    }
+
+    public int getSkillPoint() {
+        return skillPoints.get();
+    }
+
+    public void updateSkillPoint() {
+        skillPoints = Optional.of(skillPoints.get() > 0 ? skillPoints.get() - 1 : skillPoints.get());
     }
 }

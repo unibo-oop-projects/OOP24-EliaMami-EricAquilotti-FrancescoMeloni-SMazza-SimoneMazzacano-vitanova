@@ -101,4 +101,20 @@ public interface HumanStats {
      * Resets actual fertility to base fertility.
      */
     void resetToBaseFertility();
+
+    int getActualSpeedUpgrade();
+
+    int getActualSicknessResistenceUpgrade();
+
+    int getActualReproductionRangeUpgrade();
+
+    int getActualFertilityUpgrade();
+
+    int getMaxSpeedUpgrade();
+
+    int getMaxSicknessResistenceUpgrade();
+
+    int getMaxReproductionRangeUpgrade();
+
+    int getMaxFertilityUpgrade();
 }

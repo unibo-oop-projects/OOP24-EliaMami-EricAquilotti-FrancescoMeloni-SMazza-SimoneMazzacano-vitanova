@@ -37,8 +37,8 @@ import it.unibo.view.sprite.HumanType;
  */
 public final class ChapterImpl implements Chapter {
     private static final int STARTING_FEMALES = 1;
-    private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private static final int POPULATION_GOAL = 100;
+    private static final double MALE_SPAWNING_PROBABILITY = .6;
+    private static final int POPULATION_GOAL = 5;
     private static final double MULTIPLY_VALUE = 1.25;
     private static final Duration DURATION_EFFECT_VALUE = Duration.ofSeconds(5);
     private static final Duration TIMER_VALUE = Duration.ofSeconds(300);
@@ -89,7 +89,6 @@ public final class ChapterImpl implements Chapter {
 
     private void spawnPickablePowerUp() {
         final List<Pickable> powerUps = new ArrayList<>();
-
         final int randomPowerUp = random.nextInt(0, 3);
         switch (randomPowerUp) {
             case 0: 
@@ -107,7 +106,6 @@ public final class ChapterImpl implements Chapter {
             default:
                 break;
         }
-
         this.pickablePowerUps.addAll(powerUps);
     }
 
