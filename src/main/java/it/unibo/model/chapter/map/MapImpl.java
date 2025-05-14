@@ -26,7 +26,7 @@ public final class MapImpl implements Map {
     private final Tile[][] tiles;
 
     /**
-     * Sets {@code rows}, {@code coloums} and generate {@code tiles}.
+     * Give an instance of {@code MapImpl} with {@code rows}, {@code coloums} and generated {@code tiles}.
      * @see MapGenerator
      * @see WaveFunctionCollapse
      * @param rows number of the rows of the map

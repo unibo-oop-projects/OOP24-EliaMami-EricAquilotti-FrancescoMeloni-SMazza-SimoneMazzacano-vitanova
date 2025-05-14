@@ -10,16 +10,17 @@ import it.unibo.common.RectangleImpl;
 
 /**
  * Implementation of a quad tree that allows insertion and queries.
+ * @param <T> the type of elements contained by the tree.
  */
-public final class QuadTreeImpl implements QuadTree {
+public final class QuadTreeImpl<T> implements QuadTree<T> {
     private static final int CAPACITY = 10;
     private final Rectangle boundary;
-    private final List<Point> points = new ArrayList<>(CAPACITY);
+    private final List<Point<T>> points = new ArrayList<>(CAPACITY);
     private boolean isDivided;
-    private QuadTree northWest;
-    private QuadTree northEast;
-    private QuadTree southWest;
-    private QuadTree southEast;
+    private QuadTree<T> northWest;
+    private QuadTree<T> northEast;
+    private QuadTree<T> southWest;
+    private QuadTree<T> southEast;
 
     /**
      * 
@@ -30,7 +31,7 @@ public final class QuadTreeImpl implements QuadTree {
     }
 
     @Override
-    public boolean insert(final Point point) {
+    public boolean insert(final Point<T> point) {
         if (!boundary.contains(point.position())) {
             return false;
         }
@@ -54,23 +55,23 @@ public final class QuadTreeImpl implements QuadTree {
         final double w = this.boundary.width();
 
         final Rectangle ne = new RectangleImpl(new Position(x + w / 2, y), w / 2, h / 2);
-        this.northEast = new QuadTreeImpl(ne);
+        this.northEast = new QuadTreeImpl<>(ne);
         final Rectangle nw = new RectangleImpl(new Position(x, y), w / 2, h / 2);
-        this.northWest = new QuadTreeImpl(nw);
+        this.northWest = new QuadTreeImpl<>(nw);
         final Rectangle se = new RectangleImpl(new Position(x + w / 2, y + h / 2), w / 2, h / 2);
-        this.southEast = new QuadTreeImpl(se);
+        this.southEast = new QuadTreeImpl<>(se);
         final Rectangle sw = new RectangleImpl(new Position(x, y + h / 2), w / 2, h / 2);
-        this.southWest = new QuadTreeImpl(sw);
+        this.southWest = new QuadTreeImpl<>(sw);
         this.isDivided = true;
     }
 
     @Override
-    public List<Point> query(final Circle range) {
-        final List<Point> found = new ArrayList<>();
+    public List<Point<T>> query(final Circle range) {
+        final List<Point<T>> found = new ArrayList<>();
         if (!range.intersects(this.boundary)) {
             return found;
         }
-        for (final Point point : this.points) {
+        for (final Point<T> point : this.points) {
             if (range.contains(point.position())) {
                 found.add(point);
             }

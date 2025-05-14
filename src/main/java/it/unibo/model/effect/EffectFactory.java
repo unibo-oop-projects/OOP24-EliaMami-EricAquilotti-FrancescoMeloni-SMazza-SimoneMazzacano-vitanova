@@ -9,25 +9,33 @@ public interface EffectFactory {
 
     /**
      * 
-     * @param duration the duration in seconds
+     * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
-     * @return an effect that decrease the speed.
+     * @return an effect that describe how to modify the speed.
      */
-    Effect speedDecrease(Duration duration, double multiplyValue);
+    Effect speedEffect(Duration duration, double multiplyValue);
 
     /**
      * 
-     * @param duration the duration in seconds
+     * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
-     * @return an effect that decrease the radius range.
+     * @return an effect that describe how to modify the radius range.
      */
-    Effect reproductionRangeDecrease(Duration duration, double multiplyValue);
+    Effect reproductionRangeEffect(Duration duration, double multiplyValue);
 
     /**
      * 
-     * @param duration the duration in seconds
+     * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
-     * @return an effect that decrease the fertility.
+     * @return an effect that describe how to modify the fertility.
      */
-    Effect fertilityDecrease(Duration duration, double multiplyValue);
+    Effect fertilityEffect(Duration duration, double multiplyValue);
+
+    /**
+     * 
+     * @param duration the duration
+     * @param multiplyValue the value to multiply the parameter with
+     * @return an effect that describe how to modify the sickness resistence.
+     */
+    Effect sicknessResistenceEffect(Duration duration, double multiplyValue);
 }

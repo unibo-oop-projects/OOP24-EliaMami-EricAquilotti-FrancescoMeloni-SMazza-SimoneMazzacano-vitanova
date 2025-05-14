@@ -19,7 +19,7 @@ public final class GamePlayMenu extends AbstractMenu {
     public GamePlayMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
         MenuOption.emptyAction("Resume"),
-        MenuOption.of("Restart chapter", Game::restartCurrentChapter), 
+        MenuOption.of("Restart", Game::restartCurrentChapter), 
         MenuOption.home(input),
         MenuOption.quit()),
         false, "", "Game paused");

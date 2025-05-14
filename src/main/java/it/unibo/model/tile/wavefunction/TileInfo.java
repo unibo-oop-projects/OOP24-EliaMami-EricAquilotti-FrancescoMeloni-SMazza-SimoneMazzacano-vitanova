@@ -9,7 +9,7 @@ import it.unibo.common.DirectionEnum;
  * @see TileType
  * @see TileEdge
  */
-public interface TileRules {
+public interface TileInfo {
 
     /**
      * Returns a Map describing the edges of a type of tile.

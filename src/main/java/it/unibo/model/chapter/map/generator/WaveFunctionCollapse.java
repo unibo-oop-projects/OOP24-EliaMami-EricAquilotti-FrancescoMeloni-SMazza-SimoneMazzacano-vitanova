@@ -26,7 +26,7 @@ public final class WaveFunctionCollapse implements MapGenerator {
     private final Random rand = new Random(System.currentTimeMillis());
 
     /**
-     * Initialize tileIds and loads the map from a file.
+     * Give an instance of {@code WaveFunctionCollapse} with {@code rows} anc {@code coloumns}.
      * @param rows number of the rows of the map
      * @param coloumns number of the coloumns of the map
      */
