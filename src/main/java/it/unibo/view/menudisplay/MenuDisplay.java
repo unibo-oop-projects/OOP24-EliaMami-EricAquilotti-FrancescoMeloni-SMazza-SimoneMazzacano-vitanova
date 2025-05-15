@@ -2,6 +2,8 @@ package it.unibo.view.menudisplay;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,6 +15,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import it.unibo.view.menu.MenuContent;
+import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Handles menu rendering for the view.
@@ -20,7 +23,8 @@ import it.unibo.view.menu.MenuContent;
 public final class MenuDisplay extends JPanel {
     private static final long serialVersionUID = 5L;
 
-    private static final Font FONT = new Font("Verdana", Font.BOLD, 60);
+    private static final int FONT_SIZE = 60;
+    private static final Font FONT = new Font("Verdana", Font.BOLD, FONT_SIZE);
     private static final float LINE_SPACING = 0.4f;
     private final JTextPane textPane = new JTextPane();
 
@@ -41,10 +45,21 @@ public final class MenuDisplay extends JPanel {
         textPane.setFont(FONT);
         textPane.setForeground(Color.WHITE);
         textPane.setOpaque(false);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                adjustFontSize();
+            }
+        });
         final SimpleAttributeSet centerAttr = new SimpleAttributeSet();
         StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
         StyleConstants.setLineSpacing(centerAttr, LINE_SPACING);
         textPane.setParagraphAttributes(centerAttr, false);
+    }
+
+    private void adjustFontSize() {
+        final Font base = textPane.getFont();
+        textPane.setFont(base.deriveFont((float) FONT_SIZE * this.getWidth() / ScreenImpl.BASE_WINDOW_WIDTH));
     }
 
     private void addLayoutCostraints() {
