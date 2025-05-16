@@ -183,20 +183,15 @@ public final class ChapterImpl implements Chapter {
     }
 
     private void spawnHumans(final InputHandler inputHandler) {
-        final Position startingPosition = spawnPlayer(inputHandler);
+        spawnPlayer(inputHandler);
         for (int i = 0; i < STARTING_FEMALES; i++) {
-            this.humans.add(humanFactory.female(randomPosition(startingPosition), map));
+            this.humans.add(humanFactory.female(Position.getRandomWalkablePosition(map), map));
         }
     }
 
-    /**
-     * @param inputHandler the input handler.
-     * @return the position of the player.
-     */
-    private Position spawnPlayer(final InputHandler inputHandler) {
+    private void spawnPlayer(final InputHandler inputHandler) {
         final Position startingPosition = Position.getRandomWalkablePosition(map);
         this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
-        return startingPosition;
     }
 
     private void solveCollisions() {
@@ -213,8 +208,8 @@ public final class ChapterImpl implements Chapter {
             .filter(female::collide)
             .forEach(male -> generated.add(
                 random.nextDouble() < MALE_SPAWNING_PROBABILITY
-                    ? humanFactory.male(randomPosition(femalePosition), map)
-                    : humanFactory.female(randomPosition(femalePosition), map)
+                    ? humanFactory.male(Position.getRandomWalkableReferencePosition(femalePosition, map), map)
+                    : humanFactory.female(Position.getRandomWalkableReferencePosition(femalePosition, map), map)
             ));
         });
         this.humans.addAll(generated);
@@ -258,26 +253,6 @@ public final class ChapterImpl implements Chapter {
     @Override
     public Human getPlayer() {
         return humans.get(0);
-    }
-
-    private Position randomPosition(final Position reference) {
-        final Position r = new Position(
-            (int) Math.floor(
-                reference.x()
-                    + (random.nextBoolean() ? 1 : -1)
-                        * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
-            ),
-            (int) Math.floor(
-                reference.y()
-                    + (random.nextBoolean() ? 1 : -1)
-                        * ScreenImpl.TILE_SIZE * 2 * random.nextDouble()
-            )
-        );
-        return walkablePosition(r) ? r : randomPosition(reference);
-    }
-
-    private boolean walkablePosition(final Position position) {
-        return map.getTileFromPixel(position.x(), position.y()).isWalkable();
     }
 
     @Override
