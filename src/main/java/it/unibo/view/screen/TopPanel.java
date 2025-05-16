@@ -1,9 +1,10 @@
 package it.unibo.view.screen;
 
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Optional;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
@@ -17,8 +18,8 @@ import it.unibo.view.timerdisplay.TimerDisplay;
  */
 public final class TopPanel extends JPanel {
     private static final long serialVersionUID = 6L;
-    private static final int TOP_MARGIN = 150;
     private static final int TEXT_LATERAL_MARGIN = 200;
+    private transient Optional<Dimension> initialSize = Optional.empty();
     /**
      * Constructor for the TopPanel class.
      * @param timerDisplay the timer display
@@ -27,7 +28,6 @@ public final class TopPanel extends JPanel {
     public TopPanel(final TimerDisplay timerDisplay, final PopulationCounterDisplay populationCounterDisplay) {
         this.setLayout(new SpringLayout());
         this.setOpaque(false);
-        this.setBorder(BorderFactory.createEmptyBorder(TOP_MARGIN, 0, 0, 0));
         this.add(timerDisplay);
         this.add(populationCounterDisplay);
         addLayoutConstraints(timerDisplay, populationCounterDisplay);
@@ -35,6 +35,9 @@ public final class TopPanel extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
+                if (initialSize.isEmpty()) {
+                    initialSize = Optional.of(TopPanel.this.getSize());
+                }
                 adjustInnerLabelsFontSize(timerDisplay, populationCounterDisplay);
             }
         });
@@ -73,7 +76,9 @@ public final class TopPanel extends JPanel {
     }
 
     private float getAdjustedFontSize(final int originalTextSize) {
-        return (float) originalTextSize * this.getWidth() / ScreenImpl.BASE_WINDOW_WIDTH;
+        final float resizedByHeight = (float) originalTextSize * this.getHeight() / this.initialSize.get().height;
+        final float resizedByWidth = (float) originalTextSize * this.getWidth() / this.initialSize.get().width;
+        return Math.min(resizedByHeight, resizedByWidth);
     }
 
     private void adjustInnerLabelsFontSize(final TimerDisplay timerDisplay,
