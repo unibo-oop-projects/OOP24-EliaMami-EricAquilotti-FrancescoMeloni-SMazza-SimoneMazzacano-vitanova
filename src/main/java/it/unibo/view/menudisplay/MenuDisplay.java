@@ -1,9 +1,11 @@
 package it.unibo.view.menudisplay;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +17,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import it.unibo.view.menu.MenuContent;
-import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Handles menu rendering for the view.
@@ -27,6 +28,7 @@ public final class MenuDisplay extends JPanel {
     private static final Font FONT = new Font("Verdana", Font.BOLD, FONT_SIZE);
     private static final float LINE_SPACING = 0.4f;
     private final JTextPane textPane = new JTextPane();
+    private transient Optional<Dimension> initialSize = Optional.empty();
 
     /**
      * Constructor for the menu display.
@@ -48,9 +50,13 @@ public final class MenuDisplay extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
+                if (initialSize.isEmpty()) {
+                    initialSize = Optional.of(MenuDisplay.this.getSize());
+                }
                 adjustFontSize();
             }
         });
+
         final SimpleAttributeSet centerAttr = new SimpleAttributeSet();
         StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
         StyleConstants.setLineSpacing(centerAttr, LINE_SPACING);
@@ -63,7 +69,9 @@ public final class MenuDisplay extends JPanel {
     }
 
     private void adjustFontSize() {
-        setFontSize((float) FONT_SIZE * this.getWidth() / ScreenImpl.BASE_WINDOW_WIDTH);
+        final float resizedByHeight = (float) FONT_SIZE * this.getHeight() / this.initialSize.get().height;
+        final float resizedByWidth = (float) FONT_SIZE * this.getWidth() / this.initialSize.get().width;
+        setFontSize(Math.min(resizedByHeight, resizedByWidth));
     }
 
     private void addLayoutCostraints() {
