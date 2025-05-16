@@ -2,6 +2,7 @@ package it.unibo.model.pickable;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.Random;
 
 import it.unibo.common.Position;
 import it.unibo.model.effect.Effect;
@@ -14,8 +15,10 @@ import it.unibo.view.sprite.Sprite;
  * Pickable power up factory implementation.
  */
 public final class PickableFactoryImpl implements PickableFactory {
-
     private final EffectFactory effectFactory;
+    private static final double MULTIPLY_VALUE = 1.25;
+    private static final Duration DURATION_EFFECT_VALUE = Duration.ofSeconds(5);
+    private static final Random RANDOM = new Random();
 
     /**
      * 
@@ -50,6 +53,11 @@ public final class PickableFactoryImpl implements PickableFactory {
     }
 
     @Override
+    public Pickable speedBoost(final Position spawnPosition) {
+        return speedBoost(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
+    }
+
+    @Override
     public Pickable sicknessResistenceBoost(final Position spawnPosition, final Duration duration, final double boost) {
         return new Pickable() {
             private final double x = spawnPosition.x();
@@ -74,6 +82,11 @@ public final class PickableFactoryImpl implements PickableFactory {
     }
 
     @Override
+    public Pickable sicknessResistenceBoost(final Position spawnPosition) {
+        return sicknessResistenceBoost(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
+    }
+
+    @Override
     public Pickable reproductionRangeBoost(final Position spawnPosition, final Duration duration, final double boost) {
         return new Pickable() {
             private final double x = spawnPosition.x();
@@ -95,5 +108,23 @@ public final class PickableFactoryImpl implements PickableFactory {
                 return this.reproductionAreaEffect;
             }
         };
+    }
+
+    @Override
+    public Pickable reproductionRangeBoost(final Position spawnPosition) {
+        return reproductionRangeBoost(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
+    }
+
+    @Override
+    public Pickable randomBoost(final Position spawnPosition){
+        final int randomPowerUp = RANDOM.nextInt(0, 3);
+        switch (randomPowerUp) {
+            case 0: 
+                return speedBoost(spawnPosition);
+            case 1: 
+                return sicknessResistenceBoost(spawnPosition);
+            default:
+                return reproductionRangeBoost(spawnPosition);
+        }
     }
 }

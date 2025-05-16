@@ -29,7 +29,7 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final PausableClock baseClock = new PausableClock(Clock.systemUTC());
-    private Chapter chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
+    private Chapter chapter = new ChapterImpl(1, inputHandler, baseClock);
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
@@ -115,7 +115,7 @@ public final class Game implements Runnable {
      */
     public void startGameplay() {
         this.isGameplayStarted = true;
-        this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
+        this.chapter = new ChapterImpl(1, inputHandler, baseClock);
     }
 
     /**
@@ -157,7 +157,7 @@ public final class Game implements Runnable {
      * Sets the new chapter and clears the screen.
      */
     public void setNewChapter() {
-        this.chapter = new ChapterImpl(inputHandler, 16, 16, baseClock);
+        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
         this.isGameplayStarted = false;
         this.skillPoints = Optional.empty();
         this.screen.loadHumans(Collections.emptyList());
@@ -166,11 +166,11 @@ public final class Game implements Runnable {
         this.screen.loadPopulationCounter(Optional.empty());
     }
 
-    public HumanStats getPlayerStats(){
+    public HumanStats getPlayerStats() {
         return chapter.getHumans().get(0).getStats();
     }
 
-    public void setSkillPoint(int value) { 
+    public void setSkillPoint(final int value) { 
         skillPoints = skillPoints.or(() -> Optional.of(value));
     }
 
@@ -180,5 +180,15 @@ public final class Game implements Runnable {
 
     public void updateSkillPoint() {
         skillPoints = Optional.of(skillPoints.get() > 0 ? skillPoints.get() - 1 : skillPoints.get());
+    }
+    
+    public void nextChapter(){
+        this.chapter = new ChapterImpl(chapter.getChapterNumber()+1, inputHandler, baseClock);
+        this.isGameplayStarted = true;
+        this.skillPoints = Optional.empty();
+    }
+
+    public Chapter getChaper(){
+        return chapter;
     }
 }

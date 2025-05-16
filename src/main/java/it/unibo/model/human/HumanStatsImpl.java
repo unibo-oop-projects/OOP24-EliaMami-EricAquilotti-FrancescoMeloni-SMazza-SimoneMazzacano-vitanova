@@ -2,6 +2,8 @@ package it.unibo.model.human;
 
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
+import it.unibo.model.effect.Effect;
+import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 
 /**
@@ -26,10 +28,10 @@ public final class HumanStatsImpl implements HumanStats {
     private ReproStrategy reproStrategy;
     private double baseRadius;
     private double actualRadius;
-    private int actualSpeedUpgrade = 0;
-    private int actualSicknessResistenceUpgrade = 0;
-    private int actualFertilityUpgrade = 0;
-    private int actualReproductionRangeUpgrade = 0;
+    private int speedUpgrade = 0;
+    private int sicknessResistenceUpgrade = 0;
+    private int fertilityUpgrade = 0;
+    private int reproductionRangeUpgrade = 0;
 
     /**
      * Constructor for human stats.
@@ -58,15 +60,12 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseSpeed() {
-        setSicknessResistence(this.actualSpeedUpgrade < MAX_SPEED_UPGRADE ? 
-            this.baseSpeed + SPEED_UPGRADE_VALUE : 
-            this.baseSpeed);
-        this.actualSpeedUpgrade = this.actualSpeedUpgrade < MAX_SPEED_UPGRADE ? this.actualSpeedUpgrade + 1 : this.actualSpeedUpgrade;
-    }
-
-    @Override
-    public void applySpeedModifier(final double moltiplyValue) {
-        this.actualSpeed = this.baseSpeed * moltiplyValue;
+        setSicknessResistence(this.speedUpgrade < MAX_SPEED_UPGRADE 
+            ? this.baseSpeed + SPEED_UPGRADE_VALUE 
+            : this.baseSpeed);
+        this.speedUpgrade = this.speedUpgrade < MAX_SPEED_UPGRADE
+        ? this.speedUpgrade + 1
+        : this.speedUpgrade;
     }
 
     @Override
@@ -95,15 +94,12 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseReproductionAreaRadius() {
-        setReproductionAreaRadius(this.actualReproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE ? 
+        setReproductionAreaRadius(this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE ? 
             getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE : 
             getReproStrategy().getReproductionArea().getRadius());
-        this.actualReproductionRangeUpgrade = this.actualReproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE ? this.actualReproductionRangeUpgrade + 1 : this.actualReproductionRangeUpgrade;
-    }
-
-    @Override
-    public void applyReproductionRangeModifier(final double moltiplyValue) {
-        this.actualRadius = this.baseRadius * moltiplyValue;
+        this.reproductionRangeUpgrade = this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE
+        ? this.reproductionRangeUpgrade + 1
+        : this.reproductionRangeUpgrade;
     }
 
     @Override
@@ -118,15 +114,12 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseSicknessResistence() {
-        setSicknessResistence(this.actualSicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE ? 
+        setSicknessResistence(this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE ? 
             this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE : 
             this.baseSicknessResistence);
-        this.actualSicknessResistenceUpgrade = this.actualSicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE ? this.actualSicknessResistenceUpgrade + 1 : this.actualSicknessResistenceUpgrade;
-    }
-
-    @Override
-    public void applySicknessResistenceModifier(final double moltiplyValue) {
-        this.actualSicknessResistence = this.baseSicknessResistence * moltiplyValue;
+        this.sicknessResistenceUpgrade = this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE
+        ? this.sicknessResistenceUpgrade + 1
+        : this.sicknessResistenceUpgrade;
     }
 
     @Override
@@ -140,56 +133,51 @@ public final class HumanStatsImpl implements HumanStats {
     }
 
     @Override
-    public void applyFertilityModifier(final double moltiplyValue) {
-        this.actualFertility = this.baseFertility * moltiplyValue;
-    }
-
-    @Override
     public void increaseFertility() {
-        setSicknessResistence(this.actualFertilityUpgrade < MAX_FERTILITY_UPGRADE ? 
+        setSicknessResistence(this.fertilityUpgrade < MAX_FERTILITY_UPGRADE ? 
             this.baseFertility + FERTILITY_UPGRADE_VALUE : 
             this.baseFertility);
-        this.actualFertilityUpgrade = this.actualFertilityUpgrade < MAX_FERTILITY_UPGRADE ? this.actualFertilityUpgrade + 1 : this.actualFertilityUpgrade;
+        this.fertilityUpgrade = this.fertilityUpgrade < MAX_FERTILITY_UPGRADE
+        ? this.fertilityUpgrade + 1
+        : this.fertilityUpgrade;
     }
 
     @Override
-    public void resetToBaseSpeed() {
-        this.actualSpeed = this.baseSpeed;
-    }
-
-    @Override
-    public void resetToBaseSicknessResistence() {
-        this.actualSicknessResistence = this.baseSicknessResistence;
-    }
-
-    @Override
-    public void resetToBaseReproductionRange() {
-        this.actualRadius = this.baseRadius;
-    }
-
-    @Override
-    public void resetToBaseFertility() {
-        this.actualFertility = this.baseFertility;
+    public void resetEffect(EffectType type) {
+        switch(type){
+            case SPEED:
+                this.actualSpeed = this.baseSpeed;
+                break;
+            case SICKNESS_RESISTENCE:
+                this.actualSicknessResistence = this.baseSicknessResistence;
+                break;
+            case REPRODUCTION_RANGE:
+                this.actualRadius = this.baseRadius;
+                break;
+            default:
+                this.actualFertility = this.baseFertility;
+                break;
+        }
     }
 
     @Override
     public int getActualSpeedUpgrade() {
-        return actualSpeedUpgrade;
+        return speedUpgrade;
     }
 
     @Override
     public int getActualSicknessResistenceUpgrade() {
-        return actualSicknessResistenceUpgrade;
+        return sicknessResistenceUpgrade;
     }
 
     @Override
     public int getActualReproductionRangeUpgrade() {
-        return actualReproductionRangeUpgrade;
+        return reproductionRangeUpgrade;
     }
 
     @Override
     public int getActualFertilityUpgrade() {
-        return actualFertilityUpgrade;
+        return fertilityUpgrade;
     }
 
     @Override
@@ -210,5 +198,23 @@ public final class HumanStatsImpl implements HumanStats {
     @Override
     public int getMaxFertilityUpgrade() {
         return MAX_FERTILITY_UPGRADE;
+    }
+
+    @Override
+    public void applyEffect(Effect effect) {
+        switch(effect.getType()){
+            case SPEED:
+                this.actualSpeed = this.baseSpeed * effect.getMultiplyValue();
+                break;
+            case SICKNESS_RESISTENCE:
+                this.actualSicknessResistence = this.baseSicknessResistence * effect.getMultiplyValue();
+                break;
+            case REPRODUCTION_RANGE:
+                this.actualRadius = this.baseRadius * effect.getMultiplyValue();
+                break;
+            default:
+                this.actualFertility = this.baseFertility * effect.getMultiplyValue();
+                break;
+        }
     }
 }

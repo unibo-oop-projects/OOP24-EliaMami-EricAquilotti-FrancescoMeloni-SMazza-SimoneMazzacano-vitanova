@@ -19,8 +19,7 @@ import it.unibo.view.menu.MenuContent;
  */
 public final class MenuDisplay extends JPanel {
     private static final long serialVersionUID = 5L;
-
-    private static final Font FONT = new Font("Verdana", Font.BOLD, 60);
+    private static final Font FONT = new Font("Verdana", Font.BOLD, 45);
     private static final float LINE_SPACING = 0.4f;
     private final JTextPane textPane = new JTextPane();
 

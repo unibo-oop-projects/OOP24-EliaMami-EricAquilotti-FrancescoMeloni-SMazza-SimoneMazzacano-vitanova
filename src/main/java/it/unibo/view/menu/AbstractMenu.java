@@ -23,7 +23,7 @@ public abstract class AbstractMenu implements Menu {
     private final InputHandler input;
     private final Game game;
 
-    public static int getSelectedOptionIndex(){
+    public static int getSelectedOptionIndex() {
         return selectedOptionIndex;
     }
 
@@ -112,7 +112,7 @@ public abstract class AbstractMenu implements Menu {
         return isVisible;
     }
 
-    private void onExit() {
+    protected void onExit() {
         isVisible = false;
         getGame().setGameplayState(false);
     }

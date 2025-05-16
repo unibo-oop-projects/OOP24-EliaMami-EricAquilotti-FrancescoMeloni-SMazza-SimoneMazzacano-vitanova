@@ -48,6 +48,13 @@ public record MenuOption(String desc, Consumer<Game> action) {
         });
     }
 
+    public static MenuOption nextChapter(final InputHandler input) {
+        return new MenuOption("Next Chapter", g -> {
+            g.nextChapter();
+            g.setMenu(new PauseMenu(input, g));
+        });
+    }
+
     /**
      * Executes the action associated with the menu option.
      * @param g the game controller

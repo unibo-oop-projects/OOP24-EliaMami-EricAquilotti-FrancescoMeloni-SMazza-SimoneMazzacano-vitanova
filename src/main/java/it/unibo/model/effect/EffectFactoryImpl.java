@@ -195,5 +195,4 @@ public final class EffectFactoryImpl implements EffectFactory {
             }
         };
     }
-
 }

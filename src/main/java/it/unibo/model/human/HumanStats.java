@@ -1,6 +1,8 @@
 package it.unibo.model.human;
 
 import it.unibo.common.Circle;
+import it.unibo.model.effect.Effect;
+import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 
 /**
@@ -20,12 +22,6 @@ public interface HumanStats {
     void increaseSpeed();
 
     /**
-     * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to speed's stat.
-     */
-    void applySpeedModifier(double multiplyValue);
-
-    /**
      * 
      * @return the reproStrategy.
      */
@@ -43,12 +39,6 @@ public interface HumanStats {
     void increaseReproductionAreaRadius();
 
     /**
-     * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to reproduction range's stat.
-     */
-    void applyReproductionRangeModifier(double multiplyValue);
-
-    /**
      * 
      * @return the probability to resiste sickness effect.
      */
@@ -58,12 +48,6 @@ public interface HumanStats {
      * Used to increase sickness resistence after finishing the chapter.
      */
     void increaseSicknessResistence();
-
-    /**
-     * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to sickness resistence's stat.
-     */
-    void applySicknessResistenceModifier(double multiplyValue);
 
     /**
      * 
@@ -76,31 +60,11 @@ public interface HumanStats {
      */
     void increaseFertility();
 
+    void applyEffect(Effect effect);
     /**
-     * @param multiplyValue is the value to multiply with.
-     * Used to apply power up and malus effects to fertility's stat.
+     * Resets actual stats to base stats based on the expired effect type.
      */
-    void applyFertilityModifier(double multiplyValue);
-
-    /**
-     * Resets actual speed to base speed.
-     */
-    void resetToBaseSpeed();
-
-    /**
-     * Resets actual sickness resistence to base sickness resistence.
-     */
-    void resetToBaseSicknessResistence();
-
-    /**
-     * Resets actual reproduction range to base reproduction range.
-     */
-    void resetToBaseReproductionRange();
-
-    /**
-     * Resets actual fertility to base fertility.
-     */
-    void resetToBaseFertility();
+    void resetEffect(EffectType type);
 
     int getActualSpeedUpgrade();
 

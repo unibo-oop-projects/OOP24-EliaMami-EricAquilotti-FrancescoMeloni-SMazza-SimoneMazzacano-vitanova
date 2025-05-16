@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import it.unibo.common.Circle;
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.model.effect.Effect;
+import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanStats;
 import it.unibo.view.sprite.HumanType;
@@ -98,41 +100,8 @@ class ReproStrategyFactoryTest {
                     }
 
                     @Override
-                    public void applySpeedModifier(final double multiplyValue) {
-                    }
-
-                    @Override
-                    public void applyReproductionRangeModifier(final double multiplyValue) {
-                    }
-
-                    @Override
-                    public void applySicknessResistenceModifier(final double multiplyValue) {
-                    }
-
-                    @Override
-                    public void resetToBaseSpeed() {
-                    }
-
-                    @Override
-                    public void resetToBaseSicknessResistence() {
-                    }
-
-                    @Override
-                    public void resetToBaseReproductionRange() {
-                    }
-
-                    @Override
-                    public void applyFertilityModifier(final double multiplyValue) {
-                    }
-
-                    @Override
-                    public void resetToBaseFertility() {
-                    }
-
-                    @Override
                     public int getActualSpeedUpgrade() {
-                        // TODO Auto-generated method stub
-                        throw new UnsupportedOperationException("Unimplemented method 'getActualSpeedUpgrade'");
+                        return 0;
                     }
 
                     @Override
@@ -168,6 +137,14 @@ class ReproStrategyFactoryTest {
                     @Override
                     public int getMaxFertilityUpgrade() {
                         return 0;
+                    }
+
+                    @Override
+                    public void resetEffect(EffectType type) {
+                    }
+
+                    @Override
+                    public void applyEffect(Effect effect) {
                     }
                 };
             }

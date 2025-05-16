@@ -27,6 +27,12 @@ public interface Chapter {
 
     /**
      * 
+     * @return the gameMap.
+     */
+    int getChapterNumber();
+
+    /**
+     * 
      * @return the list of humans except player that are currently on the map.
      */
     List<Human> getHumans();
