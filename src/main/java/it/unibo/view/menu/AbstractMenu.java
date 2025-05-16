@@ -113,8 +113,13 @@ public abstract class AbstractMenu implements Menu {
             : options.get(index).desc();
     }
 
+    /**
+     * Gets the content of the menu.
+     * Can be overridden by subclasses to provide custom behavior (e.g. custom text size).
+     * @return the content of the menu
+     */
     @Override
-    public final MenuContent getContent() {
+    public MenuContent getContent() {
         if (isVisible) {
             final List<String> list = IntStream.range(0, options.size())
                 .mapToObj(this::formatOptionText).toList();

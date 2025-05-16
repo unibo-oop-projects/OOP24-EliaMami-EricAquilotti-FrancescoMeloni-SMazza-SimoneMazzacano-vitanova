@@ -57,9 +57,13 @@ public final class MenuDisplay extends JPanel {
         textPane.setParagraphAttributes(centerAttr, false);
     }
 
-    private void adjustFontSize() {
+    private void setFontSize(final float size) {
         final Font base = textPane.getFont();
-        textPane.setFont(base.deriveFont((float) FONT_SIZE * this.getWidth() / ScreenImpl.BASE_WINDOW_WIDTH));
+        textPane.setFont(base.deriveFont(size));
+    }
+
+    private void adjustFontSize() {
+        setFontSize((float) FONT_SIZE * this.getWidth() / ScreenImpl.BASE_WINDOW_WIDTH);
     }
 
     private void addLayoutCostraints() {
@@ -91,6 +95,7 @@ public final class MenuDisplay extends JPanel {
         ).collect(Collectors.joining("\n"));
 
         SwingUtilities.invokeLater(() -> {
+            menu.textSize().ifPresentOrElse(this::setFontSize, () -> setFontSize(FONT_SIZE));
             textPane.setText(toDraw);
         });
     }
