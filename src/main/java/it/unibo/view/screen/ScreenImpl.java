@@ -21,10 +21,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 import it.unibo.common.Position;
 import it.unibo.common.Text;
 import it.unibo.controller.InputHandler;
@@ -48,8 +46,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
-    private static final int TEXT_LATERAL_MARGIN = 200;
-    private static final int TOP_MARGIN = 150;
     /**
      * Base window width, screen width.
      */
@@ -83,7 +79,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient Graphics2D bufferGraphics;
     private final transient TimerDisplay timerLabel = new TimerDisplay();
     private final transient PopulationCounterDisplay populationCounterLabel = new PopulationCounterDisplay();
-    private final transient JPanel topPanel = new JPanel(new SpringLayout());
+    private final transient TopPanel topPanelContainer = new TopPanel(timerLabel, populationCounterLabel);
     private final transient MenuDisplay menuDisplay = new MenuDisplay();
 
     /**
@@ -94,7 +90,8 @@ public final class ScreenImpl extends JPanel implements Screen {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
-        initializeInnerComponents();
+        this.add(topPanelContainer, BorderLayout.NORTH);
+        this.add(menuDisplay, BorderLayout.CENTER);
 
         window.setLayout(new BorderLayout());
         window.setSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
@@ -125,45 +122,6 @@ public final class ScreenImpl extends JPanel implements Screen {
         in.defaultReadObject();
         humansToDraw = new ArrayList<>();
         pickableToDraw = new ArrayList<>();
-    }
-
-    private void initializeInnerComponents() {
-        topPanel.setOpaque(false);
-        topPanel.setBorder(BorderFactory.createEmptyBorder(TOP_MARGIN, 0, 0, 0));
-        topPanel.add(timerLabel);
-        topPanel.add(populationCounterLabel);
-
-        final SpringLayout layout = (SpringLayout) topPanel.getLayout();
-        layout.putConstraint(
-            SpringLayout.HORIZONTAL_CENTER,
-            timerLabel,
-            0,
-            SpringLayout.HORIZONTAL_CENTER,
-            topPanel
-        );
-        layout.putConstraint(
-            SpringLayout.EAST,
-            populationCounterLabel,
-            -TEXT_LATERAL_MARGIN,
-            SpringLayout.EAST,
-            topPanel
-        );
-        layout.putConstraint(
-            SpringLayout.SOUTH,
-            timerLabel,
-            0,
-            SpringLayout.SOUTH,
-            topPanel
-        );
-        layout.putConstraint(
-            SpringLayout.SOUTH,
-            populationCounterLabel,
-            0,
-            SpringLayout.SOUTH,
-            topPanel
-        );
-        this.add(topPanel, BorderLayout.NORTH);
-        this.add(menuDisplay, BorderLayout.CENTER);
     }
 
     @Override

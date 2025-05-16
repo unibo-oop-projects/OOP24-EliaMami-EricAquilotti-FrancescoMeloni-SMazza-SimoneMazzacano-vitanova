@@ -95,7 +95,7 @@ public final class MenuDisplay extends JPanel {
         ).collect(Collectors.joining("\n"));
 
         SwingUtilities.invokeLater(() -> {
-            menu.textSize().ifPresentOrElse(this::setFontSize, () -> setFontSize(FONT_SIZE));
+            menu.textSize().ifPresentOrElse(this::setFontSize, this::adjustFontSize);
             textPane.setText(toDraw);
         });
     }
