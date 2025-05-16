@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -89,9 +91,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     public ScreenImpl(final InputHandler inputHandler) {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.setLayout(new BorderLayout());
-        this.add(topPanelContainer, BorderLayout.NORTH);
-        this.add(menuDisplay, BorderLayout.CENTER);
+        this.setLayout(new GridBagLayout());
+        addInnerComponents();
 
         window.setLayout(new BorderLayout());
         window.setSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
@@ -106,6 +107,22 @@ public final class ScreenImpl extends JPanel implements Screen {
         this.setOffset(centerX, centerY);
         initializeBuffer();
         executor.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
+    }
+
+    private void addInnerComponents() {
+        final GridBagConstraints gbc = new GridBagConstraints();
+        final float topPanelHeightPercentage = 0.1f; // 10% of the height
+        final float menuDisplayHeightPercentage = 0.9f; // 90% of the height
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = topPanelHeightPercentage;
+        gbc.fill = GridBagConstraints.BOTH;
+        this.add(topPanelContainer, gbc);
+
+        gbc.gridy = 1;
+        gbc.weighty = menuDisplayHeightPercentage;
+        this.add(menuDisplay, gbc);
     }
 
     private void initializeBuffer() {
