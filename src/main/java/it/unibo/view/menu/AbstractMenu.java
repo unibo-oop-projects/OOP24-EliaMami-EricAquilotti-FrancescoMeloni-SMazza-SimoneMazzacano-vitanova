@@ -23,11 +23,16 @@ public abstract class AbstractMenu implements Menu {
     private final InputHandler input;
     private final Game game;
 
+    /**
+     * 
+     * @return 
+     */
     public static int getSelectedOptionIndex() {
         return selectedOptionIndex;
     }
 
     /**
+     * 
      * @return the input handler
      */
     protected final InputHandler getInput() {
@@ -35,6 +40,7 @@ public abstract class AbstractMenu implements Menu {
     }
 
     /**
+     * 
      * @return the game controller
      */
     protected final Game getGame() {
@@ -55,6 +61,16 @@ public abstract class AbstractMenu implements Menu {
         this(input, game, options, isInitiallyVisible, subtitle, title, 0);
     }
 
+    /**
+     * 
+     * @param input
+     * @param game
+     * @param options
+     * @param isInitiallyVisible
+     * @param subtitle
+     * @param title
+     * @param newSelectedOptionIndex
+     */
     protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
     final boolean isInitiallyVisible, final String subtitle, final String title, final int newSelectedOptionIndex) {
         this.title = title;
@@ -64,6 +80,10 @@ public abstract class AbstractMenu implements Menu {
         this.options = options;
         this.isVisible = isInitiallyVisible;
         getGame().setGameplayState(isInitiallyVisible);
+        setSelectedOptionIndex(newSelectedOptionIndex);
+    }
+
+    private void setSelectedOptionIndex(final int newSelectedOptionIndex) {
         selectedOptionIndex = newSelectedOptionIndex;
     }
 
@@ -75,10 +95,11 @@ public abstract class AbstractMenu implements Menu {
             toggleMenu();
             timer = TIMER_VALUE;
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S))
-         && selectedOptionIndex + 1 < options.size()) {
+                && selectedOptionIndex + 1 < options.size()) {
             selectedOptionIndex++;
             timer = TIMER_VALUE;
-        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W)) && selectedOptionIndex > 0) {
+        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W)) 
+                && selectedOptionIndex > 0) {
             selectedOptionIndex--;
             timer = TIMER_VALUE;
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE))) {
@@ -112,6 +133,9 @@ public abstract class AbstractMenu implements Menu {
         return isVisible;
     }
 
+    /**
+     * 
+     */
     protected void onExit() {
         isVisible = false;
         getGame().setGameplayState(false);

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import it.unibo.common.ChapterState;
@@ -32,7 +31,6 @@ import it.unibo.view.screen.ScreenImpl;
  */
 public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private final double maleSpawningProbabilityOfPlayer;
     private static final int STARTING_POPULATION_GOAL = 5;
     private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(300);
     private CooldownGate spawnPowerupRate;
@@ -45,7 +43,6 @@ public final class ChapterImpl implements Chapter {
     private final List<Human> humans = new CopyOnWriteArrayList<>();
     private final List<Pickable> pickables = new CopyOnWriteArrayList<>();
     private final List<Pickable> activatedPickables = new CopyOnWriteArrayList<>();
-    private final Random random = new Random();
     private final Timer timer;
     private final Clock clock;
     private static final int STARTING_ROWS = 16;
@@ -54,12 +51,11 @@ public final class ChapterImpl implements Chapter {
 
     /**
      * Sets up all the parameters.
+     * @param chapterNumber the current chapter number.
      * @param inputHandler
-     * @param rows the number of rows of the map.
-     * @param coloumns the number of coloumns of the map.
      * @param baseClock the clock used for the factories and the timer.
      */
-    public ChapterImpl(int chapterNumber, final InputHandler inputHandler, final Clock baseClock) {
+    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock) {
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS * chapterNumber, STARTING_COLOUMNS * chapterNumber);
         this.inputHandler = inputHandler;
@@ -69,9 +65,9 @@ public final class ChapterImpl implements Chapter {
         this.pickablePowerUpFactory = new PickableFactoryImpl(baseClock);
         this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), baseClock); 
         spawnHumans(inputHandler);
-        this.maleSpawningProbabilityOfPlayer = 1 - getPlayer().getStats().getFertility();
     }
 
+    @Override
     public int getChapterNumber() {
         return chapterNumber;
     }

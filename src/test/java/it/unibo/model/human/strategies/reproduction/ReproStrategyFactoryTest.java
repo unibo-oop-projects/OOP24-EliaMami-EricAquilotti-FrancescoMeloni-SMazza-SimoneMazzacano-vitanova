@@ -140,11 +140,11 @@ class ReproStrategyFactoryTest {
                     }
 
                     @Override
-                    public void resetEffect(EffectType type) {
+                    public void resetEffect(final EffectType type) {
                     }
 
                     @Override
-                    public void applyEffect(Effect effect) {
+                    public void applyEffect(final Effect effect) {
                     }
                 };
             }

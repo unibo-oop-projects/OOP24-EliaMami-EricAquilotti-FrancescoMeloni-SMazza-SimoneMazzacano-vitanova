@@ -48,6 +48,11 @@ public record MenuOption(String desc, Consumer<Game> action) {
         });
     }
 
+    /**
+     * Static factory method for the next chapter menu option.
+     * @param input the input handler
+     * @return a MenuOption to go to the next chapter
+     */
     public static MenuOption nextChapter(final InputHandler input) {
         return new MenuOption("Next Chapter", g -> {
             g.nextChapter();

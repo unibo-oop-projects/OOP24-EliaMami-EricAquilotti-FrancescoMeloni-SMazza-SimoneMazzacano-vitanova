@@ -166,29 +166,51 @@ public final class Game implements Runnable {
         this.screen.loadPopulationCounter(Optional.empty());
     }
 
+    /**
+     * This method gets player from all humans and return his stats.
+     * @return player's stats.
+     */
     public HumanStats getPlayerStats() {
         return chapter.getHumans().get(0).getStats();
     }
 
+    /**
+     * This method sets skill points value if skill points isn't already initialized.
+     * @param value the value to initialize skill points to.
+     */
     public void setSkillPoint(final int value) { 
         skillPoints = skillPoints.or(() -> Optional.of(value));
     }
 
+    /**
+     * This method returns skill points value.
+     * @return skill point's value.
+     */
     public int getSkillPoint() {
         return skillPoints.get();
     }
 
+    /**
+     * This method update the variable skill point if skill point is greater than zero.
+     */
     public void updateSkillPoint() {
         skillPoints = Optional.of(skillPoints.get() > 0 ? skillPoints.get() - 1 : skillPoints.get());
     }
-    
-    public void nextChapter(){
-        this.chapter = new ChapterImpl(chapter.getChapterNumber()+1, inputHandler, baseClock);
+
+    /**
+     * Set the next chapter.
+     */
+    public void nextChapter() {
+        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock);
         this.isGameplayStarted = true;
         this.skillPoints = Optional.empty();
     }
 
-    public Chapter getChaper(){
+    /**
+     * This method returns the current chapter.
+     * @return the current chapter.
+     */
+    public Chapter getChaper() {
         return chapter;
     }
 }

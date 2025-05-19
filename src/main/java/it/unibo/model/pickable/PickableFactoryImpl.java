@@ -116,7 +116,7 @@ public final class PickableFactoryImpl implements PickableFactory {
     }
 
     @Override
-    public Pickable randomBoost(final Position spawnPosition){
+    public Pickable randomBoost(final Position spawnPosition) {
         final int randomPowerUp = RANDOM.nextInt(0, 3);
         switch (randomPowerUp) {
             case 0: 
