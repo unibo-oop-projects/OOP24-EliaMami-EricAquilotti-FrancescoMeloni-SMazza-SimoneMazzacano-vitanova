@@ -13,8 +13,11 @@ import javax.swing.SwingUtilities;
 public final class TimerDisplay extends JLabel {
     private static final long serialVersionUID = 3L;
 
+    /**
+     * The size of the text in the timer display.
+     */
+    public static final int TEXT_SIZE = 60;
     private static final Color TEXT_COLOR = Color.WHITE;
-    private static final int TEXT_SIZE = 60;
 
     /**
      * Constructor for the timer display.

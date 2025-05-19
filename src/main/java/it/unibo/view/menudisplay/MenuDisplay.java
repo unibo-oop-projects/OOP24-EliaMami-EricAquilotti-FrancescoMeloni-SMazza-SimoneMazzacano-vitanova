@@ -1,7 +1,11 @@
 package it.unibo.view.menudisplay;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,9 +23,12 @@ import it.unibo.view.menu.MenuContent;
  */
 public final class MenuDisplay extends JPanel {
     private static final long serialVersionUID = 5L;
-    private static final Font FONT = new Font("Verdana", Font.BOLD, 45);
+
+    private static final int FONT_SIZE = 60;
+    private static final Font FONT = new Font("Verdana", Font.BOLD, FONT_SIZE);
     private static final float LINE_SPACING = 0.4f;
     private final JTextPane textPane = new JTextPane();
+    private transient Optional<Dimension> initialSize = Optional.empty();
 
     /**
      * Constructor for the menu display.
@@ -40,10 +47,31 @@ public final class MenuDisplay extends JPanel {
         textPane.setFont(FONT);
         textPane.setForeground(Color.WHITE);
         textPane.setOpaque(false);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                if (initialSize.isEmpty()) {
+                    initialSize = Optional.of(MenuDisplay.this.getSize());
+                }
+                adjustFontSize();
+            }
+        });
+
         final SimpleAttributeSet centerAttr = new SimpleAttributeSet();
         StyleConstants.setAlignment(centerAttr, StyleConstants.ALIGN_CENTER);
         StyleConstants.setLineSpacing(centerAttr, LINE_SPACING);
         textPane.setParagraphAttributes(centerAttr, false);
+    }
+
+    private void setFontSize(final float size) {
+        final Font base = textPane.getFont();
+        textPane.setFont(base.deriveFont(size));
+    }
+
+    private void adjustFontSize() {
+        final float resizedByHeight = (float) FONT_SIZE * this.getHeight() / this.initialSize.get().height;
+        final float resizedByWidth = (float) FONT_SIZE * this.getWidth() / this.initialSize.get().width;
+        setFontSize(Math.min(resizedByHeight, resizedByWidth));
     }
 
     private void addLayoutCostraints() {
@@ -75,6 +103,7 @@ public final class MenuDisplay extends JPanel {
         ).collect(Collectors.joining("\n"));
 
         SwingUtilities.invokeLater(() -> {
+            menu.textSize().ifPresentOrElse(this::setFontSize, this::adjustFontSize);
             textPane.setText(toDraw);
         });
     }

@@ -14,11 +14,14 @@ import it.unibo.model.chapter.PopulationCounter;
 public final class PopulationCounterDisplay extends JLabel {
     private static final long serialVersionUID = 4L;
 
+    /**
+     * The size of the text in the population counter display.
+     */
+    public static final int TEXT_SIZE = 60;
     private static final Color TEXT_COLOR = Color.WHITE;
-    private static final int TEXT_SIZE = 60;
 
     /**
-     * Contructor for the population counter display.
+     * Constructor for the population counter display.
      */
     public PopulationCounterDisplay() {
         final Font font = new Font("Verdana", Font.BOLD, TEXT_SIZE);
