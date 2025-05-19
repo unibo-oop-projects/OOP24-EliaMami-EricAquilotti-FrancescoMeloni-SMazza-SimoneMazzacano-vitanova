@@ -24,11 +24,12 @@ import it.unibo.view.menu.MenuContent;
 public final class MenuDisplay extends JPanel {
     private static final long serialVersionUID = 5L;
 
-    private static final int FONT_SIZE = 60;
-    private static final Font FONT = new Font("Verdana", Font.BOLD, FONT_SIZE);
+    private static final int DEFAULT_FONT_SIZE = 60;
+    private static final Font FONT = new Font("Verdana", Font.BOLD, DEFAULT_FONT_SIZE);
     private static final float LINE_SPACING = 0.4f;
     private final JTextPane textPane = new JTextPane();
     private transient Optional<Dimension> initialSize = Optional.empty();
+    private float currentTextSize = DEFAULT_FONT_SIZE;
 
     /**
      * Constructor for the menu display.
@@ -38,7 +39,7 @@ public final class MenuDisplay extends JPanel {
         this.setOpaque(false);
         initializeComponents();
         this.add(textPane);
-        addLayoutCostraints();
+        addLayoutConstraints();
     }
 
     private void initializeComponents() {
@@ -69,12 +70,12 @@ public final class MenuDisplay extends JPanel {
     }
 
     private void adjustFontSize() {
-        final float resizedByHeight = (float) FONT_SIZE * this.getHeight() / this.initialSize.get().height;
-        final float resizedByWidth = (float) FONT_SIZE * this.getWidth() / this.initialSize.get().width;
+        final float resizedByHeight = currentTextSize * this.getHeight() / this.initialSize.get().height;
+        final float resizedByWidth = currentTextSize * this.getWidth() / this.initialSize.get().width;
         setFontSize(Math.min(resizedByHeight, resizedByWidth));
     }
 
-    private void addLayoutCostraints() {
+    private void addLayoutConstraints() {
         final SpringLayout layout = (SpringLayout) this.getLayout();
         layout.putConstraint(
             SpringLayout.HORIZONTAL_CENTER,
@@ -102,8 +103,9 @@ public final class MenuDisplay extends JPanel {
             menu.options().stream()
         ).collect(Collectors.joining("\n"));
 
+        currentTextSize = menu.textSize().map(i -> i.floatValue()).orElse((float) DEFAULT_FONT_SIZE);
         SwingUtilities.invokeLater(() -> {
-            menu.textSize().ifPresentOrElse(this::setFontSize, this::adjustFontSize);
+            adjustFontSize();
             textPane.setText(toDraw);
         });
     }
