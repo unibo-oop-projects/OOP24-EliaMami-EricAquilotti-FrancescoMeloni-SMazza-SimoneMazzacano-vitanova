@@ -1,6 +1,7 @@
 package it.unibo.view.menu;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
@@ -10,13 +11,21 @@ import it.unibo.controller.InputHandler;
  * @param desc the description of the menu option
  * @param action the action to be performed when the option is selected by the user
  */
-public record MenuOption(String desc, Consumer<Game> action) {
+public record MenuOption(Supplier<String> desc, Consumer<Game> action) {
     /**
      * Static factory method for the MenuOption class.
      * @param desc the description of the menu option
      * @param action the action to be performed when the option is selected by the user
      */
     public static MenuOption of(final String desc, final Consumer<Game> action) {
+        return new MenuOption(() -> desc, action);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public static MenuOption of(final Supplier<String> desc, final Consumer<Game> action) {
         return new MenuOption(desc, action);
     }
 
@@ -24,7 +33,7 @@ public record MenuOption(String desc, Consumer<Game> action) {
      * @return a MenuOption to quit the game
      */
     public static MenuOption quit() {
-        return new MenuOption("Quit", Game::exit);
+        return new MenuOption(() -> "Quit", Game::exit);
     }
 
     /**
@@ -33,7 +42,7 @@ public record MenuOption(String desc, Consumer<Game> action) {
      * @return a MenuOption with an empty action
      */
     public static MenuOption emptyAction(final String desc) {
-        return new MenuOption(desc, g -> { });
+        return new MenuOption(() -> desc, g -> { });
     }
 
     /**
@@ -42,7 +51,7 @@ public record MenuOption(String desc, Consumer<Game> action) {
      * @return a MenuOption to go back to the home menu
      */
     public static MenuOption home(final InputHandler input) {
-        return new MenuOption("Home", g -> {
+        return new MenuOption(() -> "Home", g -> {
             g.setNewChapter();
             g.setMenu(new StartMenu(input, g));
         });
@@ -54,7 +63,7 @@ public record MenuOption(String desc, Consumer<Game> action) {
      * @return a MenuOption to go to the next chapter
      */
     public static MenuOption nextChapter(final InputHandler input) {
-        return new MenuOption("Next Chapter", g -> {
+        return new MenuOption(() -> "Next Chapter", g -> {
             g.nextChapter();
             g.setMenu(new PauseMenu(input, g));
         });

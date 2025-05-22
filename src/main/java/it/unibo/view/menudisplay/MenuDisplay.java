@@ -103,7 +103,7 @@ public final class MenuDisplay extends JPanel {
             menu.options().stream()
         ).collect(Collectors.joining("\n"));
 
-        currentTextSize = menu.textSize().map(i -> i.floatValue()).orElse((float) DEFAULT_FONT_SIZE);
+        currentTextSize = menu.textSize().map(Integer::floatValue).orElse((float) DEFAULT_FONT_SIZE);
         SwingUtilities.invokeLater(() -> {
             adjustFontSize();
             textPane.setText(toDraw);
