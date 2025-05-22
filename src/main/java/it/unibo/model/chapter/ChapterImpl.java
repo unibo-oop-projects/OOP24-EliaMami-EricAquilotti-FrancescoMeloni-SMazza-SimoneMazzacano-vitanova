@@ -163,7 +163,7 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public Human getPlayer() {
-        return humans.get(0);
+        return humans.getFirst();
     }
 
     @Override

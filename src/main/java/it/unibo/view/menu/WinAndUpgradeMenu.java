@@ -21,19 +21,19 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
      */
     public WinAndUpgradeMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
-            MenuOption.of("Speed: " 
+            MenuOption.of(() -> "Speed: " 
             + updateUpgradeText(k -> k.getPlayerStats().getActualSpeedUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSpeed(), g);
             }),
-            MenuOption.of("Resistence: " 
+            MenuOption.of(() -> "Resistence: " 
             + updateUpgradeText(k -> k.getPlayerStats().getActualSicknessResistenceUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSicknessResistence(), g);
             }),
-            MenuOption.of("Area: " 
+            MenuOption.of(() -> "Area: " 
             + updateUpgradeText(k -> k.getPlayerStats().getActualReproductionRangeUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseReproductionAreaRadius(), g);
             }), 
-            MenuOption.of("Fertility: " 
+            MenuOption.of(() -> "Fertility: " 
             + updateUpgradeText(k -> k.getPlayerStats().getActualFertilityUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseFertility(), g);
             }),
@@ -42,9 +42,8 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
             MenuOption.quit()
         ), 
         true,
-        "You have " + game.getSkillPoint() + " skill point.",
-        "You won the Chapter! Upgrade your skills.",
-        getSelectedOptionIndex()
+        () -> "You have " + game.getSkillPoint() + " skill point.",
+        "You won the Chapter! Upgrade your skills."
         );
     }
 
@@ -60,9 +59,7 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     }
 
     @Override
-    protected void onExit() {
-        getGame().setGameplayState(false);
-    }
+    protected void onExit() { }
 
     @Override
     public MenuContent getContent() {

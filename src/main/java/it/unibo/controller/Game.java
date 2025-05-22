@@ -171,7 +171,7 @@ public final class Game implements Runnable {
      * @return player's stats.
      */
     public HumanStats getPlayerStats() {
-        return chapter.getHumans().get(0).getStats();
+        return chapter.getPlayer().getStats();
     }
 
     /**
@@ -194,7 +194,7 @@ public final class Game implements Runnable {
      * This method update the variable skill point if skill point is greater than zero.
      */
     public void updateSkillPoint() {
-        skillPoints = Optional.of(skillPoints.get() > 0 ? skillPoints.get() - 1 : skillPoints.get());
+        skillPoints = Optional.of(skillPoints.get() > 0 ? (Integer) (skillPoints.get() - 1) : skillPoints.get());
     }
 
     /**

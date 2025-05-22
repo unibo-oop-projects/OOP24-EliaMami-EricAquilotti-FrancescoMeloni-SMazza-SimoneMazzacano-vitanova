@@ -4,6 +4,7 @@ import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 
@@ -16,20 +17,12 @@ public abstract class AbstractMenu implements Menu {
 
     private final List<MenuOption> options;
     private final String title;
-    private final String subtitle;
-    private static int selectedOptionIndex;
+    private final Supplier<String> subtitle;
+    private int selectedOptionIndex;
     private boolean isVisible;
     private int timer = TIMER_VALUE;
     private final InputHandler input;
     private final Game game;
-
-    /**
-     * 
-     * @return 
-     */
-    public static int getSelectedOptionIndex() {
-        return selectedOptionIndex;
-    }
 
     /**
      * 
@@ -57,22 +50,7 @@ public abstract class AbstractMenu implements Menu {
      * @param title the title of the menu
      */
     protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
-    final boolean isInitiallyVisible, final String subtitle, final String title) {
-        this(input, game, options, isInitiallyVisible, subtitle, title, 0);
-    }
-
-    /**
-     * 
-     * @param input
-     * @param game
-     * @param options
-     * @param isInitiallyVisible
-     * @param subtitle
-     * @param title
-     * @param newSelectedOptionIndex
-     */
-    protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
-    final boolean isInitiallyVisible, final String subtitle, final String title, final int newSelectedOptionIndex) {
+    final boolean isInitiallyVisible, final Supplier<String> subtitle, final String title) {
         this.title = title;
         this.subtitle = subtitle;
         this.input = input;
@@ -80,11 +58,20 @@ public abstract class AbstractMenu implements Menu {
         this.options = options;
         this.isVisible = isInitiallyVisible;
         getGame().setGameplayState(isInitiallyVisible);
-        setSelectedOptionIndex(newSelectedOptionIndex);
     }
 
-    private void setSelectedOptionIndex(final int newSelectedOptionIndex) {
-        selectedOptionIndex = newSelectedOptionIndex;
+    /**
+     * Constructor for the AbstractMenu class.
+     * @param input the input handler
+     * @param game the game controller
+     * @param options the list of MenuOption
+     * @param isInitiallyVisible the initial state of the menu
+     * @param subtitle the subtitle of the menu
+     * @param title the title of the menu
+     */
+    protected AbstractMenu(final InputHandler input, final Game game, final List<MenuOption> options,
+    final boolean isInitiallyVisible, final String subtitle, final String title) {
+        this(input, game, options, isInitiallyVisible, () -> subtitle, title);
     }
 
     @Override
@@ -104,6 +91,7 @@ public abstract class AbstractMenu implements Menu {
             timer = TIMER_VALUE;
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE))) {
             onExit();
+            timer = TIMER_VALUE;
             options.get(selectedOptionIndex).execute(game);
         }
     }
@@ -143,8 +131,8 @@ public abstract class AbstractMenu implements Menu {
 
     private String formatOptionText(final int index) {
         return selectedOptionIndex == index 
-            ? applySelectedFormat(options.get(index).desc()) 
-            : options.get(index).desc();
+            ? applySelectedFormat(options.get(index).desc().get()) 
+            : options.get(index).desc().get();
     }
 
     /**
@@ -157,7 +145,7 @@ public abstract class AbstractMenu implements Menu {
         if (isVisible) {
             final List<String> list = IntStream.range(0, options.size())
                 .mapToObj(this::formatOptionText).toList();
-            return new MenuContent(title, subtitle, list);
+            return new MenuContent(title, subtitle.get(), list);
         }
         return MenuContent.empty();
     }
