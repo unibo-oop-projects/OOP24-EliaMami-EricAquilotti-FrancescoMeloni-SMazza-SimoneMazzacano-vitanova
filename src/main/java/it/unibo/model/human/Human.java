@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import java.io.Serializable;
+
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
 import it.unibo.view.sprite.HumanType;
@@ -8,7 +10,7 @@ import it.unibo.view.sprite.Sprite;
 /**
  * Models a human that can move inside the map.
  */
-public interface Human {
+public interface Human extends Serializable {
 
     /**
      * 

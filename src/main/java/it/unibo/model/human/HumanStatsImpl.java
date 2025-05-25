@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import java.io.Serializable;
+
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.model.effect.Effect;
@@ -9,7 +11,8 @@ import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 /**
  * Implementation of human stats that handles all human's stats.
  */
-public final class HumanStatsImpl implements HumanStats {
+public final class HumanStatsImpl implements HumanStats, Serializable {
+    private static final long serialVersionUID = 1L;
     private static final double SPEED_UPGRADE_VALUE = .5;
     private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .05;
     private static final double FERTILITY_UPGRADE_VALUE = .05;
@@ -26,7 +29,7 @@ public final class HumanStatsImpl implements HumanStats {
     private double actualFertility;
     private boolean hasBeenSick;
     private boolean isSick;
-    private ReproStrategy reproStrategy;
+    private transient ReproStrategy reproStrategy;
     private double baseRadius;
     private double actualRadius;
     private int speedUpgrade;
