@@ -29,7 +29,7 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final PausableClock baseClock = new PausableClock(Clock.systemUTC());
-    private Chapter chapter = new ChapterImpl(1, inputHandler, baseClock);
+    private Chapter chapter;
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
@@ -39,6 +39,7 @@ public final class Game implements Runnable {
      * Starts the game engine.
      */
     public Game() {
+        chapter = new ChapterImpl(1, inputHandler, baseClock);
         gameThread.start();
     }
 
@@ -202,7 +203,7 @@ public final class Game implements Runnable {
      * Set the next chapter.
      */
     public void nextChapter() {
-        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock);
+        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
         this.isGameplayStarted = true;
         this.skillPoints = Optional.empty();
     }
