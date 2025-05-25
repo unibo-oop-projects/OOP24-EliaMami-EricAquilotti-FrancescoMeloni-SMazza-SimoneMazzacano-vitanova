@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import java.io.Serializable;
+
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
@@ -7,7 +9,7 @@ import it.unibo.model.chapter.map.Map;
 /**
  * Models a factory of NPCs that can be male or female.
  */
-public interface HumanFactory {
+public interface HumanFactory extends Serializable {
 
     /**
      * 

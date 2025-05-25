@@ -1,6 +1,10 @@
 package it.unibo.controller;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.Clock;
 import java.util.Collections;
 import java.util.Optional;
@@ -12,6 +16,7 @@ import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.human.HumanStats;
+import it.unibo.model.savemanager.SaveManager;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -34,11 +39,21 @@ public final class Game implements Runnable {
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
     private Optional<Integer> skillPoints = Optional.empty();
+    private File saveFile = new File("Stats.txt");
+    private SaveManager saveManager;
+    private boolean isNewFile;
 
     /**
      * Starts the game engine.
      */
     public Game() {
+        try{
+            saveFile.createNewFile();
+            saveManager = new SaveManager(new FileInputStream(saveFile), new FileOutputStream(saveFile));
+            chapter = new ChapterImpl(1, inputHandler, baseClock);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         gameThread.start();
     }
 
@@ -143,6 +158,7 @@ public final class Game implements Runnable {
      * Exits the game.
      */
     public void exit() {
+        saveGame();
         System.exit(0);
     }
 
@@ -202,6 +218,7 @@ public final class Game implements Runnable {
      */
     public void nextChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock);
+        saveGame();
         this.isGameplayStarted = true;
         this.skillPoints = Optional.empty();
     }
@@ -212,5 +229,12 @@ public final class Game implements Runnable {
      */
     public Chapter getChaper() {
         return chapter;
+    }
+    public void saveGame() {
+        try {
+            saveManager.saveObj(getPlayerStats());
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
