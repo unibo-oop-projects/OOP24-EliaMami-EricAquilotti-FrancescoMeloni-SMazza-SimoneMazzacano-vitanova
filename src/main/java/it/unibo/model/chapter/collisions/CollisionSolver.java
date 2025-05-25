@@ -13,6 +13,7 @@ import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
+import it.unibo.model.human.sickness.SicknessManager;
 import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
@@ -30,12 +31,14 @@ public final class CollisionSolver {
      * @param maleSpawiningProbability the probability of the newborn to be a male.
      * @param map the map where to spawn the humans.
      * @param humanFactory the factory used to create the newborns.
+     * @param sicknessManager the sickness manager used to handle the sickness between humans.
      */
     public static void solveCollisions(
             final List<Human> currentPopulation,
             final double maleSpawiningProbability,
             final Map map,
-            final HumanFactory humanFactory
+            final HumanFactory humanFactory,
+            final SicknessManager sicknessManager
     ) {
         final Random random = new Random();
         final List<Human> generated = new ArrayList<>();
@@ -49,11 +52,16 @@ public final class CollisionSolver {
             tree.query(range).stream()
             .map(Point::data)
             .filter(female::collide)
-            .forEach(male -> generated.add(
-                random.nextDouble() < maleSpawiningProbability
+            .forEach(male -> {
+                if (male.getType() == HumanType.PLAYER) {
+                    sicknessManager.applyToPlayer(male, currentPopulation.size() + generated.size());
+                }
+                final Human child = random.nextDouble() < maleSpawiningProbability
                     ? humanFactory.male(Position.getRandomWalkableReferencePosition(femalePosition, map), map)
-                    : humanFactory.female(Position.getRandomWalkableReferencePosition(femalePosition, map), map)
-            ));
+                    : humanFactory.female(Position.getRandomWalkableReferencePosition(femalePosition, map), map);
+                generated.add(child);
+                sicknessManager.solveSpread(male, female, child, currentPopulation.size() + generated.size());
+            });
         });
         currentPopulation.addAll(generated);
     }

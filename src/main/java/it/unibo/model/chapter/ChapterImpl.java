@@ -15,11 +15,14 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.HumanFactoryImpl;
+import it.unibo.model.human.sickness.SicknessManager;
+import it.unibo.model.human.sickness.SicknessManagerImpl;
 import it.unibo.model.timer.Timer;
 import it.unibo.model.timer.TimerImpl;
 import it.unibo.model.chapter.collisions.CollisionSolver;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
+import it.unibo.model.effect.EffectFactoryImpl;
 import it.unibo.model.pickable.Pickable;
 import it.unibo.model.pickable.PickableFactory;
 import it.unibo.model.pickable.PickableFactoryImpl;
@@ -29,7 +32,7 @@ import it.unibo.view.screen.ScreenImpl;
  * Implementation of a chapter that handles map and humans movement and
  * collisions.
  */
-public final class ChapterImpl implements Chapter {
+public final class ChapterImpl implements Chapter { 
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int STARTING_POPULATION_GOAL = 5;
     private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(300);
@@ -38,6 +41,7 @@ public final class ChapterImpl implements Chapter {
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
     private final PickableFactory pickablePowerUpFactory;
+    private final SicknessManager sicknessManager;
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
@@ -64,6 +68,7 @@ public final class ChapterImpl implements Chapter {
         this.timer = new TimerImpl(STARTING_TIMER_VALUE, baseClock);
         this.pickablePowerUpFactory = new PickableFactoryImpl(baseClock);
         this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), baseClock); 
+        this.sicknessManager = new SicknessManagerImpl(new EffectFactoryImpl(baseClock), getPopulationGoal());
         spawnHumans(inputHandler);
     }
 
@@ -76,8 +81,9 @@ public final class ChapterImpl implements Chapter {
     public void update() {
         for (final Human human : humans) {
             human.move();
+            sicknessManager.checkStatus(human);
         }
-        CollisionSolver.solveCollisions(humans, MALE_SPAWNING_PROBABILITY, map, humanFactory);
+        CollisionSolver.solveCollisions(humans, MALE_SPAWNING_PROBABILITY, map, humanFactory, sicknessManager);
         if (spawnPowerupRate.tryActivate()) {
             spawnPickablePowerUp(); 
         }
@@ -92,6 +98,9 @@ public final class ChapterImpl implements Chapter {
     }
 
     private void solvePickablePowerUpCollisions() {
+        if (getPlayer().getStats().isSick()) {
+            return;
+        }
         for (final Pickable pickable : pickables) {
             if (Math.abs(getPlayer().getPosition().x() - pickable.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
                 && Math.abs(getPlayer().getPosition().y() - pickable.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
