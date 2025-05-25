@@ -20,6 +20,10 @@ public final class StartMenu extends AbstractMenu {
             g.setMenu(new PauseMenu(input, g));
             g.startGameplay();
         }),
+        MenuOption.of("New Map", g -> {
+            g.setNewChapter();
+            g.setMenu(new StartMenu(input, g));
+        }),
         MenuOption.of("Help", g -> g.setMenu(new HelpMenu(input, game))),
         MenuOption.quit()),
         true, "Welcome to the game", "Vitanova");
