@@ -68,12 +68,4 @@ public record MenuOption(Supplier<String> desc, Consumer<Game> action) {
             g.setMenu(new PauseMenu(input, g));
         });
     }
-
-    /**
-     * Executes the action associated with the menu option.
-     * @param g the game controller
-     */
-    public void execute(final Game g) {
-        action.accept(g);
-    }
 }

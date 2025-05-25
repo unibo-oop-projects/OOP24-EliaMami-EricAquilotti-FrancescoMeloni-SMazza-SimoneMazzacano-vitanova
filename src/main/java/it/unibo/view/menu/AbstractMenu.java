@@ -92,7 +92,7 @@ public abstract class AbstractMenu implements Menu {
         } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE))) {
             onExit();
             timer = TIMER_VALUE;
-            options.get(selectedOptionIndex).execute(game);
+            options.get(selectedOptionIndex).action().accept(getGame());
         }
     }
 
