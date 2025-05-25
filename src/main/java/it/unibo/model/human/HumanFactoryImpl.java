@@ -79,8 +79,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             private Direction direction = new Direction(false, false, true, false);
             private int numSprite = 1;
             private int spriteCounter;
-            private Sprite sprite = nextSprite();
             private final HumanStats humanStats = new HumanStatsImpl(4.5, .7, .1, reproductionStrategy);
+            private Sprite sprite = nextSprite();
             private final SolidCollisions solidCollisions = new SimpleSolidCollisions(map);
 
             @Override
@@ -109,7 +109,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             private Sprite nextSprite() {
                 return Sprite.getSprite(
                     humanType,
-                    DirectionEnum.getDirectionEnum(direction), numSprite
+                    DirectionEnum.getDirectionEnum(direction), humanStats.isSick(), numSprite
                 ).orElse(sprite);
             }
 
