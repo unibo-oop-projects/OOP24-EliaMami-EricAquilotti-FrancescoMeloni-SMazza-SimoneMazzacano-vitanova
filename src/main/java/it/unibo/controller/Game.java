@@ -115,7 +115,6 @@ public final class Game implements Runnable {
      */
     public void startGameplay() {
         this.isGameplayStarted = true;
-        this.chapter = new ChapterImpl(1, inputHandler, baseClock);
     }
 
     /**
@@ -159,6 +158,13 @@ public final class Game implements Runnable {
     public void setNewChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
         this.isGameplayStarted = false;
+        clearScreen();
+    }
+
+    /**
+     * Clears the screen by removing everything, except of the map.
+     */
+    public void clearScreen() {
         this.skillPoints = Optional.empty();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());

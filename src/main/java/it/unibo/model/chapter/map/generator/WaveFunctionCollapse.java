@@ -7,7 +7,6 @@ import java.util.Random;
 import java.util.Stack;
 
 import it.unibo.common.DirectionEnum;
-import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.tile.Tile;
 import it.unibo.model.tile.wavefunction.TileType;
 import it.unibo.model.tile.wavefunction.WaveFunctionTile;
@@ -23,7 +22,7 @@ public final class WaveFunctionCollapse implements MapGenerator {
     private final int rows;
     private final int coloumns;
     private final WaveFunctionTile[][] tiles;
-    private final Random rand = new Random(System.currentTimeMillis());
+    private final Random rand = new Random();
 
     /**
      * Give an instance of {@code WaveFunctionCollapse} with {@code rows} anc {@code coloumns}.
@@ -71,10 +70,7 @@ public final class WaveFunctionCollapse implements MapGenerator {
     }
 
     private WaveFunctionTile newTile(final int x, final int y) {
-        final int columnMargin = (int) Math.ceil(MapImpl.MARGIN_COLOUMNS / 2d);
-        final int rowMargin = (int) Math.ceil(MapImpl.MARGIN_ROWS / 2d);
-        if (x < columnMargin || x > coloumns - columnMargin
-            || y < rowMargin || y > rows - rowMargin) {
+        if (x < 1 || x > coloumns - 2 || y < 1 || y > rows - 2) {
             return new WaveFunctionTileImpl(new LinkedList<>(List.of(TileType.TILE_WATER)));
         }
         return new WaveFunctionTileImpl();

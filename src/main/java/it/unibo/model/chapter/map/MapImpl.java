@@ -12,15 +12,6 @@ import it.unibo.view.screen.ScreenImpl;
  */
 public final class MapImpl implements Map {
 
-    /**
-     * The vertical margin, used to not display the borders of the map.
-     */
-    public static final int MARGIN_ROWS = ScreenImpl.BASE_WINDOW_HEIGHT / ScreenImpl.TILE_SIZE;
-    /**
-     * The horizontal margin, used to not display the borders of the map.
-     */
-    public static final int MARGIN_COLOUMNS = ScreenImpl.BASE_WINDOW_WIDTH / ScreenImpl.TILE_SIZE;
-
     private final int rows;
     private final int coloumns;
     private final Tile[][] tiles;
@@ -33,8 +24,8 @@ public final class MapImpl implements Map {
      * @param coloumns number of the coloumns of the map
      */
     public MapImpl(final int rows, final int coloumns) {
-        this.rows = rows + MARGIN_ROWS;
-        this.coloumns = coloumns + MARGIN_COLOUMNS;
+        this.rows = rows;
+        this.coloumns = coloumns;
         final MapGenerator mapGenerator = new WaveFunctionCollapse(this.rows, this.coloumns);
         this.tiles = mapGenerator.generateMap();
     }

@@ -49,8 +49,8 @@ public final class ChapterImpl implements Chapter {
     private final List<Pickable> activatedPickables = new CopyOnWriteArrayList<>();
     private final Timer timer;
     private final Clock clock;
-    private static final int STARTING_ROWS = 16;
-    private static final int STARTING_COLOUMNS = 16;
+    private static final int STARTING_ROWS = 32;
+    private static final int STARTING_COLOUMNS = 32;
     private final int chapterNumber;
 
     /**
@@ -61,7 +61,7 @@ public final class ChapterImpl implements Chapter {
      */
     public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock) {
         this.chapterNumber = chapterNumber;
-        this.map = new MapImpl(STARTING_ROWS * chapterNumber, STARTING_COLOUMNS * chapterNumber);
+        this.map = new MapImpl(STARTING_ROWS + chapterNumber, STARTING_COLOUMNS + chapterNumber);
         this.inputHandler = inputHandler;
         this.clock = baseClock;
         this.humanFactory = new HumanFactoryImpl(baseClock);
