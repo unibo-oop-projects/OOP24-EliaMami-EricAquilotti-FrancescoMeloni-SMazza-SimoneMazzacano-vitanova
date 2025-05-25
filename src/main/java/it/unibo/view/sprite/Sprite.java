@@ -117,6 +117,38 @@ public enum Sprite {
      */
     MALE_LEFT_2("human/male/left_2.png"),
     /**
+     * Male human facing up with a sick face.
+     */
+    MALE_UP_SICK_1("human/male/sick/up_1_sick.png"),
+    /**
+     * Male human facing up with a sick face.
+     */
+    MALE_UP_SICK_2("human/male/sick/up_2_sick.png"),
+    /**
+     * Male human facing right with a sick face.
+     */
+    MALE_RIGHT_SICK_1("human/male/sick/right_1_sick.png"),
+    /**
+     * Male human facing right with a sick face.
+     */
+    MALE_RIGHT_SICK_2("human/male/sick/right_2_sick.png"),
+    /**
+     * Male human facing left with a sick face.
+     */
+    MALE_LEFT_SICK_1("human/male/sick/left_1_sick.png"),
+    /**
+     * Male human facing left with a sick face.
+     */
+    MALE_LEFT_SICK_2("human/male/sick/left_2_sick.png"),
+    /**
+     * Male human facing down with a sick face.
+     */
+    MALE_DOWN_SICK_1("human/male/sick/down_1_sick.png"),
+    /**
+     * Male human facing down with a sick face.
+     */
+    MALE_DOWN_SICK_2("human/male/sick/down_2_sick.png"),
+    /**
      * Female human facing up.
      */
     FEMALE_UP_1("human/female/up_1.png"),
@@ -148,6 +180,38 @@ public enum Sprite {
      * Female human facing left.
      */
     FEMALE_LEFT_2("human/female/left_2.png"),
+    /**
+     * Female human facing up with a sick face.
+     */
+    FEMALE_UP_SICK_1("human/female/sick/up_1_sick.png"),
+    /**
+     * Female human facing up with a sick face.
+     */
+    FEMALE_UP_SICK_2("human/female/sick/up_2_sick.png"),
+    /**
+     * Female human facing right with a sick face.
+     */
+    FEMALE_RIGHT_SICK_1("human/female/sick/right_1_sick.png"),
+    /**
+     * Female human facing right with a sick face.
+     */
+    FEMALE_RIGHT_SICK_2("human/female/sick/right_2_sick.png"),
+    /**
+     * Female human facing left with a sick face.
+     */
+    FEMALE_LEFT_SICK_1("human/female/sick/left_1_sick.png"),
+    /**
+     * Female human facing left with a sick face.
+     */
+    FEMALE_LEFT_SICK_2("human/female/sick/left_2_sick.png"),
+    /**
+     * Female human facing down with a sick face.
+     */
+    FEMALE_DOWN_SICK_1("human/female/sick/down_1_sick.png"),
+    /**
+     * Female human facing down with a sick face.
+     */
+    FEMALE_DOWN_SICK_2("human/female/sick/down_2_sick.png"),
     /**
      * Grass tile.
      */
