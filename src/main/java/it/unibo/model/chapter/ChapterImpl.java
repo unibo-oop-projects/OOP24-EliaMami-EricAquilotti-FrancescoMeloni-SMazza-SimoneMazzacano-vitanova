@@ -151,7 +151,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     private void spawnPlayer(final InputHandler inputHandler) {
-        final Position startingPosition = Position.getRandomWalkablePosition(map);
+        final Position startingPosition = Position.getRandomCentralWalkablePosition(map);
         this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
     }
 
