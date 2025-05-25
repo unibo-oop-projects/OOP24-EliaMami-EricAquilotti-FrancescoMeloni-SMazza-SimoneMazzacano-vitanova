@@ -80,7 +80,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             private int numSprite = 1;
             private int spriteCounter;
             private Sprite sprite = nextSprite();
-            private final HumanStats humanStats = new HumanStatsImpl(4.5, .1, .1, reproductionStrategy);
+            private final HumanStats humanStats = new HumanStatsImpl(4.5, .7, .1, reproductionStrategy);
             private final SolidCollisions solidCollisions = new SimpleSolidCollisions(map);
 
             @Override

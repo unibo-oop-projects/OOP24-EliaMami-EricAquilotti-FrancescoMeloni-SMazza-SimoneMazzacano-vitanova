@@ -245,6 +245,11 @@ public final class ScreenImpl extends JPanel implements Screen {
                     screenPositionCircle.y() - diam / 2, diam,
                     diam
                 );
+                if (human.getStats().isSick()) {
+                    bufferGraphics.setColor(Color.GREEN);
+                } else {
+                    bufferGraphics.setColor(Color.RED);
+                }
                 bufferGraphics.draw(circle);
         }
 

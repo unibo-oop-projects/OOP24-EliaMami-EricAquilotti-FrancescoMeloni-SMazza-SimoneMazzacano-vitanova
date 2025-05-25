@@ -14,7 +14,7 @@ import it.unibo.model.human.Human;
 public final class CooldownReproductionPredicate implements Predicate<Human> {
     private final Predicate<Human> canReproduceWith;
     private final CooldownGate gate;
-    private boolean canReproduce = true;
+    private boolean firstReproduction = true;
 
     /**
      * @param canReproduceWith tells if the current human can reproduce with another human.
@@ -28,13 +28,11 @@ public final class CooldownReproductionPredicate implements Predicate<Human> {
 
     @Override
     public boolean test(final Human other) {
-        if (!canReproduce && gate.tryActivate()) {
-            canReproduce = true;
-        }
-        if (canReproduce && canReproduceWith.test(other)) {
-            canReproduce = false;
+        if (firstReproduction && canReproduceWith.test(other)) {
+            firstReproduction = false;
+            gate.tryActivate();
             return true;
         }
-        return false;
+        return canReproduceWith.test(other) && gate.tryActivate();
     }
 }
