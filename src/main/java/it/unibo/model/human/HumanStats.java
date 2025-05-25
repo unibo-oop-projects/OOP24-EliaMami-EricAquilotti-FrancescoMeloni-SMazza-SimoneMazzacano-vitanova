@@ -119,4 +119,22 @@ public interface HumanStats {
      * @return the upgrade's max number that human can get.
      */
     int getMaxFertilityUpgrade();
+
+    /**
+     * 
+     * @return true if the human has been sick, including now.
+     */
+    boolean hasBeenSick();
+
+    /**
+     * 
+     * @return true if the human is sick now.
+     */
+    boolean isSick();
+
+    /**
+     * Sets the sick status of the human.
+     * @param isSick true if the human is sick.
+     */
+    void setSickness(boolean isSick);
 }

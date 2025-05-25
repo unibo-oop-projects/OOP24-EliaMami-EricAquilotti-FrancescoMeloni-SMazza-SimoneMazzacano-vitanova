@@ -24,7 +24,8 @@ public final class HumanStatsImpl implements HumanStats {
     private double actualSicknessResistence;
     private double baseFertility;
     private double actualFertility;
-    //private boolean isSick = false;
+    private boolean hasBeenSick;
+    private boolean isSick;
     private ReproStrategy reproStrategy;
     private double baseRadius;
     private double actualRadius;
@@ -216,5 +217,21 @@ public final class HumanStatsImpl implements HumanStats {
                 this.actualFertility = this.baseFertility * effect.getMultiplyValue();
                 break;
         }
+    }
+
+    @Override
+    public boolean hasBeenSick() {
+        return this.hasBeenSick;
+    }
+
+    @Override
+    public boolean isSick() {
+        return this.isSick;
+    }
+
+    @Override
+    public void setSickness(final boolean isSick) {
+        this.isSick = isSick;
+        this.hasBeenSick = this.hasBeenSick || isSick;
     }
 }
