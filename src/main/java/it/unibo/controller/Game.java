@@ -143,6 +143,7 @@ public final class Game implements Runnable {
      * Exits the game.
      */
     public void exit() {
+        chapter.getPlayer().getStats().resetAllEffect();
         System.exit(0);
     }
 

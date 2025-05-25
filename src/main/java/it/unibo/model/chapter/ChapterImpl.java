@@ -83,7 +83,11 @@ public final class ChapterImpl implements Chapter {
             human.move();
             sicknessManager.checkStatus(human);
         }
-        CollisionSolver.solveCollisions(humans, MALE_SPAWNING_PROBABILITY, map, humanFactory, sicknessManager);
+        CollisionSolver.solveCollisions(humans, (h) -> { 
+            return h.getType().equals(HumanType.PLAYER) 
+            ? 1 - h.getStats().getFertility() 
+            : MALE_SPAWNING_PROBABILITY; 
+        }, map, humanFactory, sicknessManager);
         if (spawnPowerupRate.tryActivate()) {
             spawnPickablePowerUp(); 
         }
@@ -183,9 +187,11 @@ public final class ChapterImpl implements Chapter {
     @Override
     public ChapterState getState() {
         if (gameWon()) {
+            getPlayer().getStats().resetAllEffect();
             return ChapterState.PLAYER_WON;
         }
         if (gameLost()) {
+            getPlayer().getStats().resetAllEffect();
             return ChapterState.PLAYER_LOST;
         }
         return ChapterState.IN_PROGRESS;
@@ -193,9 +199,11 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public void restart() {
+        getPlayer().getStats().resetAllEffect();
         this.humans.clear();
         this.pickables.clear();
         spawnHumans(this.inputHandler);
+        this.activatedPickables.clear();
         timer.reset();
         this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), clock); 
     }
