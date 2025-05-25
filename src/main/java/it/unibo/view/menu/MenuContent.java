@@ -13,13 +13,6 @@ public final class MenuContent {
     private final List<String> options;
     private final Optional<Integer> textSize;
 
-    /**
-     * Constructor for the MenuContent class.
-     * @param title the title of the menu
-     * @param subtitle the subtitle of the menu
-     * @param options the list of options in the menu
-     * @param textSize the size of the text in the menu, can be empty
-     */
     private MenuContent(final String title, final String subtitle, final List<String> options,
                         final Optional<Integer> textSize) {
         this.title = title;
