@@ -165,6 +165,10 @@ public final class HumanMockup {
                     public void setSickness(final boolean isSick) {
 
                     }
+
+                    @Override
+                    public void resetAllEffect() {
+                    }
                 };
             }
         };

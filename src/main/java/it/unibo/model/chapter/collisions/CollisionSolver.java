@@ -3,6 +3,7 @@ package it.unibo.model.chapter.collisions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import it.unibo.common.Circle;
 import it.unibo.common.Position;
@@ -35,7 +36,7 @@ public final class CollisionSolver {
      */
     public static void solveCollisions(
             final List<Human> currentPopulation,
-            final double maleSpawiningProbability,
+            final Function<Human, Double> maleSpawiningProbability,
             final Map map,
             final HumanFactory humanFactory,
             final SicknessManager sicknessManager
@@ -56,7 +57,7 @@ public final class CollisionSolver {
                 if (male.getType() == HumanType.PLAYER) {
                     sicknessManager.applyToPlayer(male, currentPopulation.size() + generated.size());
                 }
-                final Human child = random.nextDouble() < maleSpawiningProbability
+                final Human child = random.nextDouble() < maleSpawiningProbability.apply(male)
                     ? humanFactory.male(Position.getRandomWalkableReferencePosition(femalePosition, map), map)
                     : humanFactory.female(Position.getRandomWalkableReferencePosition(femalePosition, map), map);
                 generated.add(child);

@@ -13,7 +13,7 @@ public final class HumanStatsImpl implements HumanStats {
     private static final double SPEED_UPGRADE_VALUE = .5;
     private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .05;
     private static final double FERTILITY_UPGRADE_VALUE = .05;
-    private static final int RADIUS_UPGRADE_VALUE = 5;
+    private static final int RADIUS_UPGRADE_VALUE = 4;
     private static final int MAX_SPEED_UPGRADE = 5;
     private static final int MAX_SICKNESS_RESISTENCE_UPGRADE = 5;
     private static final int MAX_FERTILITY_UPGRADE = 5;
@@ -61,12 +61,10 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseSpeed() {
-        setSpeed(this.speedUpgrade < MAX_SPEED_UPGRADE 
-        ? this.baseSpeed + SPEED_UPGRADE_VALUE 
-        : this.baseSpeed);
-        this.speedUpgrade = this.speedUpgrade < MAX_SPEED_UPGRADE
-        ? this.speedUpgrade + 1
-        : this.speedUpgrade;
+        if(this.speedUpgrade < MAX_SPEED_UPGRADE) {
+            setSpeed(this.baseSpeed + SPEED_UPGRADE_VALUE);
+            this.speedUpgrade += 1;
+        }
     }
 
     @Override
@@ -95,12 +93,10 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseReproductionAreaRadius() {
-        setReproductionAreaRadius(this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE 
-        ? getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE 
-        : getReproStrategy().getReproductionArea().getRadius());
-        this.reproductionRangeUpgrade = this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE
-        ? this.reproductionRangeUpgrade + 1
-        : this.reproductionRangeUpgrade;
+        if(this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE) {
+            setReproductionAreaRadius(getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE);
+            this.reproductionRangeUpgrade += 1;
+        }
     }
 
     @Override
@@ -115,12 +111,10 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseSicknessResistence() {
-        setSicknessResistence(this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE 
-        ? this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE 
-        : this.baseSicknessResistence);
-        this.sicknessResistenceUpgrade = this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE
-        ? this.sicknessResistenceUpgrade + 1
-        : this.sicknessResistenceUpgrade;
+        if(this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE) {
+            setSicknessResistence(this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE);
+            this.sicknessResistenceUpgrade += 1;
+        }
     }
 
     @Override
@@ -135,12 +129,10 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseFertility() {
-        setFertility(this.fertilityUpgrade < MAX_FERTILITY_UPGRADE 
-        ? this.baseFertility + FERTILITY_UPGRADE_VALUE 
-        : this.baseFertility);
-        this.fertilityUpgrade = this.fertilityUpgrade < MAX_FERTILITY_UPGRADE
-        ? this.fertilityUpgrade + 1
-        : this.fertilityUpgrade;
+        if(this.fertilityUpgrade < MAX_FERTILITY_UPGRADE) {
+            setFertility(this.baseFertility + FERTILITY_UPGRADE_VALUE);
+            this.fertilityUpgrade += 1;
+        }
     }
 
     @Override
@@ -160,6 +152,17 @@ public final class HumanStatsImpl implements HumanStats {
                 break;
         }
     }
+
+    @Override
+    public void resetAllEffect() {
+        setSickness(false);
+        this.hasBeenSick = false;
+        this.actualSpeed = this.baseSpeed;
+        this.actualSicknessResistence = this.baseSicknessResistence;
+        this.actualRadius = this.baseRadius;
+        this.actualFertility = this.baseFertility;
+    }
+    
 
     @Override
     public int getActualSpeedUpgrade() {
