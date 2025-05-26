@@ -16,6 +16,7 @@ import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.human.HumanStats;
 import it.unibo.model.savemanager.SaveManager;
 import it.unibo.model.savemanager.SaveObject;
+import it.unibo.view.menu.ErrorMenu;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -38,25 +39,24 @@ public final class Game implements Runnable {
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
     private Optional<Integer> skillPoints = Optional.empty();
-    private File saveFile = new File("chapterInfo.txt");
+    private final File saveFile = new File("chapterInfo.txt");
     private SaveManager saveManager;
-    private boolean isNewFile;
 
     /**
      * Starts the game engine.
      */
     public Game() {
-        try{
-            isNewFile = saveFile.createNewFile();
+        try {
+            final boolean isNewFile = saveFile.createNewFile();
             saveManager = new SaveManager();
-            if(isNewFile){
+            if (isNewFile) {
                 chapter = new ChapterImpl(1, inputHandler, baseClock);
             } else {
-                SaveObject saved = (SaveObject) saveManager.readObj(saveFile);
+                final SaveObject saved = (SaveObject) saveManager.readObj(saveFile);
                 chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerStats());
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            this.setMenu(errorMenuCall("Lettura del file di gioco andata male"));
         }
         gameThread.start();
     }
@@ -75,14 +75,12 @@ public final class Game implements Runnable {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
-
             if (delta >= 1) {
                 update();
                 draw();
                 delta--;
                 frameCount++;
             }
-
             // Measure FPS every second
             if (System.currentTimeMillis() - timer >= 1000) {
                 final int textSize = 32;
@@ -129,6 +127,10 @@ public final class Game implements Runnable {
         }
     }
 
+    private ErrorMenu errorMenuCall(final String subtitle) {
+        return new ErrorMenu(inputHandler, this, subtitle);
+    }
+
     /**
      * Starts the gameplay.
      */
@@ -138,7 +140,7 @@ public final class Game implements Runnable {
 
     /**
      * Set current menu.
-     * @param menu
+     * @param menu 
      */
     public void setMenu(final Menu menu) {
         this.menu = menu;
@@ -251,11 +253,15 @@ public final class Game implements Runnable {
     public Chapter getChaper() {
         return chapter;
     }
+
+    /**
+     * Save the chapter number and player stats in a file.
+     */
     public void saveGame() {
         try {
             saveManager.saveObj(new SaveObject(chapter.getChapterNumber(), getPlayerStats()), saveFile);
-        } catch (IOException e){
-            e.printStackTrace();
+        } catch (IOException e) {
+            this.setMenu(errorMenuCall("Salvataggio del file di gioco andata male"));
         }
     }
 }

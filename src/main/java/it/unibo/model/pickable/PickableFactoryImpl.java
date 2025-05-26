@@ -21,7 +21,7 @@ public final class PickableFactoryImpl implements PickableFactory {
     private static final Random RANDOM = new Random();
 
     /**
-     * 
+     * Constructor for pickable factory.
      * @param clock the clock to get the current time.
      */
     public PickableFactoryImpl(final Clock clock) {

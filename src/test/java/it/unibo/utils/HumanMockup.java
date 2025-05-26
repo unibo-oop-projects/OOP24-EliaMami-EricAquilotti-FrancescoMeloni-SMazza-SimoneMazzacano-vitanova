@@ -176,7 +176,7 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public void setReproStrategy(ReproStrategy newReproStrategy) {
+                    public void setReproStrategy(final ReproStrategy newReproStrategy) {
                     }
                 };
             }

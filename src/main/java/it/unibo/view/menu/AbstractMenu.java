@@ -122,7 +122,7 @@ public abstract class AbstractMenu implements Menu {
     }
 
     /**
-     * 
+     * Manage what happen after clicking an option.
      */
     protected void onExit() {
         isVisible = false;

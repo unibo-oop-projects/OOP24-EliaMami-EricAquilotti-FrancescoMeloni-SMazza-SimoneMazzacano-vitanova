@@ -3,41 +3,41 @@ package it.unibo.model.effect;
 import java.time.Duration;
 
 /**
- * Malus interface.
+ * Effect interface.
  */
 public interface Effect {
 
     /**
-     * 
-     * @return the effect's name.
+     * Method that return the type of effect.
+     * @return the effect's type.
      */
     EffectType getType();
 
     /**
-     * 
+     * Method that return the duration of effect.
      * @return the effect's duration in seconds.
      */
     Duration getDuration();
 
     /**
-     * 
+     * Method that return the multiply value of effect.
      * @return the value to multiply the stats with.
      */
     double getMultiplyValue();
 
     /**
-     * 
-     * @return if the effect is active or not.
+     * Method that return the effect is expired or not.
+     * @return if the effect is expired or not.
      */
     boolean isExpired();
 
     /**
-     * Starts the effect.
+     * Starts the effect's cooldown.
      */
     void activate();
 
     /**
-     * Resets the power up's duration timer.
+     * Resets the effect's duration timer.
      */
     void refresh();
 }

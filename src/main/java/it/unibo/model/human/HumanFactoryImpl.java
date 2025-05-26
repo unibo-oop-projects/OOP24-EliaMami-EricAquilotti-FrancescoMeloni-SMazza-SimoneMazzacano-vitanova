@@ -22,14 +22,15 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
-    private final ReproStrategyFactory reproductionStrategyFactory;
-    private final MovStrategyFactory movementStrategyFactory;
+    private static final long serialVersionUID = 3L;
+    private final transient ReproStrategyFactory reproductionStrategyFactory;
+    private final transient MovStrategyFactory movementStrategyFactory;
     private static final double BASE_SPEED = 4.5;
-    private static final double BASE_SICKNESS_RESISTENCE = .1;
+    private static final double BASE_SICKNESS_RESISTENCE = .3;
     private static final double BASE_FERTILITY = .1;
 
     /**
-     * 
+     * Constructor for human factory.
      * @param baseClock the clock to give to the strategies that may need cooldowns.
      */
     public HumanFactoryImpl(final Clock baseClock) {
@@ -84,8 +85,9 @@ public final class HumanFactoryImpl implements HumanFactory {
     }
 
     @Override 
-    public Human player(final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats, final double areaRadius){
-        ReproStrategy rs = reproductionStrategyFactory.maleReproStrategy(startingPosition);
+    public Human player(final Position startingPosition, final Map map, 
+                        final InputHandler inputHandler, final HumanStats playerStats, final double areaRadius) {
+        final ReproStrategy rs = reproductionStrategyFactory.maleReproStrategy(startingPosition);
         rs.changeReproductionArea(areaRadius);
         playerStats.setReproStrategy(rs);
         return generalised(

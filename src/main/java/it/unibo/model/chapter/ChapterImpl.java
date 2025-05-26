@@ -31,7 +31,7 @@ import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
- * Implementation of a chapter that handles map and humans movement and
+ * Implementation of a chapter that handles map, humans movement and
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
@@ -65,11 +65,20 @@ public final class ChapterImpl implements Chapter {
         this(chapterNumber, inputHandler, baseClock, Optional.empty());
     }
 
-    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final HumanStats playerStats) {
+    /**
+     * Sets up all the parameters.
+     * @param chapterNumber the current chapter number.
+     * @param inputHandler
+     * @param baseClock the clock used for the factories and the timer.
+     * @param playerStats the player stats.
+     */
+    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, 
+                        final Clock baseClock, final HumanStats playerStats) {
         this(chapterNumber, inputHandler, baseClock, Optional.of(playerStats));
     }
 
-    private ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final Optional<HumanStats> playerStats){
+    private ChapterImpl(final int chapterNumber, final InputHandler inputHandler,
+                        final Clock baseClock, final Optional<HumanStats> playerStats) {
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS + chapterNumber, STARTING_COLOUMNS + chapterNumber);
         this.inputHandler = inputHandler;

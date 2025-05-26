@@ -8,12 +8,12 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.human.HumanStats;
 
 /**
- * 
+ * Class that is used to view the player stats during the gameplay.
  */
 public class StatsMenu extends AbstractMenu {
 
     /**
-     * 
+     * Constructor for the StatsMenu class.
      * @param input
      * @param game
      */

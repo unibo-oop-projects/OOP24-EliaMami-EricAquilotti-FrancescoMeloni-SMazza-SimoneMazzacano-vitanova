@@ -5,7 +5,7 @@ import it.unibo.common.Position;
 /**
  * Factory for creating different reproduction strategies.
  */
-public interface ReproStrategyFactory{
+public interface ReproStrategyFactory {
     /**
      * 
      * @param startingPosition the position needed to set the reproduction area.

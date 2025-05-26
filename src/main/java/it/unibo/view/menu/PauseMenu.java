@@ -12,7 +12,7 @@ import it.unibo.controller.InputHandler;
 public final class PauseMenu extends AbstractMenu {
 
     /**
-     * Constructor for the GamePlayMenu class.
+     * Constructor for the PauseMenu class.
      * @param input the input handler
      * @param game the game controller
      */

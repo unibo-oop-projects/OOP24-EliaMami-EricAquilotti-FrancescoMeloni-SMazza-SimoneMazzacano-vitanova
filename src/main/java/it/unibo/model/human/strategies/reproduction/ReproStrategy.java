@@ -7,7 +7,7 @@ import it.unibo.model.human.Human;
 /**
  * Models the reproduction of a human.
  */
-public interface ReproStrategy{
+public interface ReproStrategy {
 
     /**
      * Updates the state of reproduction.
@@ -29,6 +29,7 @@ public interface ReproStrategy{
     Circle getReproductionArea();
 
     /**
+     * This method changes the radius of the reproduction area.
      * @param changeValue is the new radius value.
      */
     void changeReproductionArea(double changeValue);

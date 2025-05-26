@@ -20,44 +20,44 @@ public interface Chapter {
     void update();
 
     /**
-     * 
-     * @return the gameMap.
+     * Method that returns the chapter map.
+     * @return the map.
      */
     Map getMap();
 
     /**
-     * 
-     * @return the gameMap.
+     * Method that returns the current chapter number.
+     * @return the chapter number.
      */
     int getChapterNumber();
 
     /**
-     * 
+     * Method that return the list of all npc in the chapter.
      * @return the list of humans except player that are currently on the map.
      */
     List<Human> getHumans();
 
     /**
-     * 
+     * Method that returns the list of all pickable power up spawned in the map.
      * @return the list of pickable power up that are currently on the map.
      */
     List<Pickable> getPickablePowerUp();
 
     /**
-     * 
+     * Method that returns the player from the humans list.
      * @return the player.
      */
     Human getPlayer();
 
     /**
-     * 
-     * @return the number of humans on the map to reach.
+     * Method that returns the population goal.
+     * @return the number of humans to reach to win.
      */
     int getPopulationGoal();
 
     /**
-     * 
-     * @return state of the chapter.
+     * Method that returns the chapter's state.
+     * @return state of the chapter, it can be won/lost/in progress.
      */
     ChapterState getState();
 
@@ -67,8 +67,8 @@ public interface Chapter {
     void restart();
 
     /**
-     * 
-     * @return the timer value.
+     * Method that returns the remaining timer value.
+     * @return the remaining timer value.
      */
     Duration getTimerValue();
 }

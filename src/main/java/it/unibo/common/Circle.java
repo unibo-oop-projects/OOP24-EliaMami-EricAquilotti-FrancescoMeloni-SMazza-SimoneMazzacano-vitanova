@@ -1,10 +1,12 @@
 package it.unibo.common;
 
+import java.io.Serializable;
+
 /**
  * Models a circle and gives the possibility to check if it intersects with
  * others.
  */
-public interface Circle {
+public interface Circle extends Serializable {
     /**
      * 
      * @param other the circle to intersect.

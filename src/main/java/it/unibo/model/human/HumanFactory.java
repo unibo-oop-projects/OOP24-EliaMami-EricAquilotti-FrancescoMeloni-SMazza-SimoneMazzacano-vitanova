@@ -12,7 +12,7 @@ import it.unibo.model.chapter.map.Map;
 public interface HumanFactory extends Serializable {
 
     /**
-     * 
+     * Method that create a new male npc.
      * @param startingPosition the initial position.
      * @param map the chapter's map.
      * @return a new male human that moves randomly.
@@ -20,7 +20,7 @@ public interface HumanFactory extends Serializable {
     Human male(Position startingPosition, Map map);
 
     /**
-     * 
+     * Method that create a new female npc.
      * @param startingPosition the initial position.
      * @param map the chapter's map.
      * @return a new female human that moves randomly and can collide with other
@@ -30,7 +30,7 @@ public interface HumanFactory extends Serializable {
 
 
     /**
-     * 
+     * Method that create the player npc.
      * @param startingPosition the initial position.
      * @param map the chapter's map.
      * @param inputHandler the handler for the user input.
@@ -39,7 +39,7 @@ public interface HumanFactory extends Serializable {
     Human player(Position startingPosition, Map map, InputHandler inputHandler);
 
     /**
-     * 
+     * Method that create the player npc.
      * @param startingPosition the initial position.
      * @param map the chapter's map.
      * @param inputHandler the handler for the user input.
@@ -49,12 +49,12 @@ public interface HumanFactory extends Serializable {
     Human player(Position startingPosition, Map map, InputHandler inputHandler, HumanStats playerStats);
 
     /**
-     * 
+     * Method that create the player npc.
      * @param startingPosition the initial position.
      * @param map the chapter's map.
      * @param inputHandler the handler for the user input.
      * @param playerStats the stats for the player.
-     * @param areaRadius the stats for the player.
+     * @param areaRadius the area radius to be set in the reprostrategy.
      * @return a new player human, the movement is based on the user input.
      */
     Human player(Position startingPosition, Map map, InputHandler inputHandler, HumanStats playerStats, double areaRadius);

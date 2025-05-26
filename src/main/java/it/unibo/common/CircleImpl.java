@@ -5,6 +5,7 @@ package it.unibo.common;
  * with other circles.
  */
 public final class CircleImpl implements Circle {
+    private static final long serialVersionUID = 4L;
     private double centerX;
     private double centerY;
     private double radius;
