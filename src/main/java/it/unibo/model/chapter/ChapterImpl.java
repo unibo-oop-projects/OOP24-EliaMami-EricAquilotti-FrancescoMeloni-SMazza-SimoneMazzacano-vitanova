@@ -212,7 +212,7 @@ public final class ChapterImpl implements Chapter {
     @Override
     public void restart() {
         getPlayer().getStats().resetAllEffect();
-        HumanStats playerStats = getPlayer().getStats();
+        final HumanStats playerStats = getPlayer().getStats();
         this.humans.clear();
         this.pickables.clear();
         this.activatedPickables.clear();
