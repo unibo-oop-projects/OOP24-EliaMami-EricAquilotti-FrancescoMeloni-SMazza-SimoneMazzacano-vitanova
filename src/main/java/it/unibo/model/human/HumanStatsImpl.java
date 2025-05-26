@@ -29,7 +29,7 @@ public final class HumanStatsImpl implements HumanStats, Serializable {
     private double actualFertility;
     private boolean hasBeenSick;
     private boolean isSick;
-    private ReproStrategy reproStrategy;
+    private transient ReproStrategy reproStrategy;
     private double baseRadius;
     private double actualRadius;
     private int speedUpgrade;
@@ -84,7 +84,13 @@ public final class HumanStatsImpl implements HumanStats, Serializable {
         );
     }
 
-    private void setReproStrategy(final ReproStrategy newReproStrategy) {
+    @Override
+    public double getBaseRadius() {
+        return this.baseRadius;
+    }
+
+    @Override
+    public void setReproStrategy(final ReproStrategy newReproStrategy) {
         this.reproStrategy = newReproStrategy;
         this.baseRadius = reproStrategy.getReproductionArea().getRadius();
         this.actualRadius = this.baseRadius;

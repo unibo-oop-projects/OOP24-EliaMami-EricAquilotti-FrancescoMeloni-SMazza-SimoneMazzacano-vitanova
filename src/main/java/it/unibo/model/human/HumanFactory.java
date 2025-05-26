@@ -46,5 +46,16 @@ public interface HumanFactory extends Serializable {
      * @param playerStats the stats for the player.
      * @return a new player human, the movement is based on the user input.
      */
-    Human player(final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats);
+    Human player(Position startingPosition, Map map, InputHandler inputHandler, HumanStats playerStats);
+
+    /**
+     * 
+     * @param startingPosition the initial position.
+     * @param map the chapter's map.
+     * @param inputHandler the handler for the user input.
+     * @param playerStats the stats for the player.
+     * @param areaRadius the stats for the player.
+     * @return a new player human, the movement is based on the user input.
+     */
+    Human player(Position startingPosition, Map map, InputHandler inputHandler, HumanStats playerStats, double areaRadius);
 }

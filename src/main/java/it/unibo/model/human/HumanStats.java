@@ -23,6 +23,12 @@ public interface HumanStats {
 
     /**
      * 
+     * @param newReproStrategy
+     */
+    void setReproStrategy(final ReproStrategy newReproStrategy);
+
+    /**
+     * 
      * @return the reproStrategy.
      */
     ReproStrategy getReproStrategy();
@@ -32,6 +38,12 @@ public interface HumanStats {
      * @return the radius of the reproduction radius.
      */
     Circle getReproductionAreaRadius();
+
+    /**
+     * 
+     * @return the radius of the reproduction radius.
+     */
+    double getBaseRadius();
 
     /**
      * Used to increase the reproduction area radius after finishing the chapter.

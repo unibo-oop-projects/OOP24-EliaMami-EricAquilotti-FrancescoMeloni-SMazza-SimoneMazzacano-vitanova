@@ -168,7 +168,7 @@ public final class ChapterImpl implements Chapter {
         final Position startingPosition = Position.getRandomCentralWalkablePosition(map);
         this.humans.add(playerStats.isEmpty() 
         ? humanFactory.player(startingPosition, map, inputHandler) 
-        : humanFactory.player(startingPosition, map, inputHandler, playerStats.get()));
+        : humanFactory.player(startingPosition, map, inputHandler, playerStats.get(), playerStats.get().getBaseRadius()));
     }
 
     @Override

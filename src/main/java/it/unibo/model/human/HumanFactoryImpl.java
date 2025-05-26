@@ -79,6 +79,21 @@ public final class HumanFactoryImpl implements HumanFactory {
         );
     }
 
+    @Override 
+    public Human player(final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats, final double areaRadius){
+        ReproStrategy rs = reproductionStrategyFactory.maleReproStrategy(startingPosition);
+        rs.changeReproductionArea(areaRadius);
+        playerStats.setReproStrategy(rs);
+        return generalised(
+            startingPosition,
+            map,
+            HumanType.PLAYER,
+            movementStrategyFactory.userInputMovement(inputHandler),
+            rs,
+            playerStats
+        );
+    }
+
     private Human generalised(final Position startingPosition, final Map map,
                                 final HumanType humanType, final MovStrategy movementStrategy,
                                 final ReproStrategy reproductionStrategy, final HumanStats stats) {

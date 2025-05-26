@@ -169,6 +169,15 @@ public final class HumanMockup {
                     @Override
                     public void resetAllEffect() {
                     }
+
+                    @Override
+                    public double getBaseRadius() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void setReproStrategy(ReproStrategy newReproStrategy) {
+                    }
                 };
             }
         };
