@@ -22,6 +22,10 @@ public final class PauseMenu extends AbstractMenu {
         MenuOption.of("Restart", Game::restartCurrentChapter), 
         MenuOption.of("Stats", g -> g.setMenu(new StatsMenu(input, g))),
         MenuOption.home(input),
+        MenuOption.of("New Map", g -> {
+            g.setNewChapter();
+            g.setMenu(new StartMenu(input, g));
+        }),
         MenuOption.quit()),
         false, "", "Game paused");
     }

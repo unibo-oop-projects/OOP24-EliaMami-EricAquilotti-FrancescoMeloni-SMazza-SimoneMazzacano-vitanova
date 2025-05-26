@@ -16,13 +16,15 @@ public final class StartMenu extends AbstractMenu {
      * @param game the game controller
      */
     public StartMenu(final InputHandler input, final Game game) {
-        super(input, game, List.of(MenuOption.of("Play", g -> {
+        super(input, game, List.of(
+        MenuOption.of("Play/Continue", g -> {
             g.setMenu(new PauseMenu(input, g));
             g.startGameplay();
         }),
-        MenuOption.of("New Map", g -> {
-            g.setNewChapter();
-            g.setMenu(new StartMenu(input, g));
+        MenuOption.of("New game", g -> {
+            g.setMenu(new PauseMenu(input, g));
+            g.setFirstChapter();
+            g.startGameplay();
         }),
         MenuOption.of("Help", g -> g.setMenu(new HelpMenu(input, game))),
         MenuOption.quit()),
