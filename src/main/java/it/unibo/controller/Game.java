@@ -209,6 +209,7 @@ public final class Game implements Runnable {
      * Set the next chapter.
      */
     public void nextChapter() {
+        getPlayerStats().resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
         this.isGameplayStarted = true;
         this.skillPoints = Optional.empty();

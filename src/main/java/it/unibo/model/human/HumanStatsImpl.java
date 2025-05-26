@@ -89,6 +89,7 @@ public final class HumanStatsImpl implements HumanStats {
 
     private void setReproductionAreaRadius(final double newRadius) {
         getReproStrategy().changeReproductionArea(newRadius);
+        this.baseRadius = reproStrategy.getReproductionArea().getRadius();
     }
 
     @Override
