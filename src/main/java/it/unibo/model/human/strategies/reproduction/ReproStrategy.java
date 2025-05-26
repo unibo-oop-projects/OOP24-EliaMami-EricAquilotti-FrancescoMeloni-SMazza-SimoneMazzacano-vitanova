@@ -1,5 +1,7 @@
 package it.unibo.model.human.strategies.reproduction;
 
+import java.io.Serializable;
+
 import it.unibo.common.Circle;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
@@ -7,7 +9,7 @@ import it.unibo.model.human.Human;
 /**
  * Models the reproduction of a human.
  */
-public interface ReproStrategy {
+public interface ReproStrategy extends Serializable{
 
     /**
      * Updates the state of reproduction.

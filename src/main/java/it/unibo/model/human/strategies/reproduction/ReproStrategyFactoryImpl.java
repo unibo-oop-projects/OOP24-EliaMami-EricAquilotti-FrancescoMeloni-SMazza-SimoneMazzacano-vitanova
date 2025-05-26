@@ -2,7 +2,6 @@ package it.unibo.model.human.strategies.reproduction;
 
 import java.time.Clock;
 import java.time.Duration;
-import java.util.function.Predicate;
 
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
@@ -38,12 +37,12 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     @Override
     public ReproStrategy femaleReproStrategy(final Position startingPosition) {
         return generalised(
-            new CooldownReproductionPredicate(h -> ((Human) h).getType() != HumanType.FEMALE, Duration.ofSeconds(2), clock),
+            new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, Duration.ofSeconds(2), clock),
             startingPosition
         );
     }
 
-    private ReproStrategy generalised(final Predicate<Human> canReproduceWith, final Position startingPosition) {
+    private ReproStrategy generalised(final SerializablePredicate<Human> canReproduceWith, final Position startingPosition) {
         final Circle reproductionArea = new CircleImpl(
             startingPosition.x() + CIRCLE_X_OFFSET,
             startingPosition.y() + CIRCLE_Y_OFFSET,

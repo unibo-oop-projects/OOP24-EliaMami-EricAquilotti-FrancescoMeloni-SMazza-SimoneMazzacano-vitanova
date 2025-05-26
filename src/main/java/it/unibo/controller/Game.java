@@ -2,8 +2,6 @@ package it.unibo.controller;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Clock;
 import java.util.Collections;
@@ -17,6 +15,7 @@ import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.human.HumanStats;
 import it.unibo.model.savemanager.SaveManager;
+import it.unibo.model.savemanager.SaveObject;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -39,7 +38,7 @@ public final class Game implements Runnable {
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
     private Optional<Integer> skillPoints = Optional.empty();
-    private File saveFile = new File("Stats.txt");
+    private File saveFile = new File("chapterInfo.txt");
     private SaveManager saveManager;
     private boolean isNewFile;
 
@@ -48,10 +47,15 @@ public final class Game implements Runnable {
      */
     public Game() {
         try{
-            saveFile.createNewFile();
-            saveManager = new SaveManager(new FileInputStream(saveFile), new FileOutputStream(saveFile));
-            chapter = new ChapterImpl(1, inputHandler, baseClock);
-        } catch (IOException e) {
+            isNewFile = saveFile.createNewFile();
+            saveManager = new SaveManager();
+            if(isNewFile){
+                chapter = new ChapterImpl(1, inputHandler, baseClock);
+            } else {
+                SaveObject saved = (SaveObject) saveManager.readObj(saveFile);
+                chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerStats());
+            }
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         gameThread.start();
@@ -170,10 +174,19 @@ public final class Game implements Runnable {
     }
 
     /**
+     * Sets the first chapter and clears the screen.
+     */
+    public void setFirstChapter() {
+        this.chapter = new ChapterImpl(1, inputHandler, baseClock);
+        this.isGameplayStarted = false;
+        clearScreen();
+    }
+
+    /**
      * Sets the new chapter and clears the screen.
      */
     public void setNewChapter() {
-        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
+        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, getPlayerStats());
         this.isGameplayStarted = false;
         clearScreen();
     }
@@ -224,7 +237,7 @@ public final class Game implements Runnable {
      * Set the next chapter.
      */
     public void nextChapter() {
-        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
+        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, getPlayerStats());
         saveGame();
         this.isGameplayStarted = true;
         this.skillPoints = Optional.empty();
@@ -239,7 +252,7 @@ public final class Game implements Runnable {
     }
     public void saveGame() {
         try {
-            saveManager.saveObj(getPlayerStats());
+            saveManager.saveObj(new SaveObject(chapter.getChapterNumber(), getPlayerStats()), saveFile);
         } catch (IOException e){
             e.printStackTrace();
         }

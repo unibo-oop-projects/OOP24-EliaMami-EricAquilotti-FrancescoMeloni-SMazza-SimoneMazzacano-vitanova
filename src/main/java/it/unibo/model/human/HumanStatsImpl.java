@@ -29,7 +29,7 @@ public final class HumanStatsImpl implements HumanStats, Serializable {
     private double actualFertility;
     private boolean hasBeenSick;
     private boolean isSick;
-    private transient ReproStrategy reproStrategy;
+    private ReproStrategy reproStrategy;
     private double baseRadius;
     private double actualRadius;
     private int speedUpgrade;
@@ -91,7 +91,7 @@ public final class HumanStatsImpl implements HumanStats, Serializable {
     }
 
     private void setReproductionAreaRadius(final double newRadius) {
-        getReproStrategy().changeReproductionArea(newRadius);
+        this.reproStrategy.changeReproductionArea(newRadius);
     }
 
     @Override

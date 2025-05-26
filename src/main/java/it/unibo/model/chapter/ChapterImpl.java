@@ -65,7 +65,11 @@ public final class ChapterImpl implements Chapter {
         this(chapterNumber, inputHandler, baseClock, Optional.empty());
     }
 
-    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final Optional<HumanStats> playerStats) {
+    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final HumanStats playerStats) {
+        this(chapterNumber, inputHandler, baseClock, Optional.of(playerStats));
+    }
+
+    private ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final Optional<HumanStats> playerStats){
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS + chapterNumber, STARTING_COLOUMNS + chapterNumber);
         this.inputHandler = inputHandler;
@@ -77,7 +81,6 @@ public final class ChapterImpl implements Chapter {
         this.sicknessManager = new SicknessManagerImpl(new EffectFactoryImpl(baseClock), getPopulationGoal());
         spawnHumans(inputHandler, playerStats);
     }
-
 
     @Override
     public int getChapterNumber() {

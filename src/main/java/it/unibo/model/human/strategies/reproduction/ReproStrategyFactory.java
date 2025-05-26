@@ -1,11 +1,13 @@
 package it.unibo.model.human.strategies.reproduction;
 
+import java.io.Serializable;
+
 import it.unibo.common.Position;
 
 /**
  * Factory for creating different reproduction strategies.
  */
-public interface ReproStrategyFactory {
+public interface ReproStrategyFactory extends Serializable{
     /**
      * 
      * @param startingPosition the position needed to set the reproduction area.

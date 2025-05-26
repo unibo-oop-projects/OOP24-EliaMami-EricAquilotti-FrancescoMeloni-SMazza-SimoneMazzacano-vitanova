@@ -1,5 +1,6 @@
 package it.unibo.common;
 
+import java.io.Serializable;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -9,7 +10,7 @@ import java.time.ZoneId;
  * Implementation of a clock that can be pause and unpaused. This class can be
  * extended for testing purposes.
  */
-public final class PausableClock extends Clock {
+public final class PausableClock extends Clock implements Serializable {
     private final Clock baseClock;
     private boolean paused;
     private Instant pauseStart;

@@ -1,10 +1,12 @@
 package it.unibo.common;
 
+import java.io.Serializable;
+
 /**
  * Implementation of a circle that has a center and a radious and can intersects
  * with other circles.
  */
-public final class CircleImpl implements Circle {
+public final class CircleImpl implements Circle, Serializable {
     private double centerX;
     private double centerY;
     private double radius;
