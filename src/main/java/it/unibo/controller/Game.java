@@ -34,7 +34,7 @@ public final class Game implements Runnable {
     private final InputHandler inputHandler = new InputHandlerImpl();
     private final Screen screen = new ScreenImpl(inputHandler);
     private final PausableClock baseClock = new PausableClock(Clock.systemUTC());
-    private Chapter chapter = new ChapterImpl(1, inputHandler, baseClock);
+    private Chapter chapter;
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
@@ -130,7 +130,6 @@ public final class Game implements Runnable {
      */
     public void startGameplay() {
         this.isGameplayStarted = true;
-        this.chapter = new ChapterImpl(1, inputHandler, baseClock);
     }
 
     /**
@@ -158,6 +157,7 @@ public final class Game implements Runnable {
      * Exits the game.
      */
     public void exit() {
+        chapter.getPlayer().getStats().resetAllEffect();
         saveGame();
         System.exit(0);
     }
@@ -175,6 +175,13 @@ public final class Game implements Runnable {
     public void setNewChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
         this.isGameplayStarted = false;
+        clearScreen();
+    }
+
+    /**
+     * Clears the screen by removing everything, except of the map.
+     */
+    public void clearScreen() {
         this.skillPoints = Optional.empty();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
@@ -217,7 +224,7 @@ public final class Game implements Runnable {
      * Set the next chapter.
      */
     public void nextChapter() {
-        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock);
+        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
         saveGame();
         this.isGameplayStarted = true;
         this.skillPoints = Optional.empty();

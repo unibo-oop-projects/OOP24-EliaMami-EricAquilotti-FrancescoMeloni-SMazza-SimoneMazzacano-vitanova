@@ -24,6 +24,27 @@ public record Position(double x, double y) {
     }
 
     /**
+     * Returns the walkable position closest to the center of the map.
+     * @param map the map we want to have the walkable position.
+     * @return the walkable position closest to the center within the map.
+     */
+    public static Position getRandomCentralWalkablePosition(final Map map) {
+        final var mapSize = new Position(map.getColoumns() * ScreenImpl.TILE_SIZE, map.getRows() * ScreenImpl.TILE_SIZE);
+        final var center = new Position(mapSize.x / 2, mapSize.y / 2);
+        final var offset = new Position(mapSize.x / 10, mapSize.y / 10);
+        var pos = center;
+        while (!isWalkable(pos, map) || !pos.withinOffset(center, offset)) {
+            pos = randomPosition(map);
+        }
+        return pos;
+    }
+
+    private boolean withinOffset(final Position center, final Position offset) {
+        return x > center.x - offset.x && x < center.x + offset.x 
+                && y > center.y - offset.y && y < center.y + offset.y;
+    }
+
+    /**
      * Returns a random walkable position near a reference.
      * @param reference the position we want to stay close.
      * @param map the map we want to have a walkable position.

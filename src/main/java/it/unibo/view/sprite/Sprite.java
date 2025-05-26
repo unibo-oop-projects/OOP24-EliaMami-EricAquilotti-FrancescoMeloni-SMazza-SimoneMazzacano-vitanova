@@ -6,12 +6,14 @@ import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
 import it.unibo.common.DirectionEnum;
+import it.unibo.common.SicknessEnum;
 import it.unibo.model.tile.wavefunction.TileType;
 
 /**
@@ -51,6 +53,38 @@ public enum Sprite {
      */
     PLAYER_LEFT_2("human/male/left_2.png"),
     /**
+     * Player facing up with a sick face.
+     */
+    PLAYER_UP_SICK_1("human/male/sick/up_1_sick.png"),
+    /**
+     * Player facing up with a sick face.
+     */
+    PLAYER_UP_SICK_2("human/male/sick/up_2_sick.png"),
+    /**
+     * Player facing right with a sick face.
+     */
+    PLAYER_RIGHT_SICK_1("human/male/sick/right_1_sick.png"),
+    /**
+     * Player facing right with a sick face.
+     */
+    PLAYER_RIGHT_SICK_2("human/male/sick/right_2_sick.png"),
+    /**
+     * Player facing down with a sick face.
+     */
+    PLAYER_DOWN_SICK_1("human/male/sick/down_1_sick.png"),
+    /**
+     * Player facing down with a sick face.
+     */
+    PLAYER_DOWN_SICK_2("human/male/sick/down_2_sick.png"),
+    /**
+     * Player facing left with a sick face.
+     */
+    PLAYER_LEFT_SICK_1("human/male/sick/left_1_sick.png"),
+    /**
+     * Player facing left with a sick face.
+     */
+    PLAYER_LEFT_SICK_2("human/male/sick/left_2_sick.png"),
+    /**
      * Male human facing up.
      */
     MALE_UP_1("human/male/up_1.png"),
@@ -83,6 +117,38 @@ public enum Sprite {
      */
     MALE_LEFT_2("human/male/left_2.png"),
     /**
+     * Male human facing up with a sick face.
+     */
+    MALE_UP_SICK_1("human/male/sick/up_1_sick.png"),
+    /**
+     * Male human facing up with a sick face.
+     */
+    MALE_UP_SICK_2("human/male/sick/up_2_sick.png"),
+    /**
+     * Male human facing right with a sick face.
+     */
+    MALE_RIGHT_SICK_1("human/male/sick/right_1_sick.png"),
+    /**
+     * Male human facing right with a sick face.
+     */
+    MALE_RIGHT_SICK_2("human/male/sick/right_2_sick.png"),
+    /**
+     * Male human facing left with a sick face.
+     */
+    MALE_LEFT_SICK_1("human/male/sick/left_1_sick.png"),
+    /**
+     * Male human facing left with a sick face.
+     */
+    MALE_LEFT_SICK_2("human/male/sick/left_2_sick.png"),
+    /**
+     * Male human facing down with a sick face.
+     */
+    MALE_DOWN_SICK_1("human/male/sick/down_1_sick.png"),
+    /**
+     * Male human facing down with a sick face.
+     */
+    MALE_DOWN_SICK_2("human/male/sick/down_2_sick.png"),
+    /**
      * Female human facing up.
      */
     FEMALE_UP_1("human/female/up_1.png"),
@@ -114,6 +180,38 @@ public enum Sprite {
      * Female human facing left.
      */
     FEMALE_LEFT_2("human/female/left_2.png"),
+    /**
+     * Female human facing up with a sick face.
+     */
+    FEMALE_UP_SICK_1("human/female/sick/up_1_sick.png"),
+    /**
+     * Female human facing up with a sick face.
+     */
+    FEMALE_UP_SICK_2("human/female/sick/up_2_sick.png"),
+    /**
+     * Female human facing right with a sick face.
+     */
+    FEMALE_RIGHT_SICK_1("human/female/sick/right_1_sick.png"),
+    /**
+     * Female human facing right with a sick face.
+     */
+    FEMALE_RIGHT_SICK_2("human/female/sick/right_2_sick.png"),
+    /**
+     * Female human facing left with a sick face.
+     */
+    FEMALE_LEFT_SICK_1("human/female/sick/left_1_sick.png"),
+    /**
+     * Female human facing left with a sick face.
+     */
+    FEMALE_LEFT_SICK_2("human/female/sick/left_2_sick.png"),
+    /**
+     * Female human facing down with a sick face.
+     */
+    FEMALE_DOWN_SICK_1("human/female/sick/down_1_sick.png"),
+    /**
+     * Female human facing down with a sick face.
+     */
+    FEMALE_DOWN_SICK_2("human/female/sick/down_2_sick.png"),
     /**
      * Grass tile.
      */
@@ -190,20 +288,29 @@ public enum Sprite {
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
     private final BufferedImage image;
-    private static final Map<HumanType, Map<DirectionEnum, Sprite[]>> SPRITE_CHARACTERS_MAP = new EnumMap<>(HumanType.class);
+    private static final Map<HumanType, Map<DirectionEnum, Map<Boolean, Sprite[]>>> SPRITE_CHARACTERS_MAP = 
+    new EnumMap<>(HumanType.class);
     private static final Map<TileType, Sprite> SPRITE_TILES_MAP = new EnumMap<>(TileType.class);
     private static final Map<PowerUpType, Sprite> SPRITE_POWER_UP = new EnumMap<>(PowerUpType.class);
     static {
         for (final HumanType type : HumanType.values()) {
-            final Map<DirectionEnum, Sprite[]> directionMap = new EnumMap<>(DirectionEnum.class);
+            final Map<DirectionEnum, Map<Boolean, Sprite[]>> directionMap = new EnumMap<>(DirectionEnum.class);
             for (final DirectionEnum direction : DirectionEnum.values()) {
-                directionMap.put(
-                    direction,
-                    Arrays.stream(values())
-                    .filter(s -> s.name().startsWith(type.name() + "_" + direction.name() + "_"))
-                    .toArray(Sprite[]::new)
+                final Map<Boolean, Sprite[]> sicknessMap = new HashMap<>();
+                for (final SicknessEnum sickness : SicknessEnum.values()) {
+                    sicknessMap.put(
+                        sickness == SicknessEnum.SICK,
+                        Arrays.stream(values())
+                        .filter(s -> s.name().startsWith(type.name() + "_" + direction.name() + "_"
+                             + (sickness == SicknessEnum.SICK ? sickness.name() : "")))
+                        .toArray(Sprite[]::new)
                     );
                 }
+                directionMap.put(
+                    direction,
+                    sicknessMap
+                );
+            }
             SPRITE_CHARACTERS_MAP.put(type, directionMap);
         }
         for (final TileType tileType : TileType.values()) {
@@ -238,13 +345,15 @@ public enum Sprite {
      * @param type the type of human we want to get the sprite of.
      * @param direction the direction the human is facing.
      * @param frame the sprite animation frame.
+     * @param isHumanSick true if the human is sick, false otherwise.
      * @return the correct sprite if the human is moving.
      */
-    public static Optional<Sprite> getSprite(final HumanType type, final DirectionEnum direction, final int frame) {
+    public static Optional<Sprite> getSprite(final HumanType type, final DirectionEnum direction,
+    final boolean isHumanSick, final int frame) {
         if (direction == DirectionEnum.NONE) {
             return Optional.empty();
         }
-        return Optional.of(SPRITE_CHARACTERS_MAP.get(type).get(direction)[frame % 2]);
+        return Optional.of(SPRITE_CHARACTERS_MAP.get(type).get(direction).get(isHumanSick)[frame % 2]);
     }
 
     /**

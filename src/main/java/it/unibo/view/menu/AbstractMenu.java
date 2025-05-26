@@ -145,7 +145,7 @@ public abstract class AbstractMenu implements Menu {
         if (isVisible) {
             final List<String> list = IntStream.range(0, options.size())
                 .mapToObj(this::formatOptionText).toList();
-            return new MenuContent(title, subtitle.get(), list);
+            return MenuContent.of(title, subtitle.get(), list);
         }
         return MenuContent.empty();
     }

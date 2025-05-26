@@ -67,9 +67,21 @@ public final class HumanFactoryImpl implements HumanFactory {
         );
     }
 
+    @Override
+    public Human player(final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats){
+        return generalised(
+            startingPosition,
+            map,
+            HumanType.PLAYER,
+            movementStrategyFactory.userInputMovement(inputHandler),
+            playerStats.getReproStrategy(),
+            playerStats
+        );
+    }
+
     private Human generalised(final Position startingPosition, final Map map,
                                 final HumanType humanType, final MovStrategy movementStrategy,
-                                final ReproStrategy reproductionStrategy) {
+                                final ReproStrategy reproductionStrategy, final HumanStats stats) {
         return new Human() {
             private static final int CHANGE_SPRITE_THRESHOLD = 20;
             // private boolean canReproduce = true;
@@ -79,8 +91,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             private Direction direction = new Direction(false, false, true, false);
             private int numSprite = 1;
             private int spriteCounter;
+            private final HumanStats humanStats = stats;
             private Sprite sprite = nextSprite();
-            private final HumanStats humanStats = new HumanStatsImpl(4.5, .7, .1, reproductionStrategy);
             private final SolidCollisions solidCollisions = new SimpleSolidCollisions(map);
 
             @Override
@@ -109,7 +121,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             private Sprite nextSprite() {
                 return Sprite.getSprite(
                     humanType,
-                    DirectionEnum.getDirectionEnum(direction), numSprite
+                    DirectionEnum.getDirectionEnum(direction), humanStats.isSick(), numSprite
                 ).orElse(sprite);
             }
 
@@ -148,5 +160,11 @@ public final class HumanFactoryImpl implements HumanFactory {
                 return reproductionStrategy.collide(other);
             }
         };
+    }
+
+    private Human generalised(final Position startingPosition, final Map map,
+                                final HumanType humanType, final MovStrategy movementStrategy,
+                                final ReproStrategy reproductionStrategy) {
+        return generalised(startingPosition, map, humanType, movementStrategy, reproductionStrategy, new HumanStatsImpl(4.5, .1, .1, reproductionStrategy));
     }
 }
