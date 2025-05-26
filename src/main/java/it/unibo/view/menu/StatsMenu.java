@@ -34,7 +34,7 @@ public class StatsMenu extends AbstractMenu {
         + "Fertility: " + decimalFormat(playerStats.getFertility());
     }
 
-    private static String decimalFormat(Double value){
+    private static String decimalFormat(final Double value) {
         return DecimalFormat.getNumberInstance().format(value);
     }
 }

@@ -65,7 +65,15 @@ public final class ChapterImpl implements Chapter {
         this(chapterNumber, inputHandler, baseClock, Optional.empty());
     }
 
-    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final Optional<HumanStats> playerStats) {
+    /**
+     * Sets up all the parameters.
+     * @param chapterNumber the current chapter number.
+     * @param inputHandler
+     * @param baseClock the clock used for the factories and the timer.
+     * @param playerStats the player stats.
+     */
+    public ChapterImpl(
+        final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final Optional<HumanStats> playerStats) {
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS + chapterNumber, STARTING_COLOUMNS + chapterNumber);
         this.inputHandler = inputHandler;
@@ -209,7 +217,7 @@ public final class ChapterImpl implements Chapter {
     @Override
     public void restart() {
         getPlayer().getStats().resetAllEffect();
-        HumanStats playerStats = getPlayer().getStats();
+        final HumanStats playerStats = getPlayer().getStats();
         this.humans.clear();
         this.pickables.clear();
         this.activatedPickables.clear();

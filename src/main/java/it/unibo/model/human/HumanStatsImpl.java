@@ -61,7 +61,7 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseSpeed() {
-        if(this.speedUpgrade < MAX_SPEED_UPGRADE) {
+        if (this.speedUpgrade < MAX_SPEED_UPGRADE) {
             setSpeed(this.baseSpeed + SPEED_UPGRADE_VALUE);
             this.speedUpgrade += 1;
         }
@@ -93,7 +93,7 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseReproductionAreaRadius() {
-        if(this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE) {
+        if (this.reproductionRangeUpgrade < MAX_REPRODUCTION_RANGE_UPGRADE) {
             setReproductionAreaRadius(getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE);
             this.reproductionRangeUpgrade += 1;
         }
@@ -111,7 +111,7 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseSicknessResistence() {
-        if(this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE) {
+        if (this.sicknessResistenceUpgrade < MAX_SICKNESS_RESISTENCE_UPGRADE) {
             setSicknessResistence(this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE);
             this.sicknessResistenceUpgrade += 1;
         }
@@ -129,7 +129,7 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public void increaseFertility() {
-        if(this.fertilityUpgrade < MAX_FERTILITY_UPGRADE) {
+        if (this.fertilityUpgrade < MAX_FERTILITY_UPGRADE) {
             setFertility(this.baseFertility + FERTILITY_UPGRADE_VALUE);
             this.fertilityUpgrade += 1;
         }
@@ -162,7 +162,6 @@ public final class HumanStatsImpl implements HumanStats {
         this.actualRadius = this.baseRadius;
         this.actualFertility = this.baseFertility;
     }
-    
 
     @Override
     public int getActualSpeedUpgrade() {
