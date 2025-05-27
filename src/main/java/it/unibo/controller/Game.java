@@ -67,10 +67,6 @@ public final class Game implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-
-        long timer = System.currentTimeMillis();
-        int frameCount = 0; // Count frames per second
-
         while (gameThread != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
@@ -79,19 +75,6 @@ public final class Game implements Runnable {
                 update();
                 draw();
                 delta--;
-                frameCount++;
-            }
-            // Measure FPS every second
-            if (System.currentTimeMillis() - timer >= 1000) {
-                final int textSize = 32;
-                final Position textPosition = new Position(textSize, textSize);
-                // We should not show the timer when the chapter is not going.
-                final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount 
-                + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal()
-                + " Timer: " + chapter.getTimerValue().toSecondsPart();
-                screen.loadText(content, textPosition, Color.RED, textSize);
-                frameCount = 0;
-                timer += 1000;
             }
         }
     }
