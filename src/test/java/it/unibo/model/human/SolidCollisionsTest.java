@@ -29,14 +29,14 @@ class SolidCollisionsTest {
     @Test
     void testCanMove() {
         final var pos = getWalkablePosition((x, y) -> tiles[x][y].isWalkable());
-        assertTrue(pos.isPresent()); // Se e' null, allora c'e' un problema con la mappa 
+        assertTrue(pos.isPresent()); // Se e' false, allora c'e' un problema con la mappa 
         assertTrue(solidCollisions.isWalkable(pos.get()));
     }
 
     @Test
     void testStayStill() {
         final var pos = getWalkablePosition((x, y) -> !tiles[x][y].isWalkable());
-        assertTrue(pos.isPresent()); // Se e' null, allora c'e' un problema con la mappa 
+        assertTrue(pos.isPresent()); // Se e' false, allora c'e' un problema con la mappa 
         assertFalse(solidCollisions.isWalkable(pos.get()));
     }
 

@@ -73,6 +73,11 @@ public interface HumanStats {
     void resetEffect(EffectType type);
 
     /**
+     * Resets all stats to base stats. 
+     */
+    void resetAllEffect();
+
+    /**
      * This method returns how many speed upgrade the human took. 
      * @return how many upgrade the human took.
      */

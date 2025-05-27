@@ -1,5 +1,6 @@
 package it.unibo.view.menu;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 
 import it.unibo.controller.Game;
@@ -27,9 +28,13 @@ public class StatsMenu extends AbstractMenu {
     }
 
     private static String getStatsText(final HumanStats playerStats) {
-        return "Speed: " + playerStats.getSpeed() + "\n" 
-        + "Reproduction range: " + playerStats.getReproductionAreaRadius().getRadius() + "\n" 
-        + "Sickness resistence: " + playerStats.getSicknessResistence() + "\n" 
-        + "Fertility: " + playerStats.getFertility();
+        return "Speed: " + decimalFormat(playerStats.getSpeed()) + "\n"
+        + "Sickness resistence: " + decimalFormat(playerStats.getSicknessResistence()) + "\n"
+        + "Reproduction range: " + decimalFormat(playerStats.getReproductionAreaRadius().getRadius()) + "\n"
+        + "Fertility: " + decimalFormat(playerStats.getFertility());
+    }
+
+    private static String decimalFormat(final Double value) {
+        return DecimalFormat.getNumberInstance().format(value);
     }
 }
