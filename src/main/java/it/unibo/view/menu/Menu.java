@@ -1,7 +1,7 @@
 package it.unibo.view.menu;
 
 /**
- * Interface that handles the menu options, text and input.
+ * Interface that handles the menu options, content and input.
  */
 public interface Menu {
     /**
@@ -12,7 +12,7 @@ public interface Menu {
 
     /**
      * 
-     * @return the list of text to show.
+     * @return the menu content to show.
      */
     MenuContent getContent();
 }

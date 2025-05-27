@@ -73,7 +73,7 @@ public abstract class AbstractMenu implements Menu {
     final boolean isInitiallyVisible, final String subtitle, final String title) {
         this(input, game, options, isInitiallyVisible, () -> subtitle, title);
     }
-
+    
     @Override
     public final void update() {
         if (timer > 0) {
@@ -122,7 +122,9 @@ public abstract class AbstractMenu implements Menu {
     }
 
     /**
-     * 
+     * Called when the menu is exited.
+     * Default behavior is to set the visibility to false and update the game state.
+     * Subclasses can override this method to provide custom behavior.
      */
     protected void onExit() {
         isVisible = false;
