@@ -7,7 +7,7 @@ import it.unibo.controller.InputHandler;
 /**
  * Class that handles the help menu options, to show the controls to the user.
  */
-public class HelpMenu extends AbstractMenu {
+public final class HelpMenu extends AbstractMenu {
     private static final String HELP_TEXT = """
         W - move forward
         S - move backward
