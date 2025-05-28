@@ -73,7 +73,7 @@ public abstract class AbstractMenu implements Menu {
     final boolean isInitiallyVisible, final String subtitle, final String title) {
         this(input, game, options, isInitiallyVisible, () -> subtitle, title);
     }
-    
+
     @Override
     public final void update() {
         if (timer > 0) {
