@@ -12,6 +12,7 @@ import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.human.HumanStats;
+import it.unibo.model.skillpoint.SkillPoint;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -33,7 +34,8 @@ public final class Game implements Runnable {
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
-    private Optional<Integer> skillPoints = Optional.empty();
+    private final SkillPoint skillPoints = new SkillPoint(3);
+    
 
     /**
      * Starts the game engine.
@@ -83,7 +85,7 @@ public final class Game implements Runnable {
     private void update() {
         if (!isGameplayPaused) {
             if (chapter.getState() == ChapterState.PLAYER_WON) {
-                setSkillPoint(3);
+                skillPoints.resetToBaseValue();
                 this.setMenu(new WinAndUpgradeMenu(inputHandler, this));
             } else if (chapter.getState() == ChapterState.PLAYER_LOST) {
                 this.setMenu(new GameOverMenu(inputHandler, this));
@@ -161,7 +163,7 @@ public final class Game implements Runnable {
     public void setNewChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
         this.isGameplayStarted = false;
-        this.skillPoints = Optional.empty();
+        this.skillPoints.reset();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
         this.screen.loadPickablePowerUp(Collections.emptyList());
@@ -177,26 +179,11 @@ public final class Game implements Runnable {
     }
 
     /**
-     * This method sets skill points value if skill points isn't already initialized.
-     * @param value the value to initialize skill points to.
+     * This method returns skillPoints.
+     * @return skillPoints.
      */
-    public void setSkillPoint(final int value) { 
-        skillPoints = skillPoints.or(() -> Optional.of(value));
-    }
-
-    /**
-     * This method returns skill points value.
-     * @return skill point's value.
-     */
-    public int getSkillPoint() {
-        return skillPoints.get();
-    }
-
-    /**
-     * This method update the variable skill point if skill point is greater than zero.
-     */
-    public void updateSkillPoint() {
-        skillPoints = Optional.of(skillPoints.get() > 0 ? (Integer) (skillPoints.get() - 1) : skillPoints.get());
+    public SkillPoint getSkillPoint() {
+        return skillPoints;
     }
 
     /**
@@ -206,7 +193,7 @@ public final class Game implements Runnable {
         getPlayerStats().resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
         this.isGameplayStarted = true;
-        this.skillPoints = Optional.empty();
+        this.skillPoints.reset();
     }
 
     /**

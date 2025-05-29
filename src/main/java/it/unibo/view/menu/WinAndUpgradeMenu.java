@@ -42,7 +42,7 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
             MenuOption.quit()
         ), 
         true,
-        () -> "You have " + game.getSkillPoint() + " skill point.",
+        () -> "You have " + game.getSkillPoint().getValue() + " skill point.",
         "You won the Chapter! Upgrade your skills."
         );
     }
@@ -52,10 +52,10 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     }
 
     private static void checkAndUpdateSkillPoint(final Consumer<Game> c, final Game g) {
-        if (g.getSkillPoint() > 0) {
+        if (g.getSkillPoint().getValue() > 0) {
             c.accept(g);
         }
-        g.updateSkillPoint();
+        g.getSkillPoint().updateValue();
     }
 
     @Override
