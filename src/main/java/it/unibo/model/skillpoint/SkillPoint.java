@@ -31,7 +31,7 @@ public class SkillPoint {
      * @param value the value to initialize skill points to.
      */
     public void resetToBaseValue() {
-        skillPoint.or(() -> Optional.of(baseValue));
+        skillPoint = skillPoint.or(() -> Optional.of(baseValue));
     }
 
     /**
