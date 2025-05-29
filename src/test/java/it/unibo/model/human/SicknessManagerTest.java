@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import it.unibo.model.effect.EffectFactoryImpl;
 import it.unibo.model.human.sickness.SicknessManager;
 import it.unibo.model.human.sickness.SicknessManagerImpl;
+import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.human.stats.HumanStatsImpl;
 import it.unibo.utils.HumanMockup;
 import it.unibo.utils.MutableClock;
 import it.unibo.view.sprite.HumanType;

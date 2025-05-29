@@ -11,6 +11,8 @@ import it.unibo.model.human.strategies.movement.MovStrategyFactory;
 import it.unibo.model.human.strategies.movement.MovStrategyFactoryImpl;
 import it.unibo.model.human.solidcollisions.SimpleSolidCollisions;
 import it.unibo.model.human.solidcollisions.SolidCollisions;
+import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.human.stats.HumanStatsImpl;
 import it.unibo.model.human.strategies.movement.MovStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;

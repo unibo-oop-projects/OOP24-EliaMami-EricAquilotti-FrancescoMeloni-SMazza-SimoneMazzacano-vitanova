@@ -2,22 +2,20 @@ package it.unibo.model.chapter;
 
 import java.time.Clock;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import it.unibo.common.ChapterState;
-import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.HumanFactoryImpl;
-import it.unibo.model.human.HumanStats;
 import it.unibo.model.human.sickness.SicknessManager;
 import it.unibo.model.human.sickness.SicknessManagerImpl;
+import it.unibo.model.human.stats.HumanStats;
 import it.unibo.model.timer.Timer;
 import it.unibo.model.timer.TimerImpl;
 import it.unibo.model.chapter.collisions.CollisionSolver;
@@ -25,9 +23,8 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.effect.EffectFactoryImpl;
 import it.unibo.model.pickable.Pickable;
-import it.unibo.model.pickable.PickableFactory;
-import it.unibo.model.pickable.PickableFactoryImpl;
-import it.unibo.view.screen.ScreenImpl;
+import it.unibo.model.pickable.PickableManager;
+import it.unibo.model.pickable.PickableManagerImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
@@ -38,19 +35,15 @@ public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int STARTING_POPULATION_GOAL = 5;
     private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(300);
-    private CooldownGate spawnPowerupRate;
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
-    private final PickableFactory pickablePowerUpFactory;
+    private final PickableManager pickableManager;
     private final SicknessManager sicknessManager;
     // The first human is the player.
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
-    private final List<Pickable> pickables = new CopyOnWriteArrayList<>();
-    private final List<Pickable> activatedPickables = new CopyOnWriteArrayList<>();
     private final Timer timer;
-    private final Clock clock;
     private static final int STARTING_ROWS = 16;
     private static final int STARTING_COLOUMNS = 16;
     private final int chapterNumber;
@@ -69,15 +62,12 @@ public final class ChapterImpl implements Chapter {
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS * chapterNumber, STARTING_COLOUMNS * chapterNumber);
         this.inputHandler = inputHandler;
-        this.clock = baseClock;
         this.humanFactory = new HumanFactoryImpl(baseClock);
         this.timer = new TimerImpl(STARTING_TIMER_VALUE, baseClock);
-        this.pickablePowerUpFactory = new PickableFactoryImpl(baseClock);
-        this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), baseClock); 
         this.sicknessManager = new SicknessManagerImpl(new EffectFactoryImpl(baseClock), getPopulationGoal());
         spawnHumans(inputHandler, playerStats);
+        this.pickableManager = new PickableManagerImpl(getPlayer(), baseClock, map);
     }
-
 
     @Override
     public int getChapterNumber() {
@@ -95,56 +85,11 @@ public final class ChapterImpl implements Chapter {
             ? 1 - h.getStats().getFertility() 
             : MALE_SPAWNING_PROBABILITY; 
         }, map, humanFactory, sicknessManager);
-        if (spawnPowerupRate.tryActivate()) {
-            spawnPickablePowerUp(); 
-        }
-        solvePickablePowerUpCollisions();
-        resetExpiredEffects();
+        
+        pickableManager.spawnPickable();
+        pickableManager.solvePickableCollisions();
+        pickableManager.resetExpiredEffects();
     }
-
-    private void spawnPickablePowerUp() {
-        final List<Pickable> spawningPickables = new ArrayList<>();
-        spawningPickables.add(pickablePowerUpFactory.randomBoost(Position.getRandomWalkablePosition(map)));
-        this.pickables.addAll(spawningPickables);
-    }
-
-    private void solvePickablePowerUpCollisions() {
-        if (getPlayer().getStats().isSick()) {
-            return;
-        }
-        for (final Pickable pickable : pickables) {
-            if (Math.abs(getPlayer().getPosition().x() - pickable.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
-                && Math.abs(getPlayer().getPosition().y() - pickable.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
-                checkAndActivate(pickable);
-                pickables.remove(pickable);
-            }
-        }
-    }
-
-    private void checkAndActivate(final Pickable pickable) {
-        Optional<Pickable> tmp = Optional.empty();
-        for (final Pickable activated : activatedPickables) {
-            if (activated.getEffect().getType().equals(pickable.getEffect().getType())) {
-                tmp = Optional.of(activated);
-            }
-        }
-        if (tmp.isPresent()) {
-            tmp.get().getEffect().refresh();
-        } else {
-            pickable.getEffect().activate();
-            activatedPickables.add(pickable);
-            getPlayer().getStats().applyEffect(pickable.getEffect());
-        }
-    }
-
-    private void resetExpiredEffects() {
-        for (final Pickable activated : activatedPickables) {
-            if (activated.getEffect().isExpired()) {
-                getPlayer().getStats().resetEffect(activated.getEffect().getType());
-                activatedPickables.remove(activated);
-            }
-        }
-    } 
 
     private boolean gameWon() {
         return this.humans.size() >= (STARTING_POPULATION_GOAL * getChapterNumber());
@@ -180,7 +125,7 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public List<Pickable> getPickablePowerUp() {
-        return Collections.unmodifiableList(pickables);
+        return Collections.unmodifiableList(pickableManager.getPickables());
     }
 
     @Override
@@ -211,11 +156,10 @@ public final class ChapterImpl implements Chapter {
         getPlayer().getStats().resetAllEffect();
         HumanStats playerStats = getPlayer().getStats();
         this.humans.clear();
-        this.pickables.clear();
-        this.activatedPickables.clear();
+        pickableManager.resetPickables();
+        pickableManager.resetActivatedPickables();;
         spawnHumans(this.inputHandler, Optional.of(playerStats));
         timer.reset();
-        this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), clock); 
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.unibo.model.human;
 
 import it.unibo.common.Direction;
 import it.unibo.common.Position;
+import it.unibo.model.human.stats.HumanStats;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
 

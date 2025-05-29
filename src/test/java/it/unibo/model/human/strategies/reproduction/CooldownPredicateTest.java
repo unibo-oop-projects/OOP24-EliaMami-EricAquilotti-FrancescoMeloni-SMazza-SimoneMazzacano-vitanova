@@ -14,7 +14,7 @@ import it.unibo.common.Direction;
 import it.unibo.common.PausableClock;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
-import it.unibo.model.human.HumanStats;
+import it.unibo.model.human.stats.HumanStats;
 import it.unibo.utils.MutableClock;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;

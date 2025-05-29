@@ -3,6 +3,7 @@ package it.unibo.model.human;
 import it.unibo.common.Position;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.human.stats.HumanStats;
 
 /**
  * Models a factory of NPCs that can be male or female.

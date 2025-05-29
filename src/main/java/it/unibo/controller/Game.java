@@ -11,7 +11,7 @@ import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
-import it.unibo.model.human.HumanStats;
+import it.unibo.model.human.stats.HumanStats;
 import it.unibo.model.skillpoint.SkillPoint;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
