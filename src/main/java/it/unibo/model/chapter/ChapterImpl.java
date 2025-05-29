@@ -106,7 +106,7 @@ public final class ChapterImpl implements Chapter {
         if (spawnPowerupRate.tryActivate()) {
             spawnPickablePowerUp(); 
         }
-        solvePickablePowerUpCollisions();
+        solvePickablePowerUp();
         resetExpiredEffects();
     }
 
@@ -116,10 +116,15 @@ public final class ChapterImpl implements Chapter {
         this.pickables.addAll(spawningPickables);
     }
 
-    private void solvePickablePowerUpCollisions() {
+    private void solvePickablePowerUp() {
         if (getPlayer().getStats().isSick()) {
-            return;
+            activatedPickables.clear();
+        } else {
+            solvePickablePowerUpCollisions();
         }
+    }
+
+    private void solvePickablePowerUpCollisions() {
         for (final Pickable pickable : pickables) {
             if (Math.abs(getPlayer().getPosition().x() - pickable.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
                 && Math.abs(getPlayer().getPosition().y() - pickable.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2) {
