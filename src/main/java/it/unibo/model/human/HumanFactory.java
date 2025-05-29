@@ -45,5 +45,5 @@ public interface HumanFactory {
      * @param playerStats the stats for the player.
      * @return a new player human, the movement is based on the user input.
      */
-    Human player(final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats);
+    Human player(Position startingPosition, Map map, InputHandler inputHandler, HumanStats playerStats);
 }

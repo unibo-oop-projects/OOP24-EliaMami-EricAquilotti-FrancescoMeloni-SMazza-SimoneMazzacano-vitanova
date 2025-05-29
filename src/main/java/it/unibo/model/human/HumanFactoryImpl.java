@@ -24,6 +24,9 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
+    private static final double BASE_SPEED = 4.5;
+    private static final double BASE_SICKNESS_RESISTENCE = .1;
+    private static final double BASE_FERTILITY = .1;
     private final ReproStrategyFactory reproductionStrategyFactory;
     private final MovStrategyFactory movementStrategyFactory;
 
@@ -70,7 +73,8 @@ public final class HumanFactoryImpl implements HumanFactory {
     }
 
     @Override
-    public Human player(final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats){
+    public Human player(final Position startingPosition, final Map map,
+                        final InputHandler inputHandler, final HumanStats playerStats) {
         return generalised(
             startingPosition,
             map,
@@ -167,6 +171,7 @@ public final class HumanFactoryImpl implements HumanFactory {
     private Human generalised(final Position startingPosition, final Map map,
                                 final HumanType humanType, final MovStrategy movementStrategy,
                                 final ReproStrategy reproductionStrategy) {
-        return generalised(startingPosition, map, humanType, movementStrategy, reproductionStrategy, new HumanStatsImpl(4.5, .1, .1, reproductionStrategy));
+        return generalised(startingPosition, map, humanType, movementStrategy, reproductionStrategy, 
+                            new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, reproductionStrategy));
     }
 }

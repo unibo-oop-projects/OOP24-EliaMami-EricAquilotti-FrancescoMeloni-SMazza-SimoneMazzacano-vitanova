@@ -151,7 +151,6 @@ public final class HumanStatsImpl implements HumanStats {
         this.actualRadius = this.baseRadius;
         this.actualFertility = this.baseFertility;
     }
-    
 
     @Override
     public int getSpeedUpgrade() {

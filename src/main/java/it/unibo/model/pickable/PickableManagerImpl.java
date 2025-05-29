@@ -13,7 +13,10 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
 import it.unibo.view.screen.ScreenImpl;
 
-public class PickableManagerImpl implements PickableManager {
+/**
+ * 
+ */
+public final class PickableManagerImpl implements PickableManager {
     private final List<Pickable> pickables = new CopyOnWriteArrayList<>();
     private final List<Pickable> activatedPickables = new CopyOnWriteArrayList<>();
     private final PickableFactory pickableFactory;
@@ -22,7 +25,13 @@ public class PickableManagerImpl implements PickableManager {
     private final Map map;
     private final Clock baseClock;
 
-    public PickableManagerImpl(Human player, Clock baseClock, Map map) {
+    /**
+     * 
+     * @param player
+     * @param baseClock
+     * @param map
+     */
+    public PickableManagerImpl(final Human player, final Clock baseClock, final Map map) {
         this.baseClock = baseClock;
         this.pickableFactory = new PickableFactoryImpl(baseClock);
         setSpawnPickableRate();
@@ -81,7 +90,7 @@ public class PickableManagerImpl implements PickableManager {
 
     @Override
     public List<Pickable> getPickables() {
-        return this.pickables;
+        return new CopyOnWriteArrayList<>(this.pickables);
     }
 
     @Override

@@ -58,7 +58,15 @@ public final class ChapterImpl implements Chapter {
         this(chapterNumber, inputHandler, baseClock, Optional.empty());
     }
 
-    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock, final Optional<HumanStats> playerStats) {
+    /**
+     * 
+     * @param chapterNumber
+     * @param inputHandler
+     * @param baseClock
+     * @param playerStats
+     */
+    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, 
+                        final Clock baseClock, final Optional<HumanStats> playerStats) {
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS * chapterNumber, STARTING_COLOUMNS * chapterNumber);
         this.inputHandler = inputHandler;
@@ -80,12 +88,11 @@ public final class ChapterImpl implements Chapter {
             human.move();
             sicknessManager.checkStatus(human);
         }
-        CollisionSolver.solveCollisions(humans, (h) -> { 
+        CollisionSolver.solveCollisions(humans, (h) -> {
             return h.getType().equals(HumanType.PLAYER) 
             ? 1 - h.getStats().getFertility() 
             : MALE_SPAWNING_PROBABILITY; 
         }, map, humanFactory, sicknessManager);
-        
         pickableManager.spawnPickable();
         pickableManager.solvePickableCollisions();
         pickableManager.resetExpiredEffects();
@@ -154,10 +161,10 @@ public final class ChapterImpl implements Chapter {
     @Override
     public void restart() {
         getPlayer().getStats().resetAllEffect();
-        HumanStats playerStats = getPlayer().getStats();
+        final HumanStats playerStats = getPlayer().getStats();
         this.humans.clear();
         pickableManager.resetPickables();
-        pickableManager.resetActivatedPickables();;
+        pickableManager.resetActivatedPickables();
         spawnHumans(this.inputHandler, Optional.of(playerStats));
         timer.reset();
     }

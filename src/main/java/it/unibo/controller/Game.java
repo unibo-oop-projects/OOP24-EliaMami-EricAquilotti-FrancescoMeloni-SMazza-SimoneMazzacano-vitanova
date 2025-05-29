@@ -35,7 +35,6 @@ public final class Game implements Runnable {
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
     private final SkillPoint skillPoints = new SkillPoint(3);
-    
 
     /**
      * Starts the game engine.
