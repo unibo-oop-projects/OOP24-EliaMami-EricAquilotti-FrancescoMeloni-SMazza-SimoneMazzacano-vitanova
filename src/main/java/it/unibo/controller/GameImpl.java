@@ -22,7 +22,7 @@ import it.unibo.view.screen.ScreenImpl;
 /**
  * Implementation of the Game engine.
  */
-public final class Game implements Runnable {
+public final class GameImpl implements Runnable, Game {
     private static final int FPS = 60;
     private static final int NANO_IN_SEC = 1_000_000_000;
     private final Thread gameThread = new Thread(this);
@@ -38,7 +38,7 @@ public final class Game implements Runnable {
     /**
      * Starts the game engine.
      */
-    public Game() {
+    public GameImpl() {
         chapter = new ChapterImpl(1, inputHandler, baseClock);
         gameThread.start();
     }
@@ -111,25 +111,17 @@ public final class Game implements Runnable {
         }
     }
 
-    /**
-     * Starts the gameplay.
-     */
+    @Override
     public void startGameplay() {
         this.isGameplayStarted = true;
     }
 
-    /**
-     * Set current menu.
-     * @param menu
-     */
+    @Override
     public void setMenu(final Menu menu) {
         this.menu = menu;
     }
 
-    /**
-     * Pauses the gameplay.
-     * @param paused true if the game is paused, false otherwise.
-     */
+    @Override
     public void setGameplayState(final boolean paused) {
         if (paused) {
             baseClock.pause();
@@ -139,33 +131,25 @@ public final class Game implements Runnable {
         this.isGameplayPaused = paused;
     }
 
-    /**
-     * Exits the game.
-     */
+    @Override
     public void exit() {
         chapter.getPlayer().getStats().resetAllEffect();
         System.exit(0);
     }
 
-    /**
-     * Restarts the current chapter.
-     */
+    @Override
     public void restartCurrentChapter() {
         chapter.restart();
     }
 
-    /**
-     * Sets the new chapter and clears the screen.
-     */
+    @Override
     public void setNewChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
         this.isGameplayStarted = false;
         clearScreen();
     }
 
-    /**
-     * Clears the screen by removing everything, except of the map.
-     */
+    @Override
     public void clearScreen() {
         this.skillPoints = Optional.empty();
         this.screen.loadHumans(Collections.emptyList());
@@ -174,40 +158,27 @@ public final class Game implements Runnable {
         this.screen.loadPopulationCounter(Optional.empty());
     }
 
-    /**
-     * This method gets player from all humans and return his stats.
-     * @return player's stats.
-     */
+    @Override
     public HumanStats getPlayerStats() {
         return chapter.getPlayer().getStats();
     }
 
-    /**
-     * This method sets skill points value if skill points isn't already initialized.
-     * @param value the value to initialize skill points to.
-     */
+    @Override
     public void setSkillPoint(final int value) { 
         skillPoints = skillPoints.or(() -> Optional.of(value));
     }
 
-    /**
-     * This method returns skill points value.
-     * @return skill point's value.
-     */
+    @Override
     public int getSkillPoint() {
         return skillPoints.get();
     }
 
-    /**
-     * This method update the variable skill point if skill point is greater than zero.
-     */
+    @Override
     public void updateSkillPoint() {
         skillPoints = Optional.of(skillPoints.get() > 0 ? (Integer) (skillPoints.get() - 1) : skillPoints.get());
     }
 
-    /**
-     * Set the next chapter.
-     */
+    @Override
     public void nextChapter() {
         getPlayerStats().resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
@@ -215,11 +186,8 @@ public final class Game implements Runnable {
         this.skillPoints = Optional.empty();
     }
 
-    /**
-     * This method returns the current chapter.
-     * @return the current chapter.
-     */
-    public Chapter getChaper() {
+    @Override
+    public Chapter getChapter() {
         return chapter;
     }
 }
