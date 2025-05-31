@@ -56,9 +56,11 @@ public final class GameImpl implements Runnable, Game {
                 chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerUpgrade());
             }
         } catch (IOException | ClassNotFoundException e) {
+            chapter = new ChapterImpl(1, inputHandler, baseClock);
             this.setMenu(errorMenuCall("Lettura del file di gioco andata male"));
+        } finally {
+            gameThread.start();
         }
-        gameThread.start();
     }
 
     @Override
@@ -117,6 +119,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Starts the gameplay.
      */
+    @Override
     public void startGameplay() {
         this.isGameplayStarted = true;
     }
@@ -125,6 +128,7 @@ public final class GameImpl implements Runnable, Game {
      * Set current menu.
      * @param menu 
      */
+    @Override
     public void setMenu(final Menu menu) {
         this.menu = menu;
     }
@@ -133,6 +137,7 @@ public final class GameImpl implements Runnable, Game {
      * Pauses the gameplay.
      * @param paused true if the game is paused, false otherwise.
      */
+    @Override
     public void setGameplayState(final boolean paused) {
         if (paused) {
             baseClock.pause();
@@ -145,6 +150,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Exits the game.
      */
+    @Override
     public void exit() {
         chapter.getPlayer().getStats().resetAllEffect();
         saveGame();
@@ -154,6 +160,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Restarts the current chapter.
      */
+    @Override
     public void restartCurrentChapter() {
         chapter.restart();
     }
@@ -161,6 +168,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Sets the first chapter and clears the screen.
      */
+    @Override
     public void setFirstChapter() {
         this.chapter = new ChapterImpl(1, inputHandler, baseClock);
         this.isGameplayStarted = false;
@@ -170,6 +178,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Sets the new chapter and clears the screen.
      */
+    @Override
     public void setNewChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, getPlayerStats());
         this.isGameplayStarted = false;
@@ -179,6 +188,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Clears the screen by removing everything, except of the map.
      */
+    @Override
     public void clearScreen() {
         this.skillPoints = Optional.empty();
         this.screen.loadHumans(Collections.emptyList());
@@ -191,6 +201,7 @@ public final class GameImpl implements Runnable, Game {
      * This method gets player from all humans and return his stats.
      * @return player's stats.
      */
+    @Override
     public HumanStats getPlayerStats() {
         return chapter.getPlayer().getStats();
     }
@@ -199,6 +210,7 @@ public final class GameImpl implements Runnable, Game {
      * This method sets skill points value if skill points isn't already initialized.
      * @param value the value to initialize skill points to.
      */
+    @Override
     public void setSkillPoint(final int value) { 
         skillPoints = skillPoints.or(() -> Optional.of(value));
     }
@@ -207,6 +219,7 @@ public final class GameImpl implements Runnable, Game {
      * This method returns skill points value.
      * @return skill point's value.
      */
+    @Override
     public int getSkillPoint() {
         return skillPoints.get();
     }
@@ -214,6 +227,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * This method update the variable skill point if skill point is greater than zero.
      */
+    @Override
     public void updateSkillPoint() {
         skillPoints = Optional.of(skillPoints.get() > 0 ? (Integer) (skillPoints.get() - 1) : skillPoints.get());
     }
@@ -221,6 +235,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Set the next chapter.
      */
+    @Override
     public void nextChapter() {
         getPlayerStats().resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, getPlayerStats());
@@ -232,6 +247,7 @@ public final class GameImpl implements Runnable, Game {
     /**
      * Save the chapter number and player stats in a file.
      */
+    @Override
     public void saveGame() {
         try {
             saveManager.saveObj(new SaveObject(

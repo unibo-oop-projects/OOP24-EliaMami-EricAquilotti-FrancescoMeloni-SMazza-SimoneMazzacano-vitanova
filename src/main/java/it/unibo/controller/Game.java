@@ -62,8 +62,16 @@ public interface Game {
      */
     void nextChapter();
     /**
+     * Set the first chapter.
+     */
+    void setFirstChapter();
+    /**
      * This method returns the current chapter.
      * @return the current chapter.
      */
     Chapter getChapter();
+    /**
+     * Save the game.
+     */
+    void saveGame();
 }

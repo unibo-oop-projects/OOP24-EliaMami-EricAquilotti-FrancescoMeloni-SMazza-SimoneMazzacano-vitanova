@@ -20,6 +20,6 @@ public class ErrorMenu extends AbstractMenu {
             g.setMenu(new PauseMenu(input, g));
             g.setFirstChapter();
             g.startGameplay();
-        })), false, subtitle, "Error:");
+        })), true, subtitle, "Error:");
     }
 }
