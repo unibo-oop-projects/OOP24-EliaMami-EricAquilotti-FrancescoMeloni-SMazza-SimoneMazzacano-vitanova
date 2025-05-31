@@ -18,7 +18,7 @@ import it.unibo.view.screen.ScreenImpl;
  * 
  */
 public final class PickableManagerImpl implements PickableManager {
-    private final int SECONDS_TO_SPAWN = 5;
+    private static final int SECONDS_TO_SPAWN = 5;
     private final List<Pickable> pickables = new CopyOnWriteArrayList<>();
     private final List<Pickable> activatedPickables = new CopyOnWriteArrayList<>();
     private final PickableFactory pickableFactory;
@@ -55,11 +55,12 @@ public final class PickableManagerImpl implements PickableManager {
         if (player.getStats().isSick()) {
             return;
         }
-        Predicate<Pickable> ifCollide = p -> Math.abs(player.getPosition().x() - p.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
+        final Predicate<Pickable> ifCollide = p -> 
+                                Math.abs(player.getPosition().x() - p.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
                                  && Math.abs(player.getPosition().y() - p.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2;
         pickables.stream()
         .filter(ifCollide)
-        .forEach( p -> {
+        .forEach(p -> {
             checkAndActivate(p); 
             pickables.remove(p);
         });
@@ -91,7 +92,7 @@ public final class PickableManagerImpl implements PickableManager {
     public void resetExpiredEffects() {
         activatedPickables.stream()
         .filter(a -> a.getEffect().isExpired())
-        .forEach( a -> {
+        .forEach(a -> {
             player.getStats().resetEffect(a.getEffect().getType());
             activatedPickables.remove(a);
         });
