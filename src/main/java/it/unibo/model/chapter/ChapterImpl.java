@@ -28,7 +28,7 @@ import it.unibo.model.pickable.PickableManagerImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
- * Implementation of a chapter that handles map and humans movement and
+ * Implementation of a chapter that handles map, humans movement and
  * collisions.
  */
 public final class ChapterImpl implements Chapter {
@@ -44,8 +44,9 @@ public final class ChapterImpl implements Chapter {
     // CopyOnWriteArrayList is a thread safe list, if it's too slow we'll change it.
     private final List<Human> humans = new CopyOnWriteArrayList<>();
     private final Timer timer;
-    private static final int STARTING_ROWS = 16;
-    private static final int STARTING_COLOUMNS = 16;
+    private final Clock clock;
+    private static final int STARTING_ROWS = 32;
+    private static final int STARTING_COLOUMNS = 32;
     private final int chapterNumber;
 
     /**
@@ -55,7 +56,19 @@ public final class ChapterImpl implements Chapter {
      * @param baseClock the clock used for the factories and the timer.
      */
     public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock) {
-        this(chapterNumber, inputHandler, baseClock, Optional.empty());
+        this(chapterNumber, inputHandler, baseClock, Optional.empty(), List.of());
+    }
+
+    /**
+     * Sets up all the parameters.
+     * @param chapterNumber the current chapter number.
+     * @param inputHandler
+     * @param baseClock the clock used for the factories and the timer.
+     * @param playerStats the player stats.
+     */
+    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, 
+                        final Clock baseClock, final HumanStats playerStats) {
+        this(chapterNumber, inputHandler, baseClock, Optional.of(playerStats), List.of());
     }
 
     /**
@@ -63,18 +76,44 @@ public final class ChapterImpl implements Chapter {
      * @param chapterNumber
      * @param inputHandler
      * @param baseClock
-     * @param playerStats
+     * @param playerUpgrade
      */
     public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, 
-                        final Clock baseClock, final Optional<HumanStats> playerStats) {
+                        final Clock baseClock, final List<Integer> playerUpgrade) {
+        this(chapterNumber, inputHandler, baseClock, Optional.empty(), playerUpgrade);
+    }
+
+    private ChapterImpl(final int chapterNumber, final InputHandler inputHandler,
+                        final Clock baseClock, final Optional<HumanStats> playerStats, final List<Integer> playerUpgrade) {
         this.chapterNumber = chapterNumber;
-        this.map = new MapImpl(STARTING_ROWS * chapterNumber, STARTING_COLOUMNS * chapterNumber);
+        this.map = new MapImpl(STARTING_ROWS + chapterNumber, STARTING_COLOUMNS + chapterNumber);
         this.inputHandler = inputHandler;
         this.humanFactory = new HumanFactoryImpl(baseClock);
         this.timer = new TimerImpl(STARTING_TIMER_VALUE, baseClock);
         this.sicknessManager = new SicknessManagerImpl(new EffectFactoryImpl(baseClock), getPopulationGoal());
-        spawnHumans(inputHandler, playerStats);
-        this.pickableManager = new PickableManagerImpl(getPlayer(), baseClock, map);
+        spawnHumans(inputHandler, playerStats, playerUpgrade);
+    }
+
+    private void spawnHumans(final InputHandler inputHandler, final Optional<HumanStats> playerStats, 
+                                final List<Integer> playerUpgrade) {
+        spawnPlayer(inputHandler, playerStats, playerUpgrade);
+        for (int i = 0; i < getChapterNumber(); i++) {
+            this.humans.add(humanFactory.female(Position.getRandomWalkablePosition(map), map));
+        }
+    }
+
+    private void spawnPlayer(final InputHandler inputHandler, final Optional<HumanStats> playerStats, 
+                                final List<Integer> playerUpgrade) {
+        final Position startingPosition = Position.getRandomCentralWalkablePosition(map);
+        if (playerStats.isEmpty()) {
+            if (playerUpgrade.isEmpty()) {
+                this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
+            } else {
+                this.humans.add(humanFactory.player(startingPosition, map, inputHandler, playerUpgrade));
+            }
+        } else {
+            this.humans.add(humanFactory.player(startingPosition, map, inputHandler, playerStats.get()));
+        }
     }
 
     @Override
@@ -106,19 +145,7 @@ public final class ChapterImpl implements Chapter {
         return timer.isOver();
     }
 
-    private void spawnHumans(final InputHandler inputHandler, final Optional<HumanStats> playerStats) {
-        spawnPlayer(inputHandler, playerStats);
-        for (int i = 0; i < getChapterNumber(); i++) {
-            this.humans.add(humanFactory.female(Position.getRandomWalkablePosition(map), map));
-        }
-    }
-
-    private void spawnPlayer(final InputHandler inputHandler, final Optional<HumanStats> playerStats) {
-        final Position startingPosition = Position.getRandomWalkablePosition(map);
-        this.humans.add(playerStats.isEmpty() 
-        ? humanFactory.player(startingPosition, map, inputHandler) 
-        : humanFactory.player(startingPosition, map, inputHandler, playerStats.get()));
-    }
+    //erano qui hihi
 
     @Override
     public Map getMap() {
@@ -165,7 +192,7 @@ public final class ChapterImpl implements Chapter {
         this.humans.clear();
         pickableManager.resetPickables();
         pickableManager.resetActivatedPickables();
-        spawnHumans(this.inputHandler, Optional.of(playerStats));
+        spawnHumans(this.inputHandler, Optional.of(playerStats), List.of());
         timer.reset();
     }
 

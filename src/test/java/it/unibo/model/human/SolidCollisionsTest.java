@@ -1,7 +1,6 @@
 package it.unibo.model.human;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -30,14 +29,14 @@ class SolidCollisionsTest {
     @Test
     void testCanMove() {
         final var pos = getWalkablePosition((x, y) -> tiles[x][y].isWalkable());
-        assertNotNull(pos); // Se e' null, allora c'e' un problema con la mappa 
+        assertTrue(pos.isPresent()); // Se e' false, allora c'e' un problema con la mappa 
         assertTrue(solidCollisions.isWalkable(pos.get()));
     }
 
     @Test
     void testStayStill() {
         final var pos = getWalkablePosition((x, y) -> !tiles[x][y].isWalkable());
-        assertNotNull(pos); // Se e' null, allora c'e' un problema con la mappa 
+        assertTrue(pos.isPresent()); // Se e' false, allora c'e' un problema con la mappa 
         assertFalse(solidCollisions.isWalkable(pos.get()));
     }
 

@@ -8,16 +8,16 @@ import it.unibo.controller.InputHandler;
 import it.unibo.model.human.stats.HumanStats;
 
 /**
- * 
+ * Class that handles the stats menu options, displaying the player's stats.
  */
-public class StatsMenu extends AbstractMenu {
+public final class StatsMenu extends AbstractMenu {
 
     /**
-     * 
-     * @param input
-     * @param game
+     * Constructor for the StatsMenu class.
+     * @param input the input handler
+     * @param game the game controller
      */
-    protected StatsMenu(final InputHandler input, final Game game) {
+    public StatsMenu(final InputHandler input, final Game game) {
         super(input, game, Collections.singletonList(
             MenuOption.of("Back", g -> {
                 final PauseMenu newPause = new PauseMenu(input, game);

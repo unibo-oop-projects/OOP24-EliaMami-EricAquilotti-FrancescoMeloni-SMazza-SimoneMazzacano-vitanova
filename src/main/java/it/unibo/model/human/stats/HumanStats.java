@@ -10,58 +10,70 @@ import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 public interface HumanStats {
 
     /**
-     * 
+     * Method that returns the current speed.
      * @return the current speed of human.
      */
     double getSpeed();
 
     /**
-     * Used to increase speed after finishing the chapter.
+     * Used to increase speed of a fixed value.
      */
     void increaseSpeed();
 
     /**
-     * 
+     * Method that set the new reprostrategy of human.
+     * @param newReproStrategy
+     */
+    void setReproStrategy(ReproStrategy newReproStrategy);
+
+    /**
+     * Method that returns the current reprostrategy.
      * @return the reproStrategy.
      */
     ReproStrategy getReproStrategy();
 
     /**
-     * 
+     * Method that returns the current reproduction area.
      * @return the radius of the reproduction radius.
      */
     Circle getReproductionAreaRadius();
 
     /**
-     * Used to increase the reproduction area radius after finishing the chapter.
+     * Method that returns the current radius of the reproduction area.
+     * @return the radius of the reproduction radius.
+     */
+    double getBaseRadius();
+
+    /**
+     * Used to increase the reproduction area radius of a fixed value.
      */
     void increaseReproductionAreaRadius();
 
     /**
-     * 
-     * @return the probability to resiste sickness effect.
+     * Method that returns the sickness resistence.
+     * @return the probability to resist sickness effect.
      */
     double getSicknessResistence();
 
     /**
-     * Used to increase sickness resistence after finishing the chapter.
+     * Used to increase sickness resistence of a fixed value.
      */
     void increaseSicknessResistence();
 
     /**
-     * 
-     * @return the probability of getting more than one child.
+     * Method that returns the fertility.
+     * @return the probability of getting a female child.
      */
     double getFertility(); 
 
     /**
-     * Used to increase fertility after finishing the chapter.
+     * Used to increase fertility of a fixed value.
      */
     void increaseFertility();
 
     /**
-     * Apply stats modifier based on the effect activated.
-     * @param effect
+     * Apply the effect modifier to the stats based on the type effect activated.
+     * @param effect 
      */
     void applyEffect(Effect effect);
 
@@ -101,13 +113,13 @@ public interface HumanStats {
     int getFertilityUpgrade();
 
     /**
-     * 
+     * This method returns if the human has been sick during the chapter. 
      * @return true if the human has been sick, including now.
      */
     boolean hasBeenSick();
 
     /**
-     * 
+     * This method returns if the human is sick. 
      * @return true if the human is sick now.
      */
     boolean isSick();

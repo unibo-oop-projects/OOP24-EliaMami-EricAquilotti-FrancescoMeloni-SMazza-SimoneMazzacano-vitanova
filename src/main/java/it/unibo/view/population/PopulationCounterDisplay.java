@@ -12,7 +12,7 @@ import it.unibo.model.chapter.PopulationCounter;
  * Models a population counter display for the view.
  */
 public final class PopulationCounterDisplay extends JLabel {
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 2783719L;
 
     /**
      * The size of the text in the population counter display.

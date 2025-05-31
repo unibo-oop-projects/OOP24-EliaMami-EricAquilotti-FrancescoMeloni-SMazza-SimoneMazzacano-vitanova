@@ -19,10 +19,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import it.unibo.common.Position;
@@ -43,19 +39,13 @@ import it.unibo.view.timerdisplay.TimerDisplay;
  * Class that handles all the rendering on the screen.
  */
 public final class ScreenImpl extends JPanel implements Screen {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 1287309L;
 
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCALE = 5;
     private static final int ORIGINAL_TILE_SIZE = 16;
-    /**
-     * Base window width, screen width.
-     */
-    public static final int BASE_WINDOW_WIDTH = (int) SCREEN_SIZE.getWidth();
-    /**
-     * Base window height, screen height.
-     */
-    public static final int BASE_WINDOW_HEIGHT = (int) SCREEN_SIZE.getHeight();
+    private static final int BASE_WINDOW_WIDTH = (int) SCREEN_SIZE.getWidth();
+    private static final int BASE_WINDOW_HEIGHT = (int) SCREEN_SIZE.getHeight();
     /**
      * The pixel size of a tile scaled.
      */
@@ -66,7 +56,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private int xOffset;
     private int yOffset;
     private final JFrame window = new JFrame();
-    private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
@@ -89,7 +78,8 @@ public final class ScreenImpl extends JPanel implements Screen {
      * @param inputHandler
      */
     public ScreenImpl(final InputHandler inputHandler) {
-        this.setBackground(Color.BLACK);
+        final var color = new Color(4, 160, 180); 
+        this.setBackground(color);
         this.setDoubleBuffered(true);
         this.setLayout(new GridBagLayout());
         addInnerComponents();
@@ -106,7 +96,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         updateCenter();
         this.setOffset(centerX, centerY);
         initializeBuffer();
-        executor.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
+        new javax.swing.Timer(16, e -> repaint()).start(); // ~60 FPS
     }
 
     private void addInnerComponents() {
@@ -293,5 +283,4 @@ public final class ScreenImpl extends JPanel implements Screen {
             );
         }
     }
-
 }

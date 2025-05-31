@@ -1,6 +1,7 @@
 package it.unibo.model.human;
 
 import java.time.Clock;
+import java.util.List;
 
 import it.unibo.common.Direction;
 import it.unibo.common.DirectionEnum;
@@ -24,14 +25,14 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
+    private final transient ReproStrategyFactory reproductionStrategyFactory;
+    private final transient MovStrategyFactory movementStrategyFactory;
     private static final double BASE_SPEED = 4.5;
-    private static final double BASE_SICKNESS_RESISTENCE = .1;
+    private static final double BASE_SICKNESS_RESISTENCE = .3;
     private static final double BASE_FERTILITY = .1;
-    private final ReproStrategyFactory reproductionStrategyFactory;
-    private final MovStrategyFactory movementStrategyFactory;
 
     /**
-     * 
+     * Constructor for human factory.
      * @param baseClock the clock to give to the strategies that may need cooldowns.
      */
     public HumanFactoryImpl(final Clock baseClock) {
@@ -73,8 +74,8 @@ public final class HumanFactoryImpl implements HumanFactory {
     }
 
     @Override
-    public Human player(final Position startingPosition, final Map map,
-                        final InputHandler inputHandler, final HumanStats playerStats) {
+    public Human player(
+        final Position startingPosition, final Map map, final InputHandler inputHandler, final HumanStats playerStats) {
         return generalised(
             startingPosition,
             map,
@@ -82,6 +83,20 @@ public final class HumanFactoryImpl implements HumanFactory {
             movementStrategyFactory.userInputMovement(inputHandler),
             playerStats.getReproStrategy(),
             playerStats
+        );
+    }
+
+    @Override
+    public Human player(
+        final Position startingPosition, final Map map, final InputHandler inputHandler, final List<Integer> upgrade) {
+        final ReproStrategy rs = reproductionStrategyFactory.maleReproStrategy(startingPosition);
+        return generalised(
+            startingPosition, 
+            map, 
+            HumanType.PLAYER, 
+            movementStrategyFactory.userInputMovement(inputHandler),
+            rs,
+            new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, rs, upgrade)
         );
     }
 
@@ -97,8 +112,8 @@ public final class HumanFactoryImpl implements HumanFactory {
             private Direction direction = new Direction(false, false, true, false);
             private int numSprite = 1;
             private int spriteCounter;
-            private Sprite sprite = nextSprite();
             private final HumanStats humanStats = stats;
+            private Sprite sprite = nextSprite();
             private final SolidCollisions solidCollisions = new SimpleSolidCollisions(map);
 
             @Override
@@ -127,7 +142,7 @@ public final class HumanFactoryImpl implements HumanFactory {
             private Sprite nextSprite() {
                 return Sprite.getSprite(
                     humanType,
-                    DirectionEnum.getDirectionEnum(direction), numSprite
+                    DirectionEnum.getDirectionEnum(direction), humanStats.isSick(), numSprite
                 ).orElse(sprite);
             }
 
@@ -172,6 +187,7 @@ public final class HumanFactoryImpl implements HumanFactory {
                                 final HumanType humanType, final MovStrategy movementStrategy,
                                 final ReproStrategy reproductionStrategy) {
         return generalised(startingPosition, map, humanType, movementStrategy, reproductionStrategy, 
-                            new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, reproductionStrategy));
+            new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, reproductionStrategy)
+        );
     }
 }

@@ -3,12 +3,12 @@ package it.unibo.model.effect;
 import java.time.Duration;
 
 /**
- * Malus factory interface.
+ * Effect factory interface.
  */
 public interface EffectFactory {
 
     /**
-     * 
+     * Method that return a new speed effect.
      * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
      * @return an effect that describe how to modify the speed.
@@ -16,7 +16,7 @@ public interface EffectFactory {
     Effect speedEffect(Duration duration, double multiplyValue);
 
     /**
-     * 
+     * Method that return a new reproduction range effect.
      * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
      * @return an effect that describe how to modify the radius range.
@@ -24,7 +24,7 @@ public interface EffectFactory {
     Effect reproductionRangeEffect(Duration duration, double multiplyValue);
 
     /**
-     * 
+     * Method that return a new fertility effect.
      * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
      * @return an effect that describe how to modify the fertility.
@@ -32,7 +32,7 @@ public interface EffectFactory {
     Effect fertilityEffect(Duration duration, double multiplyValue);
 
     /**
-     * 
+     * Method that return a sickness resistence effect.
      * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
      * @return an effect that describe how to modify the sickness resistence.

@@ -1,6 +1,6 @@
 package it.unibo;
 
-import it.unibo.controller.Game;
+import it.unibo.controller.GameImpl;
 
 /**
  * Main class to run the application.
@@ -17,6 +17,6 @@ public final class App {
      * @param args
      */
     public static void main(final String[] args) {
-        new Game();
+        new GameImpl();
     }
 }

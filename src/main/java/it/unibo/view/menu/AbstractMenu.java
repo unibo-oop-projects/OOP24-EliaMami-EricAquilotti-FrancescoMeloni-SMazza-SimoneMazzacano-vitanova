@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  * Class that handles the menu options, text and input.
  */
 public abstract class AbstractMenu implements Menu {
-    private static final int TIMER_VALUE = 10;
+    private static final int INPUT_DELAY_RATE = 10;
     private static final int MENU_TOGGLE_KEY = KeyEvent.VK_ESCAPE;
 
     private final List<MenuOption> options;
@@ -20,17 +20,10 @@ public abstract class AbstractMenu implements Menu {
     private final Supplier<String> subtitle;
     private int selectedOptionIndex;
     private boolean isVisible;
-    private int timer = TIMER_VALUE;
+    // Counter to prevent a single key press from being processed multiple times by the game loop.
+    private int inputDelayCounter = INPUT_DELAY_RATE;
     private final InputHandler input;
     private final Game game;
-
-    /**
-     * 
-     * @return the input handler
-     */
-    protected final InputHandler getInput() {
-        return input;
-    }
 
     /**
      * 
@@ -76,28 +69,26 @@ public abstract class AbstractMenu implements Menu {
 
     @Override
     public final void update() {
-        if (timer > 0) {
-            timer--;
+        if (inputDelayCounter > 0) {
+            inputDelayCounter--;
         } else if (input.isKeyPressed(MENU_TOGGLE_KEY)) {
             toggleMenu();
-            timer = TIMER_VALUE;
-        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S))
-                && selectedOptionIndex + 1 < options.size()) {
-            selectedOptionIndex++;
-            timer = TIMER_VALUE;
-        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W)) 
-                && selectedOptionIndex > 0) {
-            selectedOptionIndex--;
-            timer = TIMER_VALUE;
-        } else if (this.isVisible && (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE))) {
-            onExit();
-            timer = TIMER_VALUE;
-            options.get(selectedOptionIndex).action().accept(getGame());
+            inputDelayCounter = INPUT_DELAY_RATE;
+        } else if (this.isVisible) {
+            if (input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S)
+                    && selectedOptionIndex + 1 < options.size()) {
+                selectedOptionIndex++;
+                inputDelayCounter = INPUT_DELAY_RATE;
+            } else if (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W) 
+                    && selectedOptionIndex > 0) {
+                selectedOptionIndex--;
+                inputDelayCounter = INPUT_DELAY_RATE;
+            } else if (input.isKeyPressed(KeyEvent.VK_ENTER) || input.isKeyPressed(KeyEvent.VK_SPACE)) {
+                onExit();
+                inputDelayCounter = INPUT_DELAY_RATE;
+                options.get(selectedOptionIndex).action().accept(getGame());
+            }
         }
-    }
-
-    private String applySelectedFormat(final String text) {
-        return "> " + text + " <";
     }
 
     /**
@@ -122,11 +113,17 @@ public abstract class AbstractMenu implements Menu {
     }
 
     /**
-     * 
+     * Called when the menu is exited.
+     * Default behavior is to set the visibility to false and update the game state.
+     * Subclasses can override this method to provide custom behavior.
      */
     protected void onExit() {
         isVisible = false;
         getGame().setGameplayState(false);
+    }
+
+    private String applySelectedFormat(final String text) {
+        return "> " + text + " <";
     }
 
     private String formatOptionText(final int index) {
@@ -145,7 +142,7 @@ public abstract class AbstractMenu implements Menu {
         if (isVisible) {
             final List<String> list = IntStream.range(0, options.size())
                 .mapToObj(this::formatOptionText).toList();
-            return new MenuContent(title, subtitle.get(), list);
+            return MenuContent.of(title, subtitle.get(), list);
         }
         return MenuContent.empty();
     }
