@@ -38,7 +38,10 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseFertility(), g);
             }),
             MenuOption.nextChapter(input),
-            MenuOption.home(input),
+            MenuOption.of("Home", g -> {
+                g.setNextChapter();
+                g.setMenu(new StartMenu(input, g));
+            }),
             MenuOption.quit()
         ), 
         true,

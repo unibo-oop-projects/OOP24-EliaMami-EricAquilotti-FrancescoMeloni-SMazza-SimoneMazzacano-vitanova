@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.effect.Effect;
 import it.unibo.model.human.Human;
 import it.unibo.view.screen.ScreenImpl;
 
@@ -20,7 +21,7 @@ import it.unibo.view.screen.ScreenImpl;
 public final class PickableManagerImpl implements PickableManager {
     private static final int SECONDS_TO_SPAWN = 5;
     private final List<Pickable> pickables = new CopyOnWriteArrayList<>();
-    private final List<Pickable> activatedPickables = new CopyOnWriteArrayList<>();
+    private final List<Effect> activatedEffects = new CopyOnWriteArrayList<>();
     private final PickableFactory pickableFactory;
     private CooldownGate spawnPickableRate;
     private final Human player;
@@ -61,7 +62,7 @@ public final class PickableManagerImpl implements PickableManager {
         pickables.stream()
         .filter(ifCollide)
         .forEach(p -> {
-            checkAndActivate(p); 
+            checkAndActivate(p.getEffect()); 
             pickables.remove(p);
         });
         // for (final Pickable activated : activatedPickables) {
@@ -72,29 +73,29 @@ public final class PickableManagerImpl implements PickableManager {
         // }
     }
 
-    private void checkAndActivate(final Pickable pickable) {
-        Optional<Pickable> tmp = Optional.empty();
-        for (final Pickable activated : this.activatedPickables) {
-            if (activated.getEffect().getType().equals(pickable.getEffect().getType())) {
+    private void checkAndActivate(final Effect effect) {
+        Optional<Effect> tmp = Optional.empty();
+        for (final Effect activated : this.activatedEffects) {
+            if (activated.getType().equals(effect.getType())) {
                 tmp = Optional.of(activated);
             }
         }
         if (tmp.isPresent()) {
-            tmp.get().getEffect().refresh();
+            tmp.get().refresh();
         } else {
-            pickable.getEffect().activate();
-            this.activatedPickables.add(pickable);
-            this.player.getStats().applyEffect(pickable.getEffect());
+            effect.activate();
+            this.activatedEffects.add(effect);
+            this.player.getStats().applyEffect(effect);
         }
     }
 
     @Override
     public void resetExpiredEffects() {
-        activatedPickables.stream()
-        .filter(a -> a.getEffect().isExpired())
+        activatedEffects.stream()
+        .filter(Effect::isExpired)
         .forEach(a -> {
-            player.getStats().resetEffect(a.getEffect().getType());
-            activatedPickables.remove(a);
+            player.getStats().resetEffect(a);
+            activatedEffects.remove(a);
         });
         // for (final Pickable activated : activatedPickables) {
         //     if (activated.getEffect().isExpired()) {
@@ -116,7 +117,7 @@ public final class PickableManagerImpl implements PickableManager {
 
     @Override
     public void resetActivatedPickables() {
-        this.activatedPickables.clear();
+        this.activatedEffects.clear();
     }
 
     @Override

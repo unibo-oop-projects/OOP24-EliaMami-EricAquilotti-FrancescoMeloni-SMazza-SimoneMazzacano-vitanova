@@ -2,7 +2,6 @@ package it.unibo.model.human.stats;
 
 import it.unibo.common.Circle;
 import it.unibo.model.effect.Effect;
-import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 
 /**
@@ -67,10 +66,10 @@ public interface HumanStats {
     void applyEffect(Effect effect);
 
     /**
-     * Resets actual stats to base stats based on the expired effect type.
-     * @param type 
+     * Resets actual stats to base stats based on the expired effect.
+     * @param effect 
      */
-    void resetEffect(EffectType type);
+    void resetEffect(Effect effect);
 
     /**
      * Resets all stats to base stats. 

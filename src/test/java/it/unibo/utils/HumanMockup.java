@@ -10,7 +10,6 @@ import it.unibo.controller.InputHandlerImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.effect.Effect;
-import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.HumanFactoryImpl;
@@ -124,7 +123,7 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public void resetEffect(final EffectType type) {
+                    public void resetEffect(final Effect effect) {
                     }
 
                     @Override

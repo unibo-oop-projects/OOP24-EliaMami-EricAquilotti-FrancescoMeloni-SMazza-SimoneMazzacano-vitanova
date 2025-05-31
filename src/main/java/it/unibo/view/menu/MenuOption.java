@@ -86,7 +86,7 @@ public final class MenuOption {
      */
     public static MenuOption nextChapter(final InputHandler input) {
         return new MenuOption(() -> "Next Chapter", g -> {
-            g.nextChapter();
+            g.startNextChapter();
             g.setMenu(new PauseMenu(input, g));
         });
     }

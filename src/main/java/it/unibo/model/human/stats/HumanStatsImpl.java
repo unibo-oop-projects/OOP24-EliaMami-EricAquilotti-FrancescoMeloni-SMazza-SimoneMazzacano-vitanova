@@ -1,9 +1,11 @@
 package it.unibo.model.human.stats;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.model.effect.Effect;
-import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 
 /**
@@ -14,21 +16,18 @@ public final class HumanStatsImpl implements HumanStats {
     private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .05;
     private static final double FERTILITY_UPGRADE_VALUE = .05;
     private static final int RADIUS_UPGRADE_VALUE = 4;
-    private double baseSpeed;
-    private double actualSpeed;
-    private double baseSicknessResistence;
-    private double actualSicknessResistence;
-    private double baseFertility;
-    private double actualFertility;
-    private boolean hasBeenSick;
-    private boolean isSick;
     private ReproStrategy reproStrategy;
-    private double baseRadius;
-    private double actualRadius;
+    private double speed;
+    private double sicknessResistence;
+    private double reproductionRadius;
+    private double fertility;
     private int speedUpgrade;
     private int sicknessResistenceUpgrade;
-    private int fertilityUpgrade;
     private int reproductionRangeUpgrade;
+    private int fertilityUpgrade;
+    private boolean hasBeenSick;
+    private boolean isSick;
+    private final List<Effect> activatedEffects = new CopyOnWriteArrayList<>();
 
     /**
      * Constructor for human stats.
@@ -42,22 +41,21 @@ public final class HumanStatsImpl implements HumanStats {
         setSpeed(speed);
         setSicknessResistence(sicknessResistence);
         setFertility(fertility);
-        setReproStrategy(reproStrategy);
+        setReproStrategy(reproStrategy); 
     }
 
     @Override
     public double getSpeed() {
-        return this.actualSpeed;
+        return this.speed;
     }
 
     private void setSpeed(final double newSpeed) {
-        this.baseSpeed = newSpeed;
-        this.actualSpeed = newSpeed;
+        this.speed = newSpeed;
     }
 
     @Override
     public void increaseSpeed() {
-        setSpeed(this.baseSpeed + SPEED_UPGRADE_VALUE);
+        setSpeed(this.speed + SPEED_UPGRADE_VALUE);
         this.speedUpgrade += 1;
     }
 
@@ -71,19 +69,18 @@ public final class HumanStatsImpl implements HumanStats {
         return new CircleImpl(
             getReproStrategy().getReproductionArea().getCenter().x(), 
             getReproStrategy().getReproductionArea().getCenter().y(), 
-            this.actualRadius
+            this.reproductionRadius
         );
     }
 
     private void setReproStrategy(final ReproStrategy newReproStrategy) {
         this.reproStrategy = newReproStrategy;
-        this.baseRadius = reproStrategy.getReproductionArea().getRadius();
-        this.actualRadius = this.baseRadius;
+        this.reproductionRadius = reproStrategy.getReproductionArea().getRadius();
     }
 
     private void setReproductionAreaRadius(final double newRadius) {
         getReproStrategy().changeReproductionArea(newRadius);
-        this.baseRadius = reproStrategy.getReproductionArea().getRadius();
+        this.reproductionRadius = reproStrategy.getReproductionArea().getRadius();
     }
 
     @Override
@@ -94,50 +91,69 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public double getSicknessResistence() {
-        return this.actualSicknessResistence;
+        return this.sicknessResistence;
     }
 
     private void setSicknessResistence(final double newSicknessResistence) {
-        this.baseSicknessResistence = newSicknessResistence;
-        this.actualSicknessResistence = newSicknessResistence;
+        this.sicknessResistence = newSicknessResistence;
     }
 
     @Override
     public void increaseSicknessResistence() {
-        setSicknessResistence(this.baseSicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE);
+        setSicknessResistence(this.sicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE);
         this.sicknessResistenceUpgrade += 1;
     }
 
     @Override
     public double getFertility() {
-        return this.actualFertility;
+        return this.fertility;
     }
 
     private void setFertility(final double newFertility) {
-        this.baseFertility = newFertility;
-        this.actualFertility = newFertility;
+        this.fertility = newFertility;
     }
 
     @Override
     public void increaseFertility() {
-        setFertility(this.baseFertility + FERTILITY_UPGRADE_VALUE);
+        setFertility(this.fertility + FERTILITY_UPGRADE_VALUE);
         this.fertilityUpgrade += 1;
     }
 
     @Override
-    public void resetEffect(final EffectType type) {
-        switch (type) {
+    public void applyEffect(final Effect effect) {
+        activatedEffects.stream().filter(a -> a.getType().equals(effect.getType())).forEach(this::resetEffect);
+        activatedEffects.add(effect);
+        switch (effect.getType()) {
             case SPEED:
-                this.actualSpeed = this.baseSpeed;
+                this.speed = this.speed * effect.getMultiplyValue();
                 break;
             case SICKNESS_RESISTENCE:
-                this.actualSicknessResistence = this.baseSicknessResistence;
+                this.sicknessResistence = this.sicknessResistence * effect.getMultiplyValue();
                 break;
             case REPRODUCTION_RANGE:
-                this.actualRadius = this.baseRadius;
+                this.reproductionRadius = this.reproductionRadius * effect.getMultiplyValue();
                 break;
             default:
-                this.actualFertility = this.baseFertility;
+                this.fertility = this.fertility * effect.getMultiplyValue();
+                break;
+        }
+    }
+
+    @Override
+    public void resetEffect(final Effect effect) {
+        activatedEffects.remove(effect);
+        switch (effect.getType()) {
+            case SPEED:
+                this.speed = this.speed / effect.getMultiplyValue();
+                break;
+            case SICKNESS_RESISTENCE:
+                this.sicknessResistence = this.sicknessResistence / effect.getMultiplyValue();
+                break;
+            case REPRODUCTION_RANGE:
+                this.reproductionRadius = this.reproductionRadius / effect.getMultiplyValue();
+                break;
+            default:
+                this.fertility = this.fertility / effect.getMultiplyValue();
                 break;
         }
     }
@@ -146,10 +162,7 @@ public final class HumanStatsImpl implements HumanStats {
     public void resetAllEffect() {
         setSickness(false);
         this.hasBeenSick = false;
-        this.actualSpeed = this.baseSpeed;
-        this.actualSicknessResistence = this.baseSicknessResistence;
-        this.actualRadius = this.baseRadius;
-        this.actualFertility = this.baseFertility;
+        activatedEffects.forEach(this::resetEffect);
     }
 
     @Override
@@ -170,24 +183,6 @@ public final class HumanStatsImpl implements HumanStats {
     @Override
     public int getFertilityUpgrade() {
         return fertilityUpgrade;
-    }
-
-    @Override
-    public void applyEffect(final Effect effect) {
-        switch (effect.getType()) {
-            case SPEED:
-                this.actualSpeed = this.baseSpeed * effect.getMultiplyValue();
-                break;
-            case SICKNESS_RESISTENCE:
-                this.actualSicknessResistence = this.baseSicknessResistence * effect.getMultiplyValue();
-                break;
-            case REPRODUCTION_RANGE:
-                this.actualRadius = this.baseRadius * effect.getMultiplyValue();
-                break;
-            default:
-                this.actualFertility = this.baseFertility * effect.getMultiplyValue();
-                break;
-        }
     }
 
     @Override

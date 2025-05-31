@@ -84,7 +84,7 @@ public final class SicknessManagerImpl implements SicknessManager {
         }
         human.getStats().setSickness(false);
         final List<Effect> appliedEffects = sickHumans.get(human);
-        appliedEffects.stream().forEach(effect -> human.getStats().resetEffect(effect.getType()));
+        appliedEffects.stream().forEach(effect -> human.getStats().resetEffect(effect));
         sickHumans.remove(human);
     }
 

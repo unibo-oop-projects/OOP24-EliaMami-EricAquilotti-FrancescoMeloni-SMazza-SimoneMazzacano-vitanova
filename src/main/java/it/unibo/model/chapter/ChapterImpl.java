@@ -34,7 +34,7 @@ import it.unibo.view.sprite.HumanType;
 public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
     private static final int STARTING_POPULATION_GOAL = 5;
-    private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(300);
+    private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(1);
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
