@@ -19,10 +19,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import it.unibo.common.Position;
@@ -60,7 +56,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private int xOffset;
     private int yOffset;
     private final JFrame window = new JFrame();
-    private final transient ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     // Marked as transient because they don't need to be serialized.
     private final transient List<Text> textToDraw = new ArrayList<>();
@@ -101,7 +96,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         updateCenter();
         this.setOffset(centerX, centerY);
         initializeBuffer();
-        executor.scheduleAtFixedRate(this::repaint, 0, 16, TimeUnit.MILLISECONDS); // ~60 FPS
+        new javax.swing.Timer(16, e -> repaint()).start(); // ~60 FPS
     }
 
     private void addInnerComponents() {

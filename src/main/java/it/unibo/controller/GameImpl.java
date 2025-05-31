@@ -27,7 +27,7 @@ import it.unibo.view.screen.ScreenImpl;
 /**
  * Implementation of the Game engine.
  */
-public final class Game implements Runnable {
+public final class GameImpl implements Runnable, Game {
     private static final int FPS = 60;
     private static final int NANO_IN_SEC = 1_000_000_000;
     private final Thread gameThread = new Thread(this);
@@ -45,7 +45,7 @@ public final class Game implements Runnable {
     /**
      * Starts the game engine.
      */
-    public Game() {
+    public GameImpl() {
         try {
             final boolean isNewFile = saveFile.createNewFile();
             saveManager = new SaveManager();
@@ -230,14 +230,6 @@ public final class Game implements Runnable {
     }
 
     /**
-     * This method returns the current chapter.
-     * @return the current chapter.
-     */
-    public Chapter getChaper() {
-        return chapter;
-    }
-
-    /**
      * Save the chapter number and player stats in a file.
      */
     public void saveGame() {
@@ -255,5 +247,10 @@ public final class Game implements Runnable {
         } catch (IOException e) {
             this.setMenu(errorMenuCall("Salvataggio del file di gioco andata male"));
         }
+    }
+
+    @Override
+    public Chapter getChapter() {
+        return this.chapter;
     }
 }
