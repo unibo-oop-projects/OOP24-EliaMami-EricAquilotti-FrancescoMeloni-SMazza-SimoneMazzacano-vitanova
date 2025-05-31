@@ -1,5 +1,7 @@
 package it.unibo.model.human;
 
+import java.util.List;
+
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.model.effect.Effect;
@@ -10,7 +12,6 @@ import it.unibo.model.human.strategies.reproduction.ReproStrategy;
  * Implementation of human stats that handles all human's stats.
  */
 public final class HumanStatsImpl implements HumanStats {
-    private static final long serialVersionUID = 1L;
     private static final double SPEED_UPGRADE_VALUE = .5;
     private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .05;
     private static final double FERTILITY_UPGRADE_VALUE = .05;
@@ -48,6 +49,45 @@ public final class HumanStatsImpl implements HumanStats {
         setSicknessResistence(sicknessResistence);
         setFertility(fertility);
         setReproStrategy(reproStrategy);
+    }
+
+    /**
+     * Constructor for human stats.
+     * @param speed to inizialize speed value.
+     * @param sicknessResistence to inizialize sickness resistence value.
+     * @param fertility to inizialize fertility value.
+     * @param reproStrategy to inizialize reproduction area value.
+     * @param upgrade where index 0 refers to speedUpgrade, 
+     * index 1 to sicknessResistenceUpgrade, index 2 to reproductionRangeUpgrade and index 3 to fertilityUpgrade.
+     */
+    public HumanStatsImpl(
+        final double speed, final double sicknessResistence, final double fertility, 
+        final ReproStrategy reproStrategy, final List<Integer> upgrade) {
+        setSpeedUpgrade(upgrade.get(0));
+        setSicknessResistenceUpgrade(upgrade.get(1));
+        setReproductionRangeUpgrade(upgrade.get(2));
+        setFertilityUpgrade(upgrade.get(3));
+        setSpeed(speed + speedUpgrade * SPEED_UPGRADE_VALUE);
+        setSicknessResistence(sicknessResistence + sicknessResistenceUpgrade * SICKNESS_RESISTENCE_UPGRADE_VALUE);
+        setFertility(fertility + fertilityUpgrade * FERTILITY_UPGRADE_VALUE);
+        setReproStrategy(reproStrategy);
+        setReproductionAreaRadius(getReproductionAreaRadius().getRadius() + reproductionRangeUpgrade * RADIUS_UPGRADE_VALUE);
+    }
+
+    private void setSpeedUpgrade(final int value) {
+        this.speedUpgrade = value;
+    }
+
+    private void setSicknessResistenceUpgrade(final int value) {
+        this.sicknessResistenceUpgrade = value;
+    }
+
+    private void setReproductionRangeUpgrade(final int value) {
+        this.reproductionRangeUpgrade = value;
+    }
+
+    private void setFertilityUpgrade(final int value) {
+        this.fertilityUpgrade = value;
     }
 
     @Override
@@ -97,6 +137,7 @@ public final class HumanStatsImpl implements HumanStats {
     private void setReproductionAreaRadius(final double newRadius) {
         getReproStrategy().changeReproductionArea(newRadius);
         this.baseRadius = reproStrategy.getReproductionArea().getRadius();
+        this.actualRadius = this.baseRadius;
     }
 
     @Override

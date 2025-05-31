@@ -1,7 +1,5 @@
 package it.unibo.model.human;
 
-import java.io.Serializable;
-
 import it.unibo.common.Circle;
 import it.unibo.model.effect.Effect;
 import it.unibo.model.effect.EffectType;
@@ -10,7 +8,7 @@ import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 /**
  * Models stats of a human.
  */
-public interface HumanStats extends Serializable {
+public interface HumanStats {
 
     /**
      * Method that returns the current speed.

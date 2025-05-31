@@ -1,10 +1,10 @@
 package it.unibo.controller;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.time.Clock;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import it.unibo.common.ChapterState;
@@ -53,7 +53,7 @@ public final class Game implements Runnable {
                 chapter = new ChapterImpl(1, inputHandler, baseClock);
             } else {
                 final SaveObject saved = (SaveObject) saveManager.readObj(saveFile);
-                chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerStats());
+                chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerUpgrade());
             }
         } catch (IOException | ClassNotFoundException e) {
             this.setMenu(errorMenuCall("Lettura del file di gioco andata male"));
@@ -242,7 +242,16 @@ public final class Game implements Runnable {
      */
     public void saveGame() {
         try {
-            saveManager.saveObj(new SaveObject(chapter.getChapterNumber(), getPlayerStats()), saveFile);
+            saveManager.saveObj(new SaveObject(
+                chapter.getChapterNumber(), 
+                List.of(
+                    getPlayerStats().getActualSpeedUpgrade(), 
+                    getPlayerStats().getActualSicknessResistenceUpgrade(),
+                    getPlayerStats().getActualReproductionRangeUpgrade(),
+                    getPlayerStats().getActualFertilityUpgrade()
+                    )
+                ), 
+                saveFile);
         } catch (IOException e) {
             this.setMenu(errorMenuCall("Salvataggio del file di gioco andata male"));
         }

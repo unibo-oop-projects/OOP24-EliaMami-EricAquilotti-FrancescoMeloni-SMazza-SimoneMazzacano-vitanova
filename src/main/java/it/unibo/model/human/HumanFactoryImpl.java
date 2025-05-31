@@ -1,6 +1,7 @@
 package it.unibo.model.human;
 
 import java.time.Clock;
+import java.util.List;
 
 import it.unibo.common.Direction;
 import it.unibo.common.DirectionEnum;
@@ -22,7 +23,6 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
-    private static final long serialVersionUID = 3L;
     private final transient ReproStrategyFactory reproductionStrategyFactory;
     private final transient MovStrategyFactory movementStrategyFactory;
     private static final double BASE_SPEED = 4.5;
@@ -84,19 +84,17 @@ public final class HumanFactoryImpl implements HumanFactory {
         );
     }
 
-    @Override 
-    public Human player(final Position startingPosition, final Map map, 
-                        final InputHandler inputHandler, final HumanStats playerStats, final double areaRadius) {
+    @Override
+    public Human player(
+        final Position startingPosition, final Map map, final InputHandler inputHandler, final List<Integer> upgrade) {
         final ReproStrategy rs = reproductionStrategyFactory.maleReproStrategy(startingPosition);
-        rs.changeReproductionArea(areaRadius);
-        playerStats.setReproStrategy(rs);
         return generalised(
-            startingPosition,
-            map,
-            HumanType.PLAYER,
+            startingPosition, 
+            map, 
+            HumanType.PLAYER, 
             movementStrategyFactory.userInputMovement(inputHandler),
             rs,
-            playerStats
+            new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, rs, upgrade)
         );
     }
 

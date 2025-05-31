@@ -1,8 +1,7 @@
 package it.unibo.model.savemanager;
 
 import java.io.Serializable;
-
-import it.unibo.model.human.HumanStats;
+import java.util.List;
 
 /**
  * Class that describe the object that i'm going to save.
@@ -10,24 +9,24 @@ import it.unibo.model.human.HumanStats;
 public final class SaveObject implements Serializable {
     private static final long serialVersionUID = 2L;
     private final int chapterNumber;
-    private final HumanStats playerStats;
+    private final List<Integer> playerUpgrade;
 
     /**
      * Constructor to inizialize the class.
      * @param chapterNumber set the chapterNumber.
-     * @param playerStats set the playerStats.
+     * @param playerUpgrade set the playerUpgrade.
      */
-    public SaveObject(final int chapterNumber, final HumanStats playerStats) {
+    public SaveObject(final int chapterNumber, final List<Integer> playerUpgrade) {
         this.chapterNumber = chapterNumber;
-        this.playerStats = playerStats;
+        this.playerUpgrade = List.copyOf(playerUpgrade);
     }
 
     /**
      * Method that returns the playerStats.
      * @return the player's stat.
      */
-    public HumanStats getPlayerStats() {
-        return playerStats;
+    public List<Integer> getPlayerUpgrade() {
+        return List.copyOf(playerUpgrade);
     }
 
     /**

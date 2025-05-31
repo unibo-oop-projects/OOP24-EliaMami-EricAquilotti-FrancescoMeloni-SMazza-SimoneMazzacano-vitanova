@@ -18,11 +18,9 @@ public final class SaveManager {
      * @throws IOException
      */
     public void saveObj(final Object toSave, final File saveFile) throws IOException {
-        final FileOutputStream fileOutputStream = new FileOutputStream(saveFile);
-        final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(toSave);
-        objectOutputStream.flush();
-        objectOutputStream.close();
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(saveFile))) {
+            objectOutputStream.writeObject(toSave);
+        }
     }
 
     /**
@@ -33,10 +31,8 @@ public final class SaveManager {
      * @throws IOException
      */
     public Object readObj(final File readFile) throws ClassNotFoundException, IOException {
-        final FileInputStream fileInputStream = new FileInputStream(readFile);
-        final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        final Object obj = objectInputStream.readObject();
-        objectInputStream.close(); 
-        return obj;
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(readFile))) {
+            return objectInputStream.readObject();
+        }
     }
 }

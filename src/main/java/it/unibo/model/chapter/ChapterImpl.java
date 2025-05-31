@@ -62,7 +62,7 @@ public final class ChapterImpl implements Chapter {
      * @param baseClock the clock used for the factories and the timer.
      */
     public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, final Clock baseClock) {
-        this(chapterNumber, inputHandler, baseClock, Optional.empty());
+        this(chapterNumber, inputHandler, baseClock, Optional.empty(), List.of());
     }
 
     /**
@@ -74,11 +74,23 @@ public final class ChapterImpl implements Chapter {
      */
     public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, 
                         final Clock baseClock, final HumanStats playerStats) {
-        this(chapterNumber, inputHandler, baseClock, Optional.of(playerStats));
+        this(chapterNumber, inputHandler, baseClock, Optional.of(playerStats), List.of());
+    }
+
+    /**
+     * 
+     * @param chapterNumber
+     * @param inputHandler
+     * @param baseClock
+     * @param playerUpgrade
+     */
+    public ChapterImpl(final int chapterNumber, final InputHandler inputHandler, 
+                        final Clock baseClock, final List<Integer> playerUpgrade) {
+        this(chapterNumber, inputHandler, baseClock, Optional.empty(), playerUpgrade);
     }
 
     private ChapterImpl(final int chapterNumber, final InputHandler inputHandler,
-                        final Clock baseClock, final Optional<HumanStats> playerStats) {
+                        final Clock baseClock, final Optional<HumanStats> playerStats, final List<Integer> playerUpgrade) {
         this.chapterNumber = chapterNumber;
         this.map = new MapImpl(STARTING_ROWS + chapterNumber, STARTING_COLOUMNS + chapterNumber);
         this.inputHandler = inputHandler;
@@ -88,7 +100,29 @@ public final class ChapterImpl implements Chapter {
         this.pickablePowerUpFactory = new PickableFactoryImpl(baseClock);
         this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), baseClock); 
         this.sicknessManager = new SicknessManagerImpl(new EffectFactoryImpl(baseClock), getPopulationGoal());
-        spawnHumans(inputHandler, playerStats);
+        spawnHumans(inputHandler, playerStats, playerUpgrade);
+    }
+
+    private void spawnHumans(final InputHandler inputHandler, final Optional<HumanStats> playerStats, 
+                                final List<Integer> playerUpgrade) {
+        spawnPlayer(inputHandler, playerStats, playerUpgrade);
+        for (int i = 0; i < getChapterNumber(); i++) {
+            this.humans.add(humanFactory.female(Position.getRandomWalkablePosition(map), map));
+        }
+    }
+
+    private void spawnPlayer(final InputHandler inputHandler, final Optional<HumanStats> playerStats, 
+                                final List<Integer> playerUpgrade) {
+        final Position startingPosition = Position.getRandomCentralWalkablePosition(map);
+        if (playerStats.isEmpty()) {
+            if (playerUpgrade.isEmpty()) {
+                this.humans.add(humanFactory.player(startingPosition, map, inputHandler));
+            } else {
+                this.humans.add(humanFactory.player(startingPosition, map, inputHandler, playerUpgrade));
+            }
+        } else {
+            this.humans.add(humanFactory.player(startingPosition, map, inputHandler, playerStats.get()));
+        }
     }
 
     @Override
@@ -166,19 +200,7 @@ public final class ChapterImpl implements Chapter {
         return timer.isOver();
     }
 
-    private void spawnHumans(final InputHandler inputHandler, final Optional<HumanStats> playerStats) {
-        spawnPlayer(inputHandler, playerStats);
-        for (int i = 0; i < getChapterNumber(); i++) {
-            this.humans.add(humanFactory.female(Position.getRandomWalkablePosition(map), map));
-        }
-    }
-
-    private void spawnPlayer(final InputHandler inputHandler, final Optional<HumanStats> playerStats) {
-        final Position startingPosition = Position.getRandomCentralWalkablePosition(map);
-        this.humans.add(playerStats.isEmpty() 
-        ? humanFactory.player(startingPosition, map, inputHandler) 
-        : humanFactory.player(startingPosition, map, inputHandler, playerStats.get(), playerStats.get().getBaseRadius()));
-    }
+    //erano qui hihi
 
     @Override
     public Map getMap() {
@@ -225,7 +247,7 @@ public final class ChapterImpl implements Chapter {
         this.humans.clear();
         this.pickables.clear();
         this.activatedPickables.clear();
-        spawnHumans(this.inputHandler, Optional.of(playerStats));
+        spawnHumans(this.inputHandler, Optional.of(playerStats), List.of());
         timer.reset();
         this.spawnPowerupRate = new CooldownGate(Duration.ofSeconds(3), clock); 
     }
