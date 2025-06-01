@@ -3,7 +3,7 @@ package it.unibo.model.pickable;
 import java.util.List;
 
 /**
- * Models a pickableManager that will handle all operations for pickable
+ * Models a pickableManager that will handle all operations for pickable.
  */
 public interface PickableManager {
     /**

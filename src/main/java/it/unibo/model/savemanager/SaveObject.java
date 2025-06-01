@@ -2,6 +2,9 @@ package it.unibo.model.savemanager;
 
 import java.util.List;
 
+/**
+ * Interface that models the SaveObject.
+ */
 public interface SaveObject {
 
     /**

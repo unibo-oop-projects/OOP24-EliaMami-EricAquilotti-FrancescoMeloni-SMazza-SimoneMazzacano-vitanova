@@ -5,7 +5,7 @@ import java.util.Optional;
 /**
  * Class to manage skill point after the ending of a chapter.
  */
-public class SkillPointImpl implements SkillPoint {
+public final class SkillPointImpl implements SkillPoint {
     private Optional<Integer> actualValue;
     private final int baseValue;
 

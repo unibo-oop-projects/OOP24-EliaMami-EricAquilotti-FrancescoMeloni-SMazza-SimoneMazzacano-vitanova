@@ -1,5 +1,8 @@
 package it.unibo.model.skillpoint;
 
+/**
+ * Interface that models the SkillPoint.
+ */
 public interface SkillPoint {
 
     /**

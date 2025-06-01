@@ -77,7 +77,7 @@ public interface Game {
      * Save the game.
      */
     void saveGame();
-    
+
     /**
      * This method returns the skill points.
      * @return the skill points.
