@@ -25,8 +25,8 @@ import it.unibo.view.sprite.Sprite;
  * Implementation of an NPC Factory that produces all kinds of humans.
  */
 public final class HumanFactoryImpl implements HumanFactory {
-    private final transient ReproStrategyFactory reproductionStrategyFactory;
-    private final transient MovStrategyFactory movementStrategyFactory;
+    private final ReproStrategyFactory reproductionStrategyFactory;
+    private final MovStrategyFactory movementStrategyFactory;
     private static final double BASE_SPEED = 4.5;
     private static final double BASE_SICKNESS_RESISTENCE = .3;
     private static final double BASE_FERTILITY = .1;

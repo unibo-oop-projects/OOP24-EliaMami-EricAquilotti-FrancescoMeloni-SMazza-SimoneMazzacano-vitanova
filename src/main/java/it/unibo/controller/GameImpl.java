@@ -14,10 +14,12 @@ import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.human.stats.HumanStats;
-import it.unibo.model.human.stats.HumanStatsImpl;
 import it.unibo.model.savemanager.SaveManager;
+import it.unibo.model.savemanager.SaveManagerImpl;
 import it.unibo.model.savemanager.SaveObject;
+import it.unibo.model.savemanager.SaveObjectImpl;
 import it.unibo.model.skillpoint.SkillPoint;
+import it.unibo.model.skillpoint.SkillPointImpl;
 import it.unibo.view.menu.ErrorMenu;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
@@ -42,7 +44,7 @@ public final class GameImpl implements Runnable, Game {
     private boolean isGameplayPaused;
     private final File saveFile = new File("chapterInfo.txt");
     private SaveManager saveManager;
-    private final SkillPoint skillPoints = new SkillPoint(3);
+    private final SkillPoint skillPoints = new SkillPointImpl(3);
 
     /**
      * Starts the game engine.
@@ -50,7 +52,7 @@ public final class GameImpl implements Runnable, Game {
     public GameImpl() {
         try {
             final boolean isNewFile = saveFile.createNewFile();
-            saveManager = new SaveManager();
+            saveManager = new SaveManagerImpl();
             if (isNewFile) {
                 chapter = new ChapterImpl(1, inputHandler, baseClock);
             } else {
@@ -118,27 +120,16 @@ public final class GameImpl implements Runnable, Game {
         return new ErrorMenu(inputHandler, this, subtitle);
     }
 
-    /**
-     * Starts the gameplay.
-     */
     @Override
     public void startGameplay() {
         this.isGameplayStarted = true;
     }
 
-    /**
-     * Set current menu.
-     * @param menu 
-     */
     @Override
     public void setMenu(final Menu menu) {
         this.menu = menu;
     }
 
-    /**
-     * Pauses the gameplay.
-     * @param paused true if the game is paused, false otherwise.
-     */
     @Override
     public void setGameplayState(final boolean paused) {
         if (paused) {
@@ -149,9 +140,6 @@ public final class GameImpl implements Runnable, Game {
         this.isGameplayPaused = paused;
     }
 
-    /**
-     * Exits the game.
-     */
     @Override
     public void exit() {
         chapter.getPlayer().getStats().resetAllEffect();
@@ -159,17 +147,11 @@ public final class GameImpl implements Runnable, Game {
         System.exit(0);
     }
 
-    /**
-     * Restarts the current chapter.
-     */
     @Override
     public void restartCurrentChapter() {
         chapter.restart();
     }
 
-    /**
-     * Sets the first chapter and clears the screen.
-     */
     @Override
     public void setFirstChapter() {
         this.chapter = new ChapterImpl(1, inputHandler, baseClock);
@@ -177,9 +159,6 @@ public final class GameImpl implements Runnable, Game {
         clearScreen();
     }
 
-    /**
-     * Sets the new chapter and clears the screen.
-     */
     @Override
     public void setNewChapter() {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, getPlayerStats());
@@ -187,9 +166,6 @@ public final class GameImpl implements Runnable, Game {
         clearScreen();
     }
 
-    /**
-     * Clears the screen by removing everything, except of the map.
-     */
     @Override
     public void clearScreen() {
         this.skillPoints.reset();
@@ -199,40 +175,36 @@ public final class GameImpl implements Runnable, Game {
         this.screen.loadPopulationCounter(Optional.empty());
     }
 
-    /**
-     * This method gets player from all humans and return his stats.
-     * @return player's stats.
-     */
     @Override
     public HumanStats getPlayerStats() {
         return chapter.getPlayer().getStats();
     }
 
-    /**
-     * Set the next chapter.
-     */
     @Override
-    public void nextChapter() {
+    public void startNextChapter() {
+        setNextChapter();
+        startGameplay();
+    }
+
+    @Override
+    public void setNextChapter() {
         getPlayerStats().resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, getPlayerStats());
         saveGame();
-        this.isGameplayStarted = true;
-        this.skillPoints = Optional.empty();
+        this.isGameplayStarted = false;
+        this.skillPoints.reset();
     }
 
-    /**
-     * Save the chapter number and player stats in a file.
-     */
     @Override
     public void saveGame() {
         try {
-            saveManager.saveObj(new SaveObject(
+            saveManager.saveObj(new SaveObjectImpl(
                 chapter.getChapterNumber(), 
                 List.of(
-                    getPlayerStats().getActualSpeedUpgrade(), 
-                    getPlayerStats().getActualSicknessResistenceUpgrade(),
-                    getPlayerStats().getActualReproductionRangeUpgrade(),
-                    getPlayerStats().getActualFertilityUpgrade()
+                    getPlayerStats().getSpeedUpgrade(), 
+                    getPlayerStats().getSicknessResistenceUpgrade(),
+                    getPlayerStats().getReproductionRangeUpgrade(),
+                    getPlayerStats().getFertilityUpgrade()
                     )
                 ), 
                 saveFile);
@@ -244,5 +216,10 @@ public final class GameImpl implements Runnable, Game {
     @Override
     public Chapter getChapter() {
         return this.chapter;
+    }
+
+    @Override
+    public SkillPoint getSkillPoint() {
+        return skillPoints;
     }
 }

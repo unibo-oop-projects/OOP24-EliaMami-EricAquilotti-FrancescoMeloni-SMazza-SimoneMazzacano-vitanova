@@ -114,7 +114,7 @@ public final class HumanStatsImpl implements HumanStats {
 
     @Override
     public double getBaseRadius() {
-        return this.baseRadius;
+        return this.reproductionRadius;
     }
 
     @Override

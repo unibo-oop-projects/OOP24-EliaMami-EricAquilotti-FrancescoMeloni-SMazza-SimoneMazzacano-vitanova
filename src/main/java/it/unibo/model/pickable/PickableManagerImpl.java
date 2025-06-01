@@ -16,7 +16,7 @@ import it.unibo.model.human.Human;
 import it.unibo.view.screen.ScreenImpl;
 
 /**
- * 
+ * Class that will handle all operations for pickables.
  */
 public final class PickableManagerImpl implements PickableManager {
     private static final int SECONDS_TO_SPAWN = 5;
@@ -29,10 +29,10 @@ public final class PickableManagerImpl implements PickableManager {
     private final Clock baseClock;
 
     /**
-     * 
-     * @param player
-     * @param baseClock
-     * @param map
+     * Constructor for PickableManager.
+     * @param player is the player.
+     * @param baseClock 
+     * @param map the chapter map.
      */
     public PickableManagerImpl(final Human player, final Clock baseClock, final Map map) {
         this.baseClock = baseClock;
@@ -63,14 +63,8 @@ public final class PickableManagerImpl implements PickableManager {
         .filter(ifCollide)
         .forEach(p -> {
             checkAndActivate(p.getEffect()); 
-            pickables.remove(p);
         });
-        // for (final Pickable activated : activatedPickables) {
-        //     if (activated.getEffect().isExpired()) {
-        //         getPlayer().getStats().resetEffect(activated.getEffect().getType());
-        //         activatedPickables.remove(activated);
-        //     }
-        // }
+        pickables.removeIf(ifCollide);
     }
 
     private void checkAndActivate(final Effect effect) {
@@ -95,14 +89,8 @@ public final class PickableManagerImpl implements PickableManager {
         .filter(Effect::isExpired)
         .forEach(a -> {
             player.getStats().resetEffect(a);
-            activatedEffects.remove(a);
         });
-        // for (final Pickable activated : activatedPickables) {
-        //     if (activated.getEffect().isExpired()) {
-        //         player.getStats().resetEffect(activated.getEffect().getType());
-        //         activatedPickables.remove(activated);
-        //     }
-        // }
+        activatedEffects.removeIf(Effect::isExpired);
     } 
 
     @Override
