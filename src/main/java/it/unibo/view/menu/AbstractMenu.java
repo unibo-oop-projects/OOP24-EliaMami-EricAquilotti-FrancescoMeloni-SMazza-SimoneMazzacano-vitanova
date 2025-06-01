@@ -75,11 +75,11 @@ public abstract class AbstractMenu implements Menu {
             toggleMenu();
             inputDelayCounter = INPUT_DELAY_RATE;
         } else if (this.isVisible) {
-            if (input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S)
+            if ((input.isKeyPressed(KeyEvent.VK_DOWN) || input.isKeyPressed(KeyEvent.VK_S))
                     && selectedOptionIndex + 1 < options.size()) {
                 selectedOptionIndex++;
                 inputDelayCounter = INPUT_DELAY_RATE;
-            } else if (input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W) 
+            } else if ((input.isKeyPressed(KeyEvent.VK_UP) || input.isKeyPressed(KeyEvent.VK_W)) 
                     && selectedOptionIndex > 0) {
                 selectedOptionIndex--;
                 inputDelayCounter = INPUT_DELAY_RATE;
