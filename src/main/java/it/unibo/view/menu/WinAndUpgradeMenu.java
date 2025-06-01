@@ -22,27 +22,30 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     public WinAndUpgradeMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
             MenuOption.of(() -> "Speed: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getActualSpeedUpgrade(), game), g -> {
+            + updateUpgradeText(k -> k.getPlayerStats().getSpeedUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSpeed(), g);
             }),
             MenuOption.of(() -> "Resistence: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getActualSicknessResistenceUpgrade(), game), g -> {
+            + updateUpgradeText(k -> k.getPlayerStats().getSicknessResistenceUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSicknessResistence(), g);
             }),
             MenuOption.of(() -> "Area: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getActualReproductionRangeUpgrade(), game), g -> {
+            + updateUpgradeText(k -> k.getPlayerStats().getReproductionRangeUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseReproductionAreaRadius(), g);
             }), 
             MenuOption.of(() -> "Fertility: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getActualFertilityUpgrade(), game), g -> {
+            + updateUpgradeText(k -> k.getPlayerStats().getFertilityUpgrade(), game), g -> {
                 checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseFertility(), g);
             }),
             MenuOption.nextChapter(input),
-            MenuOption.home(input),
+            MenuOption.of("Home", g -> {
+                g.setNextChapter();
+                g.setMenu(new StartMenu(input, g));
+            }),
             MenuOption.quit()
         ), 
         true,
-        () -> "You have " + game.getSkillPoint() + " skill point.",
+        () -> "You have " + game.getSkillPoint().getValue() + " skill point.",
         "You won the Chapter! Upgrade your skills."
         );
     }
@@ -52,10 +55,10 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     }
 
     private static void checkAndUpdateSkillPoint(final Consumer<Game> c, final Game g) {
-        if (g.getSkillPoint() > 0) {
+        if (g.getSkillPoint().getValue() > 0) {
             c.accept(g);
         }
-        g.updateSkillPoint();
+        g.getSkillPoint().updateValue();
     }
 
     @Override

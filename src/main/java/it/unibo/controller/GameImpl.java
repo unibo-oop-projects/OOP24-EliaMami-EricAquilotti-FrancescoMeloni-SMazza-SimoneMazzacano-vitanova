@@ -1,8 +1,10 @@
 package it.unibo.controller;
 
-import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.time.Clock;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import it.unibo.common.ChapterState;
@@ -11,7 +13,14 @@ import it.unibo.common.Position;
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
-import it.unibo.model.human.HumanStats;
+import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.savemanager.SaveManager;
+import it.unibo.model.savemanager.SaveManagerImpl;
+import it.unibo.model.savemanager.SaveObject;
+import it.unibo.model.savemanager.SaveObjectImpl;
+import it.unibo.model.skillpoint.SkillPoint;
+import it.unibo.model.skillpoint.SkillPointImpl;
+import it.unibo.view.menu.ErrorMenu;
 import it.unibo.view.menu.GameOverMenu;
 import it.unibo.view.menu.Menu;
 import it.unibo.view.menu.StartMenu;
@@ -33,14 +42,29 @@ public final class GameImpl implements Runnable, Game {
     private Menu menu = new StartMenu(inputHandler, this);
     private boolean isGameplayStarted;
     private boolean isGameplayPaused;
-    private Optional<Integer> skillPoints = Optional.empty();
+    private final File saveFile = new File("chapterInfo.txt");
+    private SaveManager saveManager;
+    private final SkillPoint skillPoints = new SkillPointImpl(3);
 
     /**
      * Starts the game engine.
      */
     public GameImpl() {
-        chapter = new ChapterImpl(1, inputHandler, baseClock);
-        gameThread.start();
+        try {
+            final boolean isNewFile = saveFile.createNewFile();
+            saveManager = new SaveManagerImpl();
+            if (isNewFile) {
+                chapter = new ChapterImpl(1, inputHandler, baseClock);
+            } else {
+                final SaveObject saved = (SaveObject) saveManager.readObj(saveFile);
+                chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerUpgrade());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            chapter = new ChapterImpl(1, inputHandler, baseClock);
+            this.setMenu(errorMenuCall("Lettura del file di gioco andata male"));
+        } finally {
+            gameThread.start();
+        }
     }
 
     @Override
@@ -49,33 +73,14 @@ public final class GameImpl implements Runnable, Game {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-
-        long timer = System.currentTimeMillis();
-        int frameCount = 0; // Count frames per second
-
         while (gameThread != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
-
             if (delta >= 1) {
                 update();
                 draw();
                 delta--;
-                frameCount++;
-            }
-
-            // Measure FPS every second
-            if (System.currentTimeMillis() - timer >= 1000) {
-                final int textSize = 32;
-                final Position textPosition = new Position(textSize, textSize);
-                // We should not show the timer when the chapter is not going.
-                final String content = chapter.getPlayer().getPosition() + " FPS: " + frameCount 
-                + " Population: " + chapter.getHumans().size() + " Goal: " + chapter.getPopulationGoal()
-                + " Timer: " + chapter.getTimerValue().toSecondsPart();
-                screen.loadText(content, textPosition, Color.RED, textSize);
-                frameCount = 0;
-                timer += 1000;
             }
         }
     }
@@ -83,7 +88,7 @@ public final class GameImpl implements Runnable, Game {
     private void update() {
         if (!isGameplayPaused) {
             if (chapter.getState() == ChapterState.PLAYER_WON) {
-                setSkillPoint(3);
+                skillPoints.resetToBaseValue();
                 this.setMenu(new WinAndUpgradeMenu(inputHandler, this));
             } else if (chapter.getState() == ChapterState.PLAYER_LOST) {
                 this.setMenu(new GameOverMenu(inputHandler, this));
@@ -111,6 +116,10 @@ public final class GameImpl implements Runnable, Game {
         }
     }
 
+    private ErrorMenu errorMenuCall(final String subtitle) {
+        return new ErrorMenu(inputHandler, this, subtitle);
+    }
+
     @Override
     public void startGameplay() {
         this.isGameplayStarted = true;
@@ -134,6 +143,7 @@ public final class GameImpl implements Runnable, Game {
     @Override
     public void exit() {
         chapter.getPlayer().getStats().resetAllEffect();
+        saveGame();
         System.exit(0);
     }
 
@@ -143,15 +153,22 @@ public final class GameImpl implements Runnable, Game {
     }
 
     @Override
+    public void setFirstChapter() {
+        this.chapter = new ChapterImpl(1, inputHandler, baseClock);
+        this.isGameplayStarted = false;
+        clearScreen();
+    }
+
+    @Override
     public void setNewChapter() {
-        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock);
+        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, getPlayerStats());
         this.isGameplayStarted = false;
         clearScreen();
     }
 
     @Override
     public void clearScreen() {
-        this.skillPoints = Optional.empty();
+        this.skillPoints.reset();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
         this.screen.loadPickablePowerUp(Collections.emptyList());
@@ -164,30 +181,45 @@ public final class GameImpl implements Runnable, Game {
     }
 
     @Override
-    public void setSkillPoint(final int value) { 
-        skillPoints = skillPoints.or(() -> Optional.of(value));
+    public void startNextChapter() {
+        setNextChapter();
+        startGameplay();
     }
 
     @Override
-    public int getSkillPoint() {
-        return skillPoints.get();
-    }
-
-    @Override
-    public void updateSkillPoint() {
-        skillPoints = Optional.of(skillPoints.get() > 0 ? (Integer) (skillPoints.get() - 1) : skillPoints.get());
-    }
-
-    @Override
-    public void nextChapter() {
+    public void setNextChapter() {
         getPlayerStats().resetAllEffect();
-        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, Optional.of(getPlayerStats()));
-        this.isGameplayStarted = true;
-        this.skillPoints = Optional.empty();
+        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, getPlayerStats());
+        saveGame();
+        this.isGameplayStarted = false;
+        this.skillPoints.reset();
+    }
+
+    @Override
+    public void saveGame() {
+        try {
+            saveManager.saveObj(new SaveObjectImpl(
+                chapter.getChapterNumber(), 
+                List.of(
+                    getPlayerStats().getSpeedUpgrade(), 
+                    getPlayerStats().getSicknessResistenceUpgrade(),
+                    getPlayerStats().getReproductionRangeUpgrade(),
+                    getPlayerStats().getFertilityUpgrade()
+                    )
+                ), 
+                saveFile);
+        } catch (IOException e) {
+            this.setMenu(errorMenuCall("Salvataggio del file di gioco andata male"));
+        }
     }
 
     @Override
     public Chapter getChapter() {
-        return chapter;
+        return this.chapter;
+    }
+
+    @Override
+    public SkillPoint getSkillPoint() {
+        return skillPoints;
     }
 }

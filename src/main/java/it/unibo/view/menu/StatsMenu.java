@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
-import it.unibo.model.human.HumanStats;
+import it.unibo.model.human.stats.HumanStats;
 
 /**
  * Class that handles the stats menu options, displaying the player's stats.

@@ -39,7 +39,7 @@ import it.unibo.view.timerdisplay.TimerDisplay;
  * Class that handles all the rendering on the screen.
  */
 public final class ScreenImpl extends JPanel implements Screen {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 1287309L;
 
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCALE = 5;

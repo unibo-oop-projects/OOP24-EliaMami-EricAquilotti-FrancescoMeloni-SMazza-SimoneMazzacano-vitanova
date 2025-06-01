@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
  * Class that handles the timer display.
  */
 public final class TimerDisplay extends JLabel {
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 2631287L;
 
     /**
      * The size of the text in the timer display.

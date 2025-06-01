@@ -1,6 +1,7 @@
 package it.unibo.model.human;
 
 import java.time.Clock;
+import java.util.List;
 
 import it.unibo.common.Direction;
 import it.unibo.common.DirectionEnum;
@@ -11,6 +12,8 @@ import it.unibo.model.human.strategies.movement.MovStrategyFactory;
 import it.unibo.model.human.strategies.movement.MovStrategyFactoryImpl;
 import it.unibo.model.human.solidcollisions.SimpleSolidCollisions;
 import it.unibo.model.human.solidcollisions.SolidCollisions;
+import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.human.stats.HumanStatsImpl;
 import it.unibo.model.human.strategies.movement.MovStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
@@ -25,11 +28,11 @@ public final class HumanFactoryImpl implements HumanFactory {
     private final ReproStrategyFactory reproductionStrategyFactory;
     private final MovStrategyFactory movementStrategyFactory;
     private static final double BASE_SPEED = 4.5;
-    private static final double BASE_SICKNESS_RESISTENCE = .1;
+    private static final double BASE_SICKNESS_RESISTENCE = .3;
     private static final double BASE_FERTILITY = .1;
 
     /**
-     * 
+     * Constructor for human factory.
      * @param baseClock the clock to give to the strategies that may need cooldowns.
      */
     public HumanFactoryImpl(final Clock baseClock) {
@@ -80,6 +83,20 @@ public final class HumanFactoryImpl implements HumanFactory {
             movementStrategyFactory.userInputMovement(inputHandler),
             playerStats.getReproStrategy(),
             playerStats
+        );
+    }
+
+    @Override
+    public Human player(
+        final Position startingPosition, final Map map, final InputHandler inputHandler, final List<Integer> upgrade) {
+        final ReproStrategy rs = reproductionStrategyFactory.maleReproStrategy(startingPosition);
+        return generalised(
+            startingPosition, 
+            map, 
+            HumanType.PLAYER, 
+            movementStrategyFactory.userInputMovement(inputHandler),
+            rs,
+            new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, rs, upgrade)
         );
     }
 

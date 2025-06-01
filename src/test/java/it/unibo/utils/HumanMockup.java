@@ -10,11 +10,10 @@ import it.unibo.controller.InputHandlerImpl;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.effect.Effect;
-import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.HumanFactoryImpl;
-import it.unibo.model.human.HumanStats;
+import it.unibo.model.human.stats.HumanStats;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
@@ -104,47 +103,27 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public int getActualSpeedUpgrade() {
+                    public int getSpeedUpgrade() {
                         return 0;
                     }
 
                     @Override
-                    public int getActualSicknessResistenceUpgrade() {
+                    public int getSicknessResistenceUpgrade() {
                         return 0;
                     }
 
                     @Override
-                    public int getActualReproductionRangeUpgrade() {
+                    public int getReproductionRangeUpgrade() {
                         return 0;
                     }
 
                     @Override
-                    public int getActualFertilityUpgrade() {
+                    public int getFertilityUpgrade() {
                         return 0;
                     }
 
                     @Override
-                    public int getMaxSpeedUpgrade() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getMaxSicknessResistenceUpgrade() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getMaxReproductionRangeUpgrade() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getMaxFertilityUpgrade() {
-                        return 0;
-                    }
-
-                    @Override
-                    public void resetEffect(final EffectType type) {
+                    public void resetEffect(final Effect effect) {
                     }
 
                     @Override
@@ -168,6 +147,15 @@ public final class HumanMockup {
 
                     @Override
                     public void resetAllEffect() {
+                    }
+
+                    @Override
+                    public double getBaseRadius() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void setReproStrategy(final ReproStrategy newReproStrategy) {
                     }
                 };
             }

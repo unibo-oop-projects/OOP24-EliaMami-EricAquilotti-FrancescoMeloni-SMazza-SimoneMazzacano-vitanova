@@ -20,7 +20,7 @@ public final class SicknessManagerImpl implements SicknessManager {
     private static final Duration DEFAULT_SICKNESS_DURATION = Duration.ofSeconds(20);
     private final Duration sicknessDuration;
     private final EffectFactoryImpl effectFactory;
-    private final Map<Human, List<Effect>> humanSicknessEffects = new HashMap<>();
+    private final Map<Human, List<Effect>> sickHumans = new HashMap<>();
     private final int populationGoal;
 
     /**
@@ -76,23 +76,27 @@ public final class SicknessManagerImpl implements SicknessManager {
                 effect.activate();
                 human.getStats().applyEffect(effect);
             });
-            humanSicknessEffects.put(human, effectsToApply);
+            sickHumans.put(human, effectsToApply);
         }
     }
 
     private void removeFromHuman(final Human human) {
-        if (human.getStats().isSick()) {
-            human.getStats().setSickness(false);
-            humanSicknessEffects.getOrDefault(human, List.of())
-                .forEach(effect -> human.getStats().resetEffect(effect.getType()));
-            humanSicknessEffects.remove(human);
+        if (!human.getStats().isSick()) {
+            return;
         }
+        human.getStats().setSickness(false);
+        final List<Effect> appliedEffects = sickHumans.get(human);
+        appliedEffects.stream().forEach(effect -> human.getStats().resetEffect(effect));
+        sickHumans.remove(human);
     }
 
     @Override
     public void checkStatus(final Human human) {
-        if (human.getStats().isSick()
-            && humanSicknessEffects.getOrDefault(human, List.of()).stream().anyMatch(Effect::isExpired)) {
+        if (!human.getStats().isSick()) {
+            return;
+        }
+        final List<Effect> appliedEffects = sickHumans.get(human);
+        if (appliedEffects.stream().anyMatch(Effect::isExpired)) {
             removeFromHuman(human);
         }
     }
