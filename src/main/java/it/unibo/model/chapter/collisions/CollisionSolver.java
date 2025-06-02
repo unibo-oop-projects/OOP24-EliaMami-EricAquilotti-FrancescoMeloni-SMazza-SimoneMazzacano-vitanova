@@ -48,7 +48,7 @@ public final class CollisionSolver {
         .filter(h -> h.getType() == HumanType.FEMALE)
         .forEach(female -> {
             final Position femalePosition = female.getPosition();
-            final Circle range = female.getStats().getReproductionAreaRadius();
+            final Circle range = currentPopulation.get(0).getStats().getReproductionAreaRadius();
             range.setRadius(range.getRadius() * 2);
             tree.query(range).stream()
             .map(Point::data)
