@@ -15,7 +15,6 @@ import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.human.solidcollisions.SimpleSolidCollisions;
 import it.unibo.model.human.solidcollisions.SolidCollisions;
 import it.unibo.model.tile.Tile;
-import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Class that tests the solid collisions.
@@ -41,13 +40,13 @@ class SolidCollisionsTest {
     }
 
     private Optional<Position> getWalkablePosition(final BiPredicate<Integer, Integer> biPredicate) {
-        final double offsetPosition = ScreenImpl.TILE_SIZE / 2;
+        final double offsetPosition = MapImpl.TILE_SIZE / 2;
         return IntStream.range(0, map.getRows())
             .boxed()
             .flatMap(y -> IntStream.range(0, map.getColoumns())
                 .filter(x -> biPredicate.test(x, y))
-                .mapToObj(x -> new Position(x * ScreenImpl.TILE_SIZE + offsetPosition,
-                                            y * ScreenImpl.TILE_SIZE + offsetPosition)))
+                .mapToObj(x -> new Position(x * MapImpl.TILE_SIZE + offsetPosition,
+                                            y * MapImpl.TILE_SIZE + offsetPosition)))
             .findFirst();
     }
 

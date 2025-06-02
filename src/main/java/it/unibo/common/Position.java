@@ -3,7 +3,7 @@ package it.unibo.common;
 import java.util.Random;
 
 import it.unibo.model.chapter.map.Map;
-import it.unibo.view.screen.ScreenImpl;
+import it.unibo.model.chapter.map.MapImpl;
 
 /**
  * 
@@ -29,7 +29,7 @@ public record Position(double x, double y) {
      * @return the walkable position closest to the center within the map.
      */
     public static Position getRandomCentralWalkablePosition(final Map map) {
-        final var mapSize = new Position(map.getColoumns() * ScreenImpl.TILE_SIZE, map.getRows() * ScreenImpl.TILE_SIZE);
+        final var mapSize = new Position(map.getColoumns() * MapImpl.TILE_SIZE, map.getRows() * MapImpl.TILE_SIZE);
         final var center = new Position(mapSize.x / 2, mapSize.y / 2);
         final var offset = new Position(mapSize.x / 10, mapSize.y / 10);
         var pos = center;
@@ -52,8 +52,8 @@ public record Position(double x, double y) {
      */
     public static Position getRandomWalkableReferencePosition(final Position reference, final Map map) {
         final Position r = new Position(
-            reference.x() + (RANDOM.nextBoolean() ? 1 : -1) * ScreenImpl.TILE_SIZE * 2 * RANDOM.nextDouble(),
-            reference.y() + (RANDOM.nextBoolean() ? 1 : -1) * ScreenImpl.TILE_SIZE * 2 * RANDOM.nextDouble()
+            reference.x() + (RANDOM.nextBoolean() ? 1 : -1) * MapImpl.TILE_SIZE * 2 * RANDOM.nextDouble(),
+            reference.y() + (RANDOM.nextBoolean() ? 1 : -1) * MapImpl.TILE_SIZE * 2 * RANDOM.nextDouble()
         );
         return isWalkable(r, map) ? r : getRandomWalkableReferencePosition(reference, map);
     }
@@ -64,8 +64,8 @@ public record Position(double x, double y) {
 
     private static Position randomPosition(final Map map) {
         return new Position(
-            RANDOM.nextInt(0, map.getColoumns()) * ScreenImpl.TILE_SIZE,
-            RANDOM.nextInt(0, map.getRows()) * ScreenImpl.TILE_SIZE
+            RANDOM.nextInt(0, map.getColoumns()) * MapImpl.TILE_SIZE,
+            RANDOM.nextInt(0, map.getRows()) * MapImpl.TILE_SIZE
         );
     }
 }

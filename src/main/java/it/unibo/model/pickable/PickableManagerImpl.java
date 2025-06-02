@@ -11,9 +11,9 @@ import java.util.function.Predicate;
 import it.unibo.common.CooldownGate;
 import it.unibo.common.Position;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.effect.Effect;
 import it.unibo.model.human.Human;
-import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Class that will handle all operations for pickables.
@@ -57,8 +57,8 @@ public final class PickableManagerImpl implements PickableManager {
             return;
         }
         final Predicate<Pickable> ifCollide = p -> 
-                                Math.abs(player.getPosition().x() - p.getPosition().x()) <= ScreenImpl.TILE_SIZE / 2 
-                                 && Math.abs(player.getPosition().y() - p.getPosition().y()) <= ScreenImpl.TILE_SIZE / 2;
+                                Math.abs(player.getPosition().x() - p.getPosition().x()) <= MapImpl.TILE_SIZE / 2 
+                                 && Math.abs(player.getPosition().y() - p.getPosition().y()) <= MapImpl.TILE_SIZE / 2;
         pickables.stream()
         .filter(ifCollide)
         .forEach(p -> {

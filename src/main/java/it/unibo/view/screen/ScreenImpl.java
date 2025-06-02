@@ -26,6 +26,7 @@ import it.unibo.common.Text;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.human.Human;
 import it.unibo.model.pickable.Pickable;
 import it.unibo.model.tile.Tile;
@@ -42,19 +43,16 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final long serialVersionUID = 1287309L;
 
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final int SCALE = 5;
-    private static final int ORIGINAL_TILE_SIZE = 16;
     private static final int BASE_WINDOW_WIDTH = (int) SCREEN_SIZE.getWidth();
     private static final int BASE_WINDOW_HEIGHT = (int) SCREEN_SIZE.getHeight();
-    /**
-     * The pixel size of a tile scaled.
-     */
-    public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
-    private int centerX;
-    private int centerY;
+    private static final double SCALE_WIDTH_FACTOR = 1920.0;
+    private static final double SCALE_HEIGHT_FACTOR = 1080.0;
+    private static final int BASE_SCALE = 5;
+    private double centerX;
+    private double centerY;
 
-    private int xOffset;
-    private int yOffset;
+    private double xOffset;
+    private double yOffset;
     private final JFrame window = new JFrame();
 
     // Marked as transient because they don't need to be serialized.
@@ -94,7 +92,7 @@ public final class ScreenImpl extends JPanel implements Screen {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         updateCenter();
-        this.setOffset(centerX, centerY);
+        // this.setOffset(centerX, centerY);
         initializeBuffer();
         new javax.swing.Timer(16, e -> repaint()).start(); // ~60 FPS
     }
@@ -184,9 +182,17 @@ public final class ScreenImpl extends JPanel implements Screen {
         populationCounter.ifPresentOrElse(populationCounterLabel::update, populationCounterLabel::clear);
     }
 
+    private int getScale() {
+        return (int) Math.round(BASE_SCALE * Math.min(
+            window.getHeight() / SCALE_HEIGHT_FACTOR,
+            window.getWidth() / SCALE_WIDTH_FACTOR
+        ));
+    }
+
     private void updateCenter() {
-        centerX = window.getWidth() / 2 - TILE_SIZE / 2;
-        centerY = window.getHeight() / 2 - TILE_SIZE / 2;
+        final int scale = getScale();
+        centerX = window.getWidth() / 2 - MapImpl.TILE_SIZE * scale / 2;
+        centerY = window.getHeight() / 2 - MapImpl.TILE_SIZE * scale / 2;
     }
 
     private void drawText(final List<Text> texts) {
@@ -209,8 +215,8 @@ public final class ScreenImpl extends JPanel implements Screen {
             for (int r = 0; r < tiles.length; r++) {
                 for (int c = 0; c < tiles[r].length; c++) {
                     final Tile tile = tiles[r][c];
-                    final int mapX = r * TILE_SIZE;
-                    final int mapY = c * TILE_SIZE;
+                    final double mapX = r * MapImpl.TILE_SIZE;
+                    final double mapY = c * MapImpl.TILE_SIZE;
                     final Position screenPosition = screenPosition(new Position(mapX, mapY));
                     drawImage(bufferGraphics, tile.getSprite().getImage(), screenPosition);
                 }
@@ -229,7 +235,7 @@ public final class ScreenImpl extends JPanel implements Screen {
 
                 bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 final Position screenPositionCircle = screenPosition(human.getStats().getReproductionAreaRadius().getCenter());
-                final double diam = 2.0 * human.getStats().getReproductionAreaRadius().getRadius();
+                final double diam = 2.0 * human.getStats().getReproductionAreaRadius().getRadius() * getScale();
                 final Shape circle = new Ellipse2D.Double(
                     screenPositionCircle.x() - diam / 2,
                     screenPositionCircle.y() - diam / 2, diam,
@@ -247,14 +253,16 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private Position screenPosition(final Position position) {
-        return new Position(position.x() - xOffset + centerX, position.y() - yOffset + centerY);
+        final int scale = getScale();
+        return new Position(position.x() * scale - xOffset + centerX, position.y() * scale - yOffset + centerY);
     }
 
     private boolean validScreenPosition(final Position position) {
-        return position.x() + TILE_SIZE >= 0
-            && position.x() - TILE_SIZE < window.getWidth()
-            && position.y() + TILE_SIZE >= 0
-            && position.y() - TILE_SIZE < window.getHeight();
+        final int tileSize = MapImpl.TILE_SIZE * getScale();
+        return position.x() + tileSize >= 0
+            && position.x() - tileSize < window.getWidth()
+            && position.y() + tileSize >= 0
+            && position.y() - tileSize < window.getHeight();
     }
 
     @Override
@@ -267,18 +275,20 @@ public final class ScreenImpl extends JPanel implements Screen {
 
     @Override
     public void setOffset(final int xOffset, final int yOffset) {
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
+        final int scale = getScale();
+        this.xOffset = xOffset * scale;
+        this.yOffset = yOffset * scale;
     }
 
     private void drawImage(final Graphics2D g2, final BufferedImage image, final Position position) {
+        final int scale = getScale();
         if (validScreenPosition(position)) {
             g2.drawImage(
                 image,
                 (int) Math.round(position.x()),
                 (int) Math.round(position.y()),
-                TILE_SIZE,
-                TILE_SIZE,
+                MapImpl.TILE_SIZE * scale,
+                MapImpl.TILE_SIZE * scale,
                 null
             );
         }

@@ -5,13 +5,16 @@ import java.util.Arrays;
 import it.unibo.model.chapter.map.generator.MapGenerator;
 import it.unibo.model.chapter.map.generator.WaveFunctionCollapse;
 import it.unibo.model.tile.Tile;
-import it.unibo.view.screen.ScreenImpl;
 
 /**
  * Implementation of a game map.
  */
 public final class MapImpl implements Map {
 
+    /**
+     * The size of a tile.
+     */
+    public static final int TILE_SIZE = 16;
     private final int rows;
     private final int coloumns;
     private final Tile[][] tiles;
@@ -47,8 +50,8 @@ public final class MapImpl implements Map {
 
     @Override
     public Tile getTileFromPixel(final double x, final double y) {
-        final int newX = (int) (x + ScreenImpl.TILE_SIZE / 2) / ScreenImpl.TILE_SIZE;
-        final int newY = (int) (y + ScreenImpl.TILE_SIZE  - ScreenImpl.TILE_SIZE / 8)  / ScreenImpl.TILE_SIZE;
+        final int newX = (int) (x + TILE_SIZE / 2) / TILE_SIZE;
+        final int newY = (int) (y + TILE_SIZE  - TILE_SIZE / 8)  / TILE_SIZE;
         if (newX <= this.coloumns && newY <= this.rows) {
             return tiles[newX][newY];
         }
