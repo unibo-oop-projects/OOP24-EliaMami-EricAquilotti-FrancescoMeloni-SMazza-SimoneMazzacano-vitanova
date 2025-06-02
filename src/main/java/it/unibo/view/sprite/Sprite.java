@@ -23,67 +23,67 @@ public enum Sprite {
     /**
      * Player facing up.
      */
-    PLAYER_UP_1("human/male/up_1.png"),
+    PLAYER_UP_1("human/player/up_1.png"),
     /**
      * Player facing up.
      */
-    PLAYER_UP_2("human/male/up_2.png"),
+    PLAYER_UP_2("human/player/up_2.png"),
     /**
      * Player facing right.
      */
-    PLAYER_RIGHT_1("human/male/right_1.png"),
+    PLAYER_RIGHT_1("human/player/right_1.png"),
     /**
      * Player facing right.
      */
-    PLAYER_RIGHT_2("human/male/right_2.png"),
+    PLAYER_RIGHT_2("human/player/right_2.png"),
     /**
      * Player facing down.
      */
-    PLAYER_DOWN_1("human/male/down_1.png"),
+    PLAYER_DOWN_1("human/player/down_1.png"),
     /**
      * Player facing down.
      */
-    PLAYER_DOWN_2("human/male/down_2.png"),
+    PLAYER_DOWN_2("human/player/down_2.png"),
     /**
      * Player facing left.
      */
-    PLAYER_LEFT_1("human/male/left_1.png"),
+    PLAYER_LEFT_1("human/player/left_1.png"),
     /**
      * Player facing left.
      */
-    PLAYER_LEFT_2("human/male/left_2.png"),
+    PLAYER_LEFT_2("human/player/left_2.png"),
     /**
      * Player facing up with a sick face.
      */
-    PLAYER_UP_SICK_1("human/male/sick/up_1_sick.png"),
+    PLAYER_UP_SICK_1("human/player/sick/up_1_sick.png"),
     /**
      * Player facing up with a sick face.
      */
-    PLAYER_UP_SICK_2("human/male/sick/up_2_sick.png"),
+    PLAYER_UP_SICK_2("human/player/sick/up_2_sick.png"),
     /**
      * Player facing right with a sick face.
      */
-    PLAYER_RIGHT_SICK_1("human/male/sick/right_1_sick.png"),
+    PLAYER_RIGHT_SICK_1("human/player/sick/right_1_sick.png"),
     /**
      * Player facing right with a sick face.
      */
-    PLAYER_RIGHT_SICK_2("human/male/sick/right_2_sick.png"),
+    PLAYER_RIGHT_SICK_2("human/player/sick/right_2_sick.png"),
     /**
      * Player facing down with a sick face.
      */
-    PLAYER_DOWN_SICK_1("human/male/sick/down_1_sick.png"),
+    PLAYER_DOWN_SICK_1("human/player/sick/down_1_sick.png"),
     /**
      * Player facing down with a sick face.
      */
-    PLAYER_DOWN_SICK_2("human/male/sick/down_2_sick.png"),
+    PLAYER_DOWN_SICK_2("human/player/sick/down_2_sick.png"),
     /**
      * Player facing left with a sick face.
      */
-    PLAYER_LEFT_SICK_1("human/male/sick/left_1_sick.png"),
+    PLAYER_LEFT_SICK_1("human/player/sick/left_1_sick.png"),
     /**
      * Player facing left with a sick face.
      */
-    PLAYER_LEFT_SICK_2("human/male/sick/left_2_sick.png"),
+    PLAYER_LEFT_SICK_2("human/player/sick/left_2_sick.png"),
     /**
      * Male human facing up.
      */
