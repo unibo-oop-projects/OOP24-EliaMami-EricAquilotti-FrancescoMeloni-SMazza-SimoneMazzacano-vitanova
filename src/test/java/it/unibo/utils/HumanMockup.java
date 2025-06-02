@@ -153,10 +153,6 @@ public final class HumanMockup {
                     public double getBaseRadius() {
                         return 0;
                     }
-
-                    @Override
-                    public void setReproStrategy(final ReproStrategy newReproStrategy) {
-                    }
                 };
             }
         };
