@@ -190,6 +190,7 @@ public final class GameImpl implements Runnable, Game {
     @Override
     public void setNextChapter() {
         getPlayerStats().resetAllEffect();
+        clearScreen();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, getPlayerStats());
         saveGame();
         this.isGameplayStarted = false;
