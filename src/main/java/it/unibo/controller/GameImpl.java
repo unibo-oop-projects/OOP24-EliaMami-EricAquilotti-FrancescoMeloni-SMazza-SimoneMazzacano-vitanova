@@ -142,7 +142,7 @@ public final class GameImpl implements Runnable, Game {
 
     @Override
     public void exit() {
-        chapter.getPlayer().getStats().resetAllEffect();
+        getPlayerStats().resetAllEffect();
         saveGame();
         System.exit(0);
     }
@@ -161,6 +161,7 @@ public final class GameImpl implements Runnable, Game {
 
     @Override
     public void setNewChapter() {
+        getPlayerStats().resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, getPlayerStats());
         this.isGameplayStarted = false;
         clearScreen();
