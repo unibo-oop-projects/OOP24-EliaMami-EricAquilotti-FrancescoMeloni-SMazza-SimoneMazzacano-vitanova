@@ -9,13 +9,13 @@ import it.unibo.common.Circle;
 import it.unibo.common.Position;
 import it.unibo.common.RectangleImpl;
 import it.unibo.model.chapter.map.Map;
+import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.chapter.quadtree.Point;
 import it.unibo.model.chapter.quadtree.QuadTree;
 import it.unibo.model.chapter.quadtree.QuadTreeImpl;
 import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.sickness.SicknessManager;
-import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
@@ -71,8 +71,8 @@ public final class CollisionSolver {
         final QuadTree<Human> tree = new QuadTreeImpl<>(
             new RectangleImpl(
                 new Position(0, 0),
-                map.getRows() * ScreenImpl.TILE_SIZE,
-                map.getColoumns() * ScreenImpl.TILE_SIZE
+                map.getRows() * MapImpl.TILE_SIZE,
+                map.getColoumns() * MapImpl.TILE_SIZE
             )
         );
         fillTree(tree, currentPopulation);

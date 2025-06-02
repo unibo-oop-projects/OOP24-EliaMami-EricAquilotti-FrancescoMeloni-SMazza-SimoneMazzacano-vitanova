@@ -7,8 +7,8 @@ import java.util.function.Predicate;
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Position;
+import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.human.Human;
-import it.unibo.view.screen.ScreenImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
@@ -16,9 +16,9 @@ import it.unibo.view.sprite.HumanType;
  */
 public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     // I want the center to be around the legs of the human.
-    private static final double CIRCLE_X_OFFSET = ScreenImpl.TILE_SIZE / 2.0;
-    private static final double CIRCLE_Y_OFFSET = ScreenImpl.TILE_SIZE * 3.0 / 4.0;
-    private static final double CIRCLE_RADIUS = ScreenImpl.TILE_SIZE / 5.0;
+    private static final double CIRCLE_X_OFFSET = MapImpl.TILE_SIZE / 2.0;
+    private static final double CIRCLE_Y_OFFSET = MapImpl.TILE_SIZE * 3.0 / 4.0;
+    private static final double CIRCLE_RADIUS = MapImpl.TILE_SIZE / 5.0;
 
     private final Clock clock;
 
