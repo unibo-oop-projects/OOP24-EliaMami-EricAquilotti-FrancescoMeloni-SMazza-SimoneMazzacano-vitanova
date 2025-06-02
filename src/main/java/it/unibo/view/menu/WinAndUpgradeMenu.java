@@ -41,8 +41,7 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
             MenuOption.of("Home", g -> {
                 g.setNextChapter();
                 g.setMenu(new StartMenu(input, g));
-            }),
-            MenuOption.quit()
+            })
         ), 
         true,
         () -> "You have " + game.getSkillPoint().getValue() + " skill point.",
