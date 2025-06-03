@@ -16,6 +16,7 @@ public final class PausableClock extends Clock {
     private Duration pausedDuration = Duration.ZERO;
 
     /**
+     * Creates a new PausableClock object given a base clock.
      * 
      * @param baseClock the base clock used to create a pausable one.
      */

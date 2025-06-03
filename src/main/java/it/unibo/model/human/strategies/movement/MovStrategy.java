@@ -7,6 +7,7 @@ import it.unibo.common.Direction;
  */
 public interface MovStrategy {
     /**
+     * Retrieves the next direction the human will face.
      * 
      * @return the next direction the human will face.
      */

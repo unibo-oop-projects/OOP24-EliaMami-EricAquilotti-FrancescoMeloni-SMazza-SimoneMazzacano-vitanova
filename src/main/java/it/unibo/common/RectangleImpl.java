@@ -12,9 +12,9 @@ public final class RectangleImpl implements Rectangle {
 
     /**
      * Initialize fields.
-     * @param topLeftCorner
-     * @param width
-     * @param height
+     * @param topLeftCorner the position of the top left corner.
+     * @param width the width of the rectangle.
+     * @param height the height of the rectangle.
      */
     public RectangleImpl(final Position topLeftCorner, final double width, final double height) {
         this.x = topLeftCorner.x();

@@ -14,7 +14,7 @@ public final class App {
 
     /**
      * Starts the controller i.e. the game engine.
-     * @param args
+     * @param args args that are not used.
      */
     public static void main(final String[] args) {
         new GameImpl();

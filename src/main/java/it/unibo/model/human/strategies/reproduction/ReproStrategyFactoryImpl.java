@@ -23,6 +23,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     private final Clock clock;
 
     /**
+     * Creates a new factory for reproduction strategies.
      * 
      * @param clock the clock to get the current time.
      */

@@ -10,6 +10,7 @@ public final class CircleImpl implements Circle {
     private double radius;
 
     /**
+     * Creates a new circle given the center and the radius.
      * 
      * @param centerX x coordinate of the center.
      * @param centerY y coordinate of the center.

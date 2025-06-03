@@ -9,6 +9,7 @@ public final class Direction {
     private final boolean up, right, down, left;
 
     /**
+     * Creates a new Direction object with defined direction booleans.
      * 
      * @param up true if going up.
      * @param right true if going right.
@@ -23,6 +24,7 @@ public final class Direction {
     }
 
     /**
+     * Retrieves the movement on the x axis.
      * 
      * @return the movement on the x axis.
      */
@@ -31,6 +33,7 @@ public final class Direction {
     }
 
     /**
+     * Retrieves the movement on the y axis.
      * 
      * @return the movement on the y axis.
      */

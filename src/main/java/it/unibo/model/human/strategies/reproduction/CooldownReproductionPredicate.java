@@ -17,6 +17,8 @@ public final class CooldownReproductionPredicate implements Predicate<Human> {
     private boolean firstReproduction = true;
 
     /**
+     * Creates a new cooldown reproduction predicate initializing the fields.
+     * 
      * @param canReproduceWith tells if the current human can reproduce with another human.
      * @param cooldown the time to wait between reproductions.
      * @param clock the clock used to get the time that can be paused. (useful for testing).

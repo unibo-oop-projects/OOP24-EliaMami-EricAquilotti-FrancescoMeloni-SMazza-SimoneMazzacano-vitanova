@@ -19,6 +19,7 @@ public final class MovStrategyFactoryImpl implements MovStrategyFactory {
     private final Clock clock;
 
     /**
+     * Creates a new factory for movement strategies.
      * 
      * @param clock the clock to get the current time.
      */

@@ -330,6 +330,7 @@ public enum Sprite {
     }
 
     /**
+     * Function to get the sprite image.
      * 
      * @return a copy of the image.
      */
@@ -341,6 +342,8 @@ public enum Sprite {
     }
 
     /**
+     * Returns the specific sprite of a human based on the humanType, direction,
+     * sickness and frame.
      * 
      * @param type the type of human we want to get the sprite of.
      * @param direction the direction the human is facing.
