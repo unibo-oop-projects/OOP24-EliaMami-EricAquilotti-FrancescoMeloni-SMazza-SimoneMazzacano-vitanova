@@ -11,11 +11,6 @@ public final class InputHandlerImpl implements InputHandler {
 
     private final boolean[] keys = new boolean[KeyEvent.class.getFields().length];
 
-    /**
-     * Default constructor.
-     */
-    public InputHandlerImpl() { }
-
     @Override
     public Direction getDirection() {
         return new Direction(

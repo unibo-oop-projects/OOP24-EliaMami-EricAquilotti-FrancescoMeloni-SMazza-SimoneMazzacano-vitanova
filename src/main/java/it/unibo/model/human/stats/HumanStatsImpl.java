@@ -117,8 +117,7 @@ public final class HumanStatsImpl implements HumanStats {
         return this.reproductionRadius;
     }
 
-    @Override
-    public void setReproStrategy(final ReproStrategy newReproStrategy) {
+    private void setReproStrategy(final ReproStrategy newReproStrategy) {
         this.reproStrategy = newReproStrategy;
         this.reproductionRadius = reproStrategy.getReproductionArea().getRadius();
     }

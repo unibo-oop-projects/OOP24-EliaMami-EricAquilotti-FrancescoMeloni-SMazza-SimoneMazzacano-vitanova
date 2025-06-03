@@ -48,7 +48,7 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final double SCALE_WIDTH_FACTOR = 1920.0;
     private static final double SCALE_HEIGHT_FACTOR = 1080.0;
     private static final int BASE_SCALE = 5;
-    
+
     // Marked as transient because they don't need to be serialized.
     private transient double centerX;
     private transient double centerY;

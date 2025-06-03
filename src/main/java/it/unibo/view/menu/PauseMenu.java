@@ -27,7 +27,7 @@ public final class PauseMenu extends AbstractMenu {
             g.setMenu(new StartMenu(input, g));
         }),
         MenuOption.quit()),
-        false, "", "Game paused");
+        false, "", "Current chapter: " + game.getChapter().getChapterNumber());
     }
 
     @Override

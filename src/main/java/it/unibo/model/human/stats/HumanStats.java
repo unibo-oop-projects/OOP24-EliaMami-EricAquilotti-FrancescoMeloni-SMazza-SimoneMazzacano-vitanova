@@ -21,12 +21,6 @@ public interface HumanStats {
     void increaseSpeed();
 
     /**
-     * Method that set the new reprostrategy of human.
-     * @param newReproStrategy
-     */
-    void setReproStrategy(ReproStrategy newReproStrategy);
-
-    /**
      * Method that returns the current reprostrategy.
      * @return the reproStrategy.
      */
