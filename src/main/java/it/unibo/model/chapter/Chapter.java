@@ -38,10 +38,10 @@ public interface Chapter {
     List<Human> getHumans();
 
     /**
-     * Method that returns the list of all pickable power up spawned in the map.
-     * @return the list of pickable power up that are currently on the map.
+     * Method that returns the list of all pickable spawned in the map.
+     * @return the list of pickable that are currently on the map.
      */
-    List<Pickable> getPickablePowerUp();
+    List<Pickable> getPickables();
 
     /**
      * Method that returns the player from the humans list.

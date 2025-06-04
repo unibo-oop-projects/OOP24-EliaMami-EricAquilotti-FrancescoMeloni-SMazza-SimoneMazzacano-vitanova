@@ -13,54 +13,58 @@ public interface PickableFactory {
      * Method that returns a new pickable with a speed effect associated.
      * @param spawnPosition the spawn position of the pickable
      * @param duration the duration in seconds
-     * @param boost the value to multiply the parameter with
-     * @return a pickable that boost speed.
+     * @param value the value to multiply the stat with
+     * @return a pickable that multiply speed.
      */
-    Pickable speedBoost(Position spawnPosition, Duration duration, double boost);
+    Pickable speedPickable(Position spawnPosition, Duration duration, double value);
 
     /**
-     * Method that returns a new pickable with a speed effect associated with a fixed duration and a fixed boost.
+     * Method that returns a new pickable with a speed effect
+     * associated with a fixed duration and a fixed multiplier.
      * @param spawnPosition the spawn position of the pickable
-     * @return a pickable that boost speed.
+     * @return a pickable that multiply speed.
      */
-    Pickable speedBoost(Position spawnPosition);
+    Pickable speedPickable(Position spawnPosition);
 
     /**
      * Method that returns a new pickable with a sickness resistence effect associated.
      * @param spawnPosition the spawn position of the pickable
      * @param duration the duration in seconds
-     * @param boost the value to multiply the parameter with
-     * @return a pickable that boost the sickness resistance.
+     * @param value the value to multiply the stat with
+     * @return a pickable that multiply the sickness resistance.
      */
-    Pickable sicknessResistenceBoost(Position spawnPosition, Duration duration, double boost);
+    Pickable sicknessResistencePickable(Position spawnPosition, Duration duration, double value);
 
     /**
-     * Method that returns a new pickable with a sickness resistence effect associated with a fixed duration and a fixed boost.
+     * Method that returns a new pickable with a sickness resistence effect
+     * associated with a fixed duration and a fixed multiplier.
      * @param spawnPosition the spawn position of the pickable
-     * @return a pickable that boost the sickness resistance.
+     * @return a pickable that multiply the sickness resistance.
      */
-    Pickable sicknessResistenceBoost(Position spawnPosition);
+    Pickable sicknessResistencePickable(Position spawnPosition);
 
     /**
      * Method that returns a new pickable with a reproduction range effect associated.
      * @param spawnPosition the spawn position of the pickable 
      * @param duration the duration in seconds
-     * @param boost the value to multiply the parameter with
-     * @return a pickable that boost the reproduction range.
+     * @param value the value to multiply the stat with
+     * @return a pickable that multiply the reproduction range.
      */
-    Pickable reproductionRangeBoost(Position spawnPosition, Duration duration, double boost);
+    Pickable reproductionRangePickable(Position spawnPosition, Duration duration, double value);
 
     /**
-     * Method that returns a new pickable with a reproduction range effect associated with a fixed duration and a fixed boost.
+     * Method that returns a new pickable with a reproduction range effect
+     * associated with a fixed duration and a fixed multiplier.
      * @param spawnPosition the spawn position of the pickable 
-     * @return a pickable that boost the reproduction range.
+     * @return a pickable that multiply the reproduction range.
      */
-    Pickable reproductionRangeBoost(Position spawnPosition);
+    Pickable reproductionRangePickable(Position spawnPosition);
 
     /**
-     * Method that returns a new pickable with a random effect associated with a fixed duration and a fixed boost.
-     * @param spawnPosition
-     * @return a random pickable boost.
+     * Method that returns a new pickable with a random effect
+     * associated with a fixed duration and a fixed multiplier.
+     * @param spawnPosition the spawn position of the pickable
+     * @return a random pickable multiply.
      */
-    Pickable randomBoost(Position spawnPosition);
+    Pickable randomPickable(Position spawnPosition);
 }

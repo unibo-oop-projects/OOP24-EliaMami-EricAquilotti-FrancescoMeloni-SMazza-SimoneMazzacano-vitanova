@@ -31,7 +31,7 @@ public final class PickableManagerImpl implements PickableManager {
     /**
      * Constructor for PickableManager.
      * @param player is the player.
-     * @param baseClock 
+     * @param baseClock the base clock.
      * @param map the chapter map.
      */
     public PickableManagerImpl(final Human player, final Clock baseClock, final Map map) {
@@ -46,7 +46,7 @@ public final class PickableManagerImpl implements PickableManager {
     public void spawnPickable() {
         if (this.spawnPickableRate.tryActivate()) {
             final List<Pickable> spawningPickables = new ArrayList<>();
-            spawningPickables.add(pickableFactory.randomBoost(Position.getRandomWalkablePosition(map)));
+            spawningPickables.add(pickableFactory.randomPickable(Position.getRandomWalkablePosition(map)));
             this.pickables.addAll(spawningPickables);
         }
     }

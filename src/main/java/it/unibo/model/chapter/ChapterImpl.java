@@ -156,7 +156,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     @Override
-    public List<Pickable> getPickablePowerUp() {
+    public List<Pickable> getPickables() {
         return Collections.unmodifiableList(pickableManager.getPickables());
     }
 

@@ -273,17 +273,17 @@ public enum Sprite {
      */
     TILE_COAST_UP_LEFT2("tile/coastUpLeft2.png"),
     /**
-     * Pickable speed boost.
+     * Pickable speed.
      */
-    PICKABLE_SPEED_BOOST("powerUp/speedBoost.png"),
+    PICKABLE_SPEED("pickable/speedPickable.png"),
     /**
-     * Pickable sickness resistence boost.
+     * Pickable sickness resistence.
      */
-    PICKABLE_SICKNESS_RESISTENCE("powerUp/sicknessResistence.png"),
+    PICKABLE_SICKNESS_RESISTENCE("pickable/sicknessResistencePickable.png"),
      /**
-     * Pickable reproduction boost.
+     * Pickable reproduction range.
      */
-    PICKABLE_REPRODUCTION_BOOST("powerUp/reproductionBoost.png");
+    PICKABLE_REPRODUCTION_RANGE("pickable/reproductionRangePickable.png");
 
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";
@@ -291,7 +291,7 @@ public enum Sprite {
     private static final Map<HumanType, Map<DirectionEnum, Map<Boolean, Sprite[]>>> SPRITE_CHARACTERS_MAP = 
     new EnumMap<>(HumanType.class);
     private static final Map<TileType, Sprite> SPRITE_TILES_MAP = new EnumMap<>(TileType.class);
-    private static final Map<PowerUpType, Sprite> SPRITE_POWER_UP = new EnumMap<>(PowerUpType.class);
+    private static final Map<PickableType, Sprite> SPRITE_PICKABLE = new EnumMap<>(PickableType.class);
     static {
         for (final HumanType type : HumanType.values()) {
             final Map<DirectionEnum, Map<Boolean, Sprite[]>> directionMap = new EnumMap<>(DirectionEnum.class);
@@ -316,8 +316,8 @@ public enum Sprite {
         for (final TileType tileType : TileType.values()) {
             SPRITE_TILES_MAP.put(tileType, valueOf(tileType.toString()));
         }
-        for (final PowerUpType powerUpType : PowerUpType.values()) {
-            SPRITE_POWER_UP.put(powerUpType, valueOf(powerUpType.toString()));
+        for (final PickableType pickableType : PickableType.values()) {
+            SPRITE_PICKABLE.put(pickableType, valueOf(pickableType.toString()));
         }
     }
 
@@ -360,18 +360,18 @@ public enum Sprite {
     }
 
     /**
-     * Returns the {@code Sprite} of the corresponding type given, can only be {@code TileType} or {@code PowerUpType}.
+     * Returns the {@code Sprite} of the corresponding type given, can only be {@code TileType} or {@code PickableType}.
      * @throws IllegalArgumentException if the specified enum type has no constant with the specified name,
      * or the specified class object does not represent an enum type.
-     * @param <T> the type ({@code TileType} or {@code PowerUpType}) we want to get the sprite of.
+     * @param <T> the type ({@code TileType} or {@code PickableType}) we want to get the sprite of.
      * @param t the enumType we want to get the sprite of.
      * @return the tile's sprite.
      */
     public static <T> Sprite getSprite(final T t) {
         if (t instanceof TileType) {
             return SPRITE_TILES_MAP.get(t);
-        } else if (t instanceof PowerUpType) {
-            return SPRITE_POWER_UP.get(t);
+        } else if (t instanceof PickableType) {
+            return SPRITE_PICKABLE.get(t);
         }
         throw new IllegalArgumentException("The specified class object does not represent an enum type");
     }

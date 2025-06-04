@@ -8,7 +8,13 @@ import java.util.List;
  */
 public final class SaveObjectImpl implements Serializable, SaveObject {
     private static final long serialVersionUID = 2L;
+    /** 
+     * The chapter number to save.
+     */
     private final int chapterNumber;
+    /** 
+     * The list of player upgrade to save.
+     */
     private final List<Integer> playerUpgrade;
 
     /**

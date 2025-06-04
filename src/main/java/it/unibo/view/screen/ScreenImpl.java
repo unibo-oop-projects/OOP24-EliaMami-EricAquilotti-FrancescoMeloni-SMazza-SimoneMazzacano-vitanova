@@ -140,8 +140,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void loadPickablePowerUp(final List<Pickable> pickablePowerUps) {
-        pickableToDraw = pickablePowerUps.stream().toList();
+    public void loadPickable(final List<Pickable> pickables) {
+        pickableToDraw = pickables.stream().toList();
     }
 
     private void removeTextByPosition(final Text text) {

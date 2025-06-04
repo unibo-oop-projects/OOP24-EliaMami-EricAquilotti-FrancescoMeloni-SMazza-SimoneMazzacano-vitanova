@@ -41,11 +41,11 @@ public interface Screen {
     void loadHumans(List<Human> humans);
 
     /**
-     * Loads a list of powerUps that will be shown into the screen.
+     * Loads a list of pickables that will be shown into the screen.
      * 
-     * @param pickablePowerUps the pickable power ups to load.
+     * @param pickables the pickables to load.
      */
-    void loadPickablePowerUp(List<Pickable> pickablePowerUps);
+    void loadPickable(List<Pickable> pickables);
 
     /**
      * Loads the map that will be shown into the screen.

@@ -11,7 +11,7 @@ public final class SkillPointImpl implements SkillPoint {
 
     /**
      * Constuctor of SkillPoint.
-     * @param value
+     * @param value the value to inizialize skill point with.
      */
     public SkillPointImpl(final int value) {
         this.actualValue = Optional.of(value);
