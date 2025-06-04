@@ -23,6 +23,7 @@ public final class QuadTreeImpl<T> implements QuadTree<T> {
     private QuadTree<T> southEast;
 
     /**
+     * Creates a new QuadTree object with a given tree.
      * 
      * @param boundary the boundary of the node.
      */

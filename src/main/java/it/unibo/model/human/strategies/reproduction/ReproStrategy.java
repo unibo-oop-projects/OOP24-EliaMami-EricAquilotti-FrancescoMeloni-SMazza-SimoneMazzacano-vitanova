@@ -16,6 +16,7 @@ public interface ReproStrategy {
     void update(Position humanPosition);
 
     /**
+     * Check if the collision with the human happens.
      * 
      * @param other the human to collide with.
      * @return true if collision happened.
@@ -23,6 +24,7 @@ public interface ReproStrategy {
     boolean collide(Human other);
 
     /**
+     * Retrieves the current reproduction area.
      * 
      * @return the current circle representing the reproduction area.
      */

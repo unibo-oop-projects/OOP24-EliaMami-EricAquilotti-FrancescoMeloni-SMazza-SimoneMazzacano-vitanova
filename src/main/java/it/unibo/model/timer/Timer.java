@@ -14,11 +14,15 @@ public interface Timer {
     void reset();
 
     /**
+     * Retrieves the remaining time of the timer.
+     * 
      * @return the remaining time.
      */
     Duration getRemainingTime();
 
     /**
+     * Checks if the timer is over.
+     * 
      * @return true if the timer is over.
      */
     boolean isOver();

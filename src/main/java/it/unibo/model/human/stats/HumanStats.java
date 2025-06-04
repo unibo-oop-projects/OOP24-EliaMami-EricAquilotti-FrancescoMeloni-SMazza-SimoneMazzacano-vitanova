@@ -67,13 +67,13 @@ public interface HumanStats {
 
     /**
      * Apply the effect modifier to the stats based on the type effect activated.
-     * @param effect 
+     * @param effect the effect to apply.
      */
     void applyEffect(Effect effect);
 
     /**
      * Resets actual stats to base stats based on the expired effect.
-     * @param effect 
+     * @param effect the effect to reset.
      */
     void resetEffect(Effect effect);
 

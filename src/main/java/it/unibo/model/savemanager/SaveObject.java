@@ -8,8 +8,8 @@ import java.util.List;
 public interface SaveObject {
 
     /**
-     * Method that returns the playerStats.
-     * @return the player's stat.
+     * Method that returns a list of the player's upgrades.
+     * @return a list of integers representing the player's upgrades.
      */
     List<Integer> getPlayerUpgrade();
 

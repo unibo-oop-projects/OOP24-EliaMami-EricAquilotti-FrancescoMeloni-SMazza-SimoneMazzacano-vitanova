@@ -48,14 +48,13 @@ public final class ScreenImpl extends JPanel implements Screen {
     private static final double SCALE_WIDTH_FACTOR = 1920.0;
     private static final double SCALE_HEIGHT_FACTOR = 1080.0;
     private static final int BASE_SCALE = 5;
-    private double centerX;
-    private double centerY;
-
-    private double xOffset;
-    private double yOffset;
-    private final JFrame window = new JFrame();
 
     // Marked as transient because they don't need to be serialized.
+    private transient double centerX;
+    private transient double centerY;
+    private transient double xOffset;
+    private transient double yOffset;
+    private final transient JFrame window = new JFrame();
     private final transient List<Text> textToDraw = new ArrayList<>();
     private transient List<Human> humansToDraw = new ArrayList<>();
     private transient List<Pickable> pickableToDraw = new ArrayList<>();
@@ -72,8 +71,9 @@ public final class ScreenImpl extends JPanel implements Screen {
     private final transient MenuDisplay menuDisplay = new MenuDisplay();
 
     /**
+     * Creates a new Screen with the needed parameters.
      * 
-     * @param inputHandler
+     * @param inputHandler the input handler controlled by the user key pressed.
      */
     public ScreenImpl(final InputHandler inputHandler) {
         final var color = new Color(4, 160, 180); 
@@ -140,8 +140,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     @Override
-    public void loadPickablePowerUp(final List<Pickable> pickablePowerUps) {
-        pickableToDraw = pickablePowerUps.stream().toList();
+    public void loadPickable(final List<Pickable> pickables) {
+        pickableToDraw = pickables.stream().toList();
     }
 
     private void removeTextByPosition(final Text text) {

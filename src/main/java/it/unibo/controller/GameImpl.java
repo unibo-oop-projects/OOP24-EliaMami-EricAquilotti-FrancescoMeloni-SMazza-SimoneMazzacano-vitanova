@@ -107,7 +107,7 @@ public final class GameImpl implements Runnable, Game {
         screen.loadMap(chapter.getMap());
         if (isGameplayStarted) {
             screen.loadHumans(chapter.getHumans());
-            screen.loadPickablePowerUp(chapter.getPickablePowerUp());
+            screen.loadPickable(chapter.getPickables());
             screen.loadTimer(Optional.of(chapter.getTimerValue()));
             final int currentPopulation = chapter.getHumans().size();
             final int populationGoal = chapter.getPopulationGoal();
@@ -172,7 +172,7 @@ public final class GameImpl implements Runnable, Game {
         this.skillPoints.reset();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
-        this.screen.loadPickablePowerUp(Collections.emptyList());
+        this.screen.loadPickable(Collections.emptyList());
         this.screen.loadPopulationCounter(Optional.empty());
     }
 

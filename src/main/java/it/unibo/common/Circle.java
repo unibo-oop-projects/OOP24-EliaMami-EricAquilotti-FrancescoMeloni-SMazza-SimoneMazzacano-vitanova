@@ -6,6 +6,7 @@ package it.unibo.common;
  */
 public interface Circle {
     /**
+     * Checks if the circle intersects other circle.
      * 
      * @param other the circle to intersect.
      * @return if the circles intersects.
@@ -13,6 +14,7 @@ public interface Circle {
     boolean intersects(Circle other);
 
     /**
+     * Check if the circle intersects a rectangle.
      * 
      * @param other the rectangle to intersect.
      * @return if the circle intersects the rectangle.
@@ -20,6 +22,7 @@ public interface Circle {
     boolean intersects(Rectangle other);
 
     /**
+     * Check if a point is inside the circle.
      * 
      * @param point the point to check.
      * @return if the point is inside the circle.
@@ -27,18 +30,21 @@ public interface Circle {
     boolean contains(Position point);
 
     /**
+     * Retrieve the center of the circle.
      * 
      * @return the center of the circle.
      */
     Position getCenter();
 
     /**
+     * Retrieve the radius of the circle.
      * 
      * @return the radius of the circle.
      */
     double getRadius();
 
     /**
+     * Changes the coordinates of the center.
      * 
      * @param newCenterX new x coordinate of the center.
      * @param newCenterY new y coordinate of the center.
@@ -46,6 +52,7 @@ public interface Circle {
     void setCenter(double newCenterX, double newCenterY);
 
     /**
+     * Changes the radius value.
      * 
      * @param newRadious the new radious of the circle.
      */

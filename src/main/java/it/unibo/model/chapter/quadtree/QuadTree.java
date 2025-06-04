@@ -11,6 +11,7 @@ import it.unibo.common.Circle;
  */
 public interface QuadTree<T> {
     /**
+     * Inserts a point into the tree.
      * 
      * @param point the point to insert in the tree.
      * @return true if the point was inserted.
@@ -18,6 +19,7 @@ public interface QuadTree<T> {
     boolean insert(Point<T> point);
 
     /**
+     * Retrieves the points that are within a given range.
      * 
      * @param range the range to check.
      * @return the list of points that are inside the range.

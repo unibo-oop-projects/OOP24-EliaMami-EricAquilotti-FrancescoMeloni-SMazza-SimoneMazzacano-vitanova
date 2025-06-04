@@ -16,7 +16,7 @@ public interface Game {
 
     /**
      * Set current menu.
-     * @param menu
+     * @param menu the menu to set.
      */
     void setMenu(Menu menu);
 

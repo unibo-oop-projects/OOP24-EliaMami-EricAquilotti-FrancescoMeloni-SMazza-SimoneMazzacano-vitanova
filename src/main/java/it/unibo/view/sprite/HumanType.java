@@ -5,8 +5,16 @@ package it.unibo.view.sprite;
  */
 public enum HumanType {
     /**
-     * The human types.
+     * The player controlled by the user.
      */
-    PLAYER, MALE, FEMALE;
+    PLAYER,
+    /**
+     * A male NPC.
+     */
+    MALE,
+    /**
+     * A female NPC.
+     */
+    FEMALE;
 }
 

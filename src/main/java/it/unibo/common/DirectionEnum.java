@@ -5,11 +5,28 @@ package it.unibo.common;
  */
 public enum DirectionEnum {
     /**
-     * The direction names.
+     * Up direction.
      */
-    UP, RIGHT, DOWN, LEFT, NONE;
+    UP,
+    /**
+     * Right direction.
+     */
+    RIGHT,
+    /**
+     * Down direction.
+     */
+    DOWN,
+    /**
+     * Left direction.
+     */
+    LEFT,
+    /**
+     * Empty direction.
+     */
+    NONE;
 
     /**
+     * Return the DirectionEnum associated to a direction.
      * 
      * @param direction the direction to cast to the enum.
      * @return the correct enum based on the direction.

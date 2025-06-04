@@ -35,7 +35,10 @@ public final class CooldownGate {
     }
 
     /**
-     * @return true if cooldown expired and resets it.
+     * Activate the gate if the cooldown is expired, if it is the cooldown is
+     * resetted.
+     * 
+     * @return true if cooldown expired.
      */
     public boolean tryActivate() {
         final Instant now = clock.instant();
@@ -47,6 +50,8 @@ public final class CooldownGate {
     }
 
     /**
+     * Checks the status of the cooldown.
+     * 
      * @return true if cooldown expired.
      */
     public boolean checkStatus() {

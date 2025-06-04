@@ -6,6 +6,7 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 
 /**
+ * Position class that contains 2 coordinates and utils functions.
  * 
  * @param x the position on the x axes.
  * @param y the position on the y axes.

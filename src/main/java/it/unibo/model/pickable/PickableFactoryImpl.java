@@ -8,11 +8,11 @@ import it.unibo.common.Position;
 import it.unibo.model.effect.Effect;
 import it.unibo.model.effect.EffectFactory;
 import it.unibo.model.effect.EffectFactoryImpl;
-import it.unibo.view.sprite.PowerUpType;
+import it.unibo.view.sprite.PickableType;
 import it.unibo.view.sprite.Sprite;
 
 /**
- * Pickable power up factory implementation.
+ * Pickable factory implementation.
  */
 public final class PickableFactoryImpl implements PickableFactory {
     private final EffectFactory effectFactory;
@@ -29,11 +29,11 @@ public final class PickableFactoryImpl implements PickableFactory {
     }
 
     @Override
-    public Pickable speedBoost(final Position spawnPosition, final Duration duration, final double boost) {
+    public Pickable speedPickable(final Position spawnPosition, final Duration duration, final double value) {
         return new Pickable() {
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
-            private final Effect speedBoost = effectFactory.speedEffect(duration, boost);
+            private final Effect speedEffect = effectFactory.speedEffect(duration, value);
 
             @Override
             public Position getPosition() {
@@ -42,27 +42,27 @@ public final class PickableFactoryImpl implements PickableFactory {
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getSprite(PowerUpType.PICKABLE_SPEED_BOOST);
+                return Sprite.getSprite(PickableType.PICKABLE_SPEED);
             }
 
             @Override
             public Effect getEffect() {
-                return this.speedBoost;
+                return this.speedEffect;
             }
         };
     }
 
     @Override
-    public Pickable speedBoost(final Position spawnPosition) {
-        return speedBoost(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
+    public Pickable speedPickable(final Position spawnPosition) {
+        return speedPickable(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
     }
 
     @Override
-    public Pickable sicknessResistenceBoost(final Position spawnPosition, final Duration duration, final double boost) {
+    public Pickable sicknessResistencePickable(final Position spawnPosition, final Duration duration, final double value) {
         return new Pickable() {
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
-            private final Effect sicknessResistence = effectFactory.sicknessResistenceEffect(duration, boost);
+            private final Effect sicknessResistenceEffect = effectFactory.sicknessResistenceEffect(duration, value);
 
             @Override
             public Position getPosition() {
@@ -71,27 +71,27 @@ public final class PickableFactoryImpl implements PickableFactory {
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getSprite(PowerUpType.PICKABLE_SICKNESS_RESISTENCE);
+                return Sprite.getSprite(PickableType.PICKABLE_SICKNESS_RESISTENCE);
             }
 
             @Override
             public Effect getEffect() {
-                return this.sicknessResistence;
+                return this.sicknessResistenceEffect;
             }
         };
     }
 
     @Override
-    public Pickable sicknessResistenceBoost(final Position spawnPosition) {
-        return sicknessResistenceBoost(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
+    public Pickable sicknessResistencePickable(final Position spawnPosition) {
+        return sicknessResistencePickable(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
     }
 
     @Override
-    public Pickable reproductionRangeBoost(final Position spawnPosition, final Duration duration, final double boost) {
+    public Pickable reproductionRangePickable(final Position spawnPosition, final Duration duration, final double value) {
         return new Pickable() {
             private final double x = spawnPosition.x();
             private final double y = spawnPosition.y();
-            private final Effect reproductionAreaEffect = effectFactory.reproductionRangeEffect(duration, boost);
+            private final Effect reproductionAreaEffect = effectFactory.reproductionRangeEffect(duration, value);
 
             @Override
             public Position getPosition() {
@@ -100,7 +100,7 @@ public final class PickableFactoryImpl implements PickableFactory {
 
             @Override
             public Sprite getSprite() {
-                return Sprite.getSprite(PowerUpType.PICKABLE_REPRODUCTION_BOOST);
+                return Sprite.getSprite(PickableType.PICKABLE_REPRODUCTION_RANGE);
             }
 
             @Override
@@ -111,20 +111,20 @@ public final class PickableFactoryImpl implements PickableFactory {
     }
 
     @Override
-    public Pickable reproductionRangeBoost(final Position spawnPosition) {
-        return reproductionRangeBoost(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
+    public Pickable reproductionRangePickable(final Position spawnPosition) {
+        return reproductionRangePickable(spawnPosition, DURATION_EFFECT_VALUE, MULTIPLY_VALUE);
     }
 
     @Override
-    public Pickable randomBoost(final Position spawnPosition) {
-        final int randomPowerUp = RANDOM.nextInt(0, 3);
-        switch (randomPowerUp) {
+    public Pickable randomPickable(final Position spawnPosition) {
+        final int randomPickable = RANDOM.nextInt(0, 3);
+        switch (randomPickable) {
             case 0: 
-                return speedBoost(spawnPosition);
+                return speedPickable(spawnPosition);
             case 1: 
-                return sicknessResistenceBoost(spawnPosition);
+                return sicknessResistencePickable(spawnPosition);
             default:
-                return reproductionRangeBoost(spawnPosition);
+                return reproductionRangePickable(spawnPosition);
         }
     }
 }

@@ -17,6 +17,7 @@ import it.unibo.model.pickable.Pickable;
  */
 public interface Screen {
     /**
+     * Loads a text that will appear on the screen.
      * 
      * @param text the string to show.
      * @param position the position on the screen.
@@ -26,30 +27,35 @@ public interface Screen {
     void loadText(String text, Position position, Color color, int size);
 
     /**
+     * Loads a menu that will be shown into the screen.
      * 
      * @param content content that represent the menu
      */
     void loadMenu(MenuContent content);
 
     /**
+     * Loads a list of humans that will be shown into the screen.
      * 
      * @param humans the humans to load.
      */
     void loadHumans(List<Human> humans);
 
     /**
+     * Loads a list of pickables that will be shown into the screen.
      * 
-     * @param pickablePowerUps the pickable power ups to load.
+     * @param pickables the pickables to load.
      */
-    void loadPickablePowerUp(List<Pickable> pickablePowerUps);
+    void loadPickable(List<Pickable> pickables);
 
     /**
+     * Loads the map that will be shown into the screen.
      * 
      * @param map the map to load.
      */
     void loadMap(Map map);
 
     /**
+     * Loads the duration of the timer that will be shown into the screen.
      * 
      * @param timerValue the duration of the timer to load.
      */
@@ -66,8 +72,8 @@ public interface Screen {
 
     /**
      * Sets the offset for the rendering.
-     * @param xOffset
-     * @param yOffset
+     * @param xOffset the offset on the x axis.
+     * @param yOffset the offset on the y axis.
      */
     void setOffset(int xOffset, int yOffset);
 }
