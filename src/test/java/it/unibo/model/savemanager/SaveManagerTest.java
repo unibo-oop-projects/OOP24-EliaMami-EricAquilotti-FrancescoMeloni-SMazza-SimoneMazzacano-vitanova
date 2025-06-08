@@ -11,30 +11,30 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class SaveManagerTest {
+final class SaveManagerTest {
     private final SaveManager sv = new SaveManagerImpl();
-    private final static File testFile = new File("src/test/java/test.txt");
-    private final Integer objectToSave = 1; 
+    private static final File TEST_FILE = new File("src/test/java/test.txt");
+    private static final String EXAMPLE_PATH = "no/such/place";
+    private static final Integer OBJECT_TO_SAVE = 1; 
 
     @BeforeEach
-    void setUp() throws IOException {
-        sv.saveObj(objectToSave, testFile);
+    void saveObject() throws IOException {
+        sv.saveObj(OBJECT_TO_SAVE, TEST_FILE);
     }
 
     @Test
     void testIOException() throws ClassNotFoundException, IOException {
-        assertThrows(IOException.class, () -> sv.saveObj(objectToSave, new File("/no/such/place")));
-        assertThrows(IOException.class, () -> sv.readObj(new File("/no/such/place")));
+        assertThrows(IOException.class, () -> sv.saveObj(OBJECT_TO_SAVE, new File(EXAMPLE_PATH)));
+        assertThrows(IOException.class, () -> sv.readObj(new File(EXAMPLE_PATH)));
     }
 
     @Test
     void testRead() throws ClassNotFoundException, IOException {
-        assertEquals(sv.readObj(testFile), objectToSave);
-        
+        assertEquals(sv.readObj(TEST_FILE), OBJECT_TO_SAVE);
     }
 
     @AfterAll
     static void deleteFile() throws IOException {
-        Files.delete(testFile.toPath());
+        Files.delete(TEST_FILE.toPath());
     }
 }
