@@ -9,10 +9,10 @@ public interface EffectFactory {
 
     /**
      * Method that return a new effect.
-     * @param type the effect type
+     * @param effectType the effect type
      * @param duration the duration
      * @param multiplyValue the value to multiply the parameter with
      * @return an effect that describe how to modify the chosen stat.
      */
-    Effect createEffect(EffectType type, Duration duration, double multiplyValue);
+    Effect createEffect(EffectType effectType, Duration duration, double multiplyValue);
 }
