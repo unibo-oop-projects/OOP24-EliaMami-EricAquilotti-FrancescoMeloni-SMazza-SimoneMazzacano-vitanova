@@ -182,12 +182,6 @@ public final class GameImpl implements Runnable, Game {
     }
 
     @Override
-    public void startNextChapter() {
-        setNextChapter();
-        startGameplay();
-    }
-
-    @Override
     public void setNextChapter() {
         getPlayerStats().resetAllEffect();
         clearScreen();

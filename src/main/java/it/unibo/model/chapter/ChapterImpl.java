@@ -23,8 +23,8 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.effect.EffectFactoryImpl;
 import it.unibo.model.pickable.Pickable;
-import it.unibo.model.pickable.PickableManager;
-import it.unibo.model.pickable.PickableManagerImpl;
+import it.unibo.model.pickable.manager.PickableManager;
+import it.unibo.model.pickable.manager.PickableManagerImpl;
 import it.unibo.view.sprite.HumanType;
 
 /**
@@ -116,7 +116,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     private boolean gameWon() {
-        return this.humans.size() >= (STARTING_POPULATION_GOAL * getChapterNumber());
+        return this.humans.size() >= getPopulationGoal();
     }
 
     private boolean gameLost() {

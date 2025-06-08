@@ -1,6 +1,8 @@
-package it.unibo.model.pickable;
+package it.unibo.model.pickable.manager;
 
 import java.util.List;
+
+import it.unibo.model.pickable.Pickable;
 
 /**
  * Models a pickableManager that will handle all operations for pickable.

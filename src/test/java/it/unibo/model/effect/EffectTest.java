@@ -1,6 +1,7 @@
 package it.unibo.model.effect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
@@ -12,20 +13,21 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.utils.MutableClock;
 
-public class EffectTest {
+class EffectTest {
     private static final MutableClock MUTABLE_CLOCK = new MutableClock(Instant.now(), ZoneId.systemDefault());
     private static final EffectFactory EFFECT_FACTORY = new EffectFactoryImpl(MUTABLE_CLOCK);
+    private static final Duration EFFECT_DURATION = Duration.ofSeconds(5);
     private Effect speed;
     private Effect sicknessResistence;
     private Effect reproductionRange;
     private Effect fertility;
 
     @BeforeEach
-    void setUp() {
-        speed = EFFECT_FACTORY.speedEffect(Duration.ofSeconds(5), 1);
-        sicknessResistence = EFFECT_FACTORY.sicknessResistenceEffect(Duration.ofSeconds(5), 1);
-        reproductionRange = EFFECT_FACTORY.reproductionRangeEffect(Duration.ofSeconds(5), 1);
-        fertility = EFFECT_FACTORY.fertilityEffect(Duration.ofSeconds(5), 1);
+    void createffect() {
+        speed = EFFECT_FACTORY.createEffect(EffectType.SPEED, EFFECT_DURATION, 1);
+        sicknessResistence = EFFECT_FACTORY.createEffect(EffectType.SICKNESS_RESISTENCE, EFFECT_DURATION, 1);
+        reproductionRange = EFFECT_FACTORY.createEffect(EffectType.REPRODUCTION_RANGE, EFFECT_DURATION, 1);
+        fertility = EFFECT_FACTORY.createEffect(EffectType.FERTILITY, EFFECT_DURATION, 1);
     }
 
     @Test
@@ -38,10 +40,10 @@ public class EffectTest {
         assertEquals(sicknessResistence.getMultiplyValue(), 1);
         assertEquals(reproductionRange.getMultiplyValue(), 1);
         assertEquals(fertility.getMultiplyValue(), 1);
-        assertEquals(speed.getDuration(), Duration.ofSeconds(5));
-        assertEquals(sicknessResistence.getDuration(), Duration.ofSeconds(5));
-        assertEquals(reproductionRange.getDuration(), Duration.ofSeconds(5));
-        assertEquals(fertility.getDuration(), Duration.ofSeconds(5));
+        assertEquals(speed.getDuration(), EFFECT_DURATION);
+        assertEquals(sicknessResistence.getDuration(), EFFECT_DURATION);
+        assertEquals(reproductionRange.getDuration(), EFFECT_DURATION);
+        assertEquals(fertility.getDuration(), EFFECT_DURATION);
     }
 
     @Test
@@ -50,10 +52,10 @@ public class EffectTest {
         sicknessResistence.activate();
         reproductionRange.activate();
         fertility.activate();
-        assertTrue(!speed.isExpired());
-        assertTrue(!sicknessResistence.isExpired());
-        assertTrue(!reproductionRange.isExpired());
-        assertTrue(!fertility.isExpired());
+        assertFalse(speed.isExpired());
+        assertFalse(sicknessResistence.isExpired());
+        assertFalse(reproductionRange.isExpired());
+        assertFalse(fertility.isExpired());
     }
 
     @Test
@@ -62,7 +64,7 @@ public class EffectTest {
         sicknessResistence.activate();
         reproductionRange.activate();
         fertility.activate();
-        MUTABLE_CLOCK.advance(Duration.ofSeconds(5));
+        MUTABLE_CLOCK.advance(EFFECT_DURATION);
         assertTrue(speed.isExpired());
         assertTrue(sicknessResistence.isExpired());
         assertTrue(reproductionRange.isExpired());
@@ -75,14 +77,14 @@ public class EffectTest {
         sicknessResistence.activate();
         reproductionRange.activate();
         fertility.activate();
-        MUTABLE_CLOCK.advance(Duration.ofSeconds(5));
+        MUTABLE_CLOCK.advance(EFFECT_DURATION);
         speed.refresh();
         sicknessResistence.refresh();
         reproductionRange.refresh();
         fertility.refresh();
-        assertTrue(!speed.isExpired());
-        assertTrue(!sicknessResistence.isExpired());
-        assertTrue(!reproductionRange.isExpired());
-        assertTrue(!fertility.isExpired());
+        assertFalse(speed.isExpired());
+        assertFalse(sicknessResistence.isExpired());
+        assertFalse(reproductionRange.isExpired());
+        assertFalse(fertility.isExpired());
     }
 }

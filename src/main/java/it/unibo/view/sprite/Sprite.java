@@ -283,7 +283,11 @@ public enum Sprite {
      /**
      * Pickable reproduction range.
      */
-    PICKABLE_REPRODUCTION_RANGE("pickable/reproductionRangePickable.png");
+    PICKABLE_REPRODUCTION_RANGE("pickable/reproductionRangePickable.png"),
+    /**
+     * Pickable fertility.
+     */
+    PICKABLE_FERTILITY("pickable/fertilityPickable.png");
 
 
     private static final String ROOT_SPRITES = "it/unibo/view/sprites/";

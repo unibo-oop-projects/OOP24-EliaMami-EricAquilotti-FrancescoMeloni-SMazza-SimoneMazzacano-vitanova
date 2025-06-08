@@ -15,5 +15,9 @@ public enum PickableType {
     /**
      * The reproduction range pickable.
      */
-    PICKABLE_REPRODUCTION_RANGE;
+    PICKABLE_REPRODUCTION_RANGE,
+    /**
+     * The fertility pickable.
+     */
+    PICKABLE_FERTILITY;
 }

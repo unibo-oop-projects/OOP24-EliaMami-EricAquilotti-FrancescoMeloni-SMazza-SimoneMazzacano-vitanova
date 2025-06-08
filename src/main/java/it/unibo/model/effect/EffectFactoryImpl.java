@@ -21,148 +21,16 @@ public final class EffectFactoryImpl implements EffectFactory {
     }
 
     @Override
-    public Effect speedEffect(final Duration duration, final double multiplyValue) {
+    public Effect createEffect(final EffectType effectType, final Duration duration, final double multiplyValue) {
         return new Effect() {
-            private static final EffectType TYPE = EffectType.SPEED; 
+            private final EffectType type = effectType; 
             private final Duration effectDuration = duration;
             private final double effectValue = multiplyValue;
             private Optional<CooldownGate> cooldown = Optional.empty();
 
             @Override
             public EffectType getType() {
-                return TYPE;
-            }
-
-            @Override
-            public Duration getDuration() {
-                return effectDuration;
-            }
-
-            @Override
-            public double getMultiplyValue() {
-                return effectValue;
-            }
-
-            @Override
-            public boolean isExpired() {
-                return cooldown.isEmpty() || cooldown.get().checkStatus();
-            }
-
-            @Override
-            public void activate() {
-                if (cooldown.isEmpty()) {
-                    cooldown = Optional.of(new CooldownGate(effectDuration, clock));
-                } else {
-                    cooldown.get().tryActivate();
-                }
-            }
-
-            @Override
-            public void refresh() {
-                cooldown = Optional.of(new CooldownGate(duration, clock));
-            }
-        };
-    }
-
-    @Override
-    public Effect reproductionRangeEffect(final Duration duration, final double multiplyValue) {
-        return new Effect() {
-            private static final EffectType TYPE = EffectType.REPRODUCTION_RANGE;
-            private final Duration effectDuration = duration;
-            private final double effectValue = multiplyValue;
-            private Optional<CooldownGate> cooldown = Optional.empty();
-
-            @Override
-            public EffectType getType() {
-                return TYPE;
-            }
-
-            @Override
-            public Duration getDuration() {
-                return effectDuration;
-            }
-
-            @Override
-            public double getMultiplyValue() {
-                return effectValue;
-            }
-
-            @Override
-            public boolean isExpired() {
-                return cooldown.isEmpty() || cooldown.get().checkStatus();
-            }
-
-            @Override
-            public void activate() {
-                if (cooldown.isEmpty()) {
-                    cooldown = Optional.of(new CooldownGate(effectDuration, clock));
-                } else {
-                    cooldown.get().tryActivate();
-                }
-            }
-
-            @Override
-            public void refresh() {
-                cooldown = Optional.of(new CooldownGate(duration, clock));
-            }
-        };
-    }
-
-    @Override
-    public Effect fertilityEffect(final Duration duration, final double multiplyValue) {
-        return new Effect() {
-            private static final EffectType TYPE = EffectType.FERTILITY; 
-            private final Duration effectDuration = duration;
-            private final double effectValue = multiplyValue;
-            private Optional<CooldownGate> cooldown = Optional.empty();
-
-            @Override
-            public EffectType getType() {
-                return TYPE;
-            }
-
-            @Override
-            public Duration getDuration() {
-                return effectDuration;
-            }
-
-            @Override
-            public double getMultiplyValue() {
-                return effectValue;
-            }
-
-            @Override
-            public boolean isExpired() {
-                return cooldown.isEmpty() || cooldown.get().checkStatus();
-            }
-
-            @Override
-            public void activate() {
-                if (cooldown.isEmpty()) {
-                    cooldown = Optional.of(new CooldownGate(effectDuration, clock));
-                } else {
-                    cooldown.get().tryActivate();
-                }
-            }
-
-            @Override
-            public void refresh() {
-                cooldown = Optional.of(new CooldownGate(duration, clock));
-            }
-        };
-    }
-
-    @Override
-    public Effect sicknessResistenceEffect(final Duration duration, final double multiplyValue) {
-        return new Effect() {
-            private static final EffectType TYPE = EffectType.SICKNESS_RESISTENCE; 
-            private final Duration effectDuration = duration;
-            private final double effectValue = multiplyValue;
-            private Optional<CooldownGate> cooldown = Optional.empty();
-
-            @Override
-            public EffectType getType() {
-                return TYPE;
+                return type;
             }
 
             @Override

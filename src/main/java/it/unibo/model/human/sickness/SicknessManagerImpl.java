@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import it.unibo.model.effect.Effect;
 import it.unibo.model.effect.EffectFactoryImpl;
+import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.Human;
 import it.unibo.view.sprite.HumanType;
 
@@ -58,9 +59,12 @@ public final class SicknessManagerImpl implements SicknessManager {
 
     private List<Effect> createEffects() {
         return List.of(
-            effectFactory.speedEffect(sicknessDuration, SICKNESS_MULTIPLIER),
-            effectFactory.reproductionRangeEffect(sicknessDuration, SICKNESS_MULTIPLIER),
-            effectFactory.fertilityEffect(sicknessDuration, SICKNESS_MULTIPLIER)
+            effectFactory.createEffect(EffectType.SPEED, sicknessDuration, SICKNESS_MULTIPLIER),
+            effectFactory.createEffect(EffectType.REPRODUCTION_RANGE, sicknessDuration, SICKNESS_MULTIPLIER),
+            effectFactory.createEffect(EffectType.FERTILITY, sicknessDuration, SICKNESS_MULTIPLIER)
+            // effectFactory.speedEffect(sicknessDuration, SICKNESS_MULTIPLIER),
+            // effectFactory.reproductionRangeEffect(sicknessDuration, SICKNESS_MULTIPLIER),
+            // effectFactory.fertilityEffect(sicknessDuration, SICKNESS_MULTIPLIER)
         );
     }
 

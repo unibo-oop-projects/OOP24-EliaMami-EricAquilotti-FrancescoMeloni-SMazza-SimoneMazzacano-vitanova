@@ -1,4 +1,4 @@
-package it.unibo.model.pickable;
+package it.unibo.model.pickable.manager;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -14,6 +14,9 @@ import it.unibo.model.chapter.map.Map;
 import it.unibo.model.chapter.map.MapImpl;
 import it.unibo.model.effect.Effect;
 import it.unibo.model.human.Human;
+import it.unibo.model.pickable.Pickable;
+import it.unibo.model.pickable.PickableFactory;
+import it.unibo.model.pickable.PickableFactoryImpl;
 
 /**
  * Class that will handle all operations for pickables.

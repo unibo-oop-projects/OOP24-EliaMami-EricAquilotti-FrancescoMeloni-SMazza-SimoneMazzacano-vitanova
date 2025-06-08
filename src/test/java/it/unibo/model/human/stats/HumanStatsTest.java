@@ -15,16 +15,24 @@ import it.unibo.common.Position;
 import it.unibo.model.effect.Effect;
 import it.unibo.model.effect.EffectFactory;
 import it.unibo.model.effect.EffectFactoryImpl;
+import it.unibo.model.effect.EffectType;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactory;
 import it.unibo.model.human.strategies.reproduction.ReproStrategyFactoryImpl;
 import it.unibo.utils.MutableClock;
 
-public class HumanStatsTest {
+final class HumanStatsTest {
     private static final MutableClock MUTABLE_CLOCK = new MutableClock(Instant.now(), ZoneId.systemDefault());
     private static final ReproStrategyFactory REPRODUCTION_STRATEGY_FACTORY = new ReproStrategyFactoryImpl(MUTABLE_CLOCK);
     private static final EffectFactory EFFECT_FACTORY = new EffectFactoryImpl(MUTABLE_CLOCK);
-    private ReproStrategy reproStrategy;
+    private static final double MULTIPLY_VALUE = 1.25;
+    private static final Duration EFFECT_DURATION = Duration.ofSeconds(100);
+    private static final List<Integer> UPGRADE = List.of(5, 5, 5, 5);
+    private static final double BASE_SPEED = 1;
+    private static final double BASE_SICKNESS_RESISTENCE = 0.5;
+    private static final double BASE_FERTILITY = 0.1;
+    private ReproStrategy baseReproStrategy;
+    private double baseRadius;
     private HumanStats stats;
     private Effect speed;
     private Effect sicknessResistence;
@@ -32,62 +40,63 @@ public class HumanStatsTest {
     private Effect fertility;
 
     @BeforeEach
-    void setUp() {
-        reproStrategy = REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(new Position(0, 0));
-        stats = new HumanStatsImpl(1, 1, 1, reproStrategy);
-        speed = EFFECT_FACTORY.speedEffect(Duration.ofSeconds(100), 1.25);
-        sicknessResistence = EFFECT_FACTORY.sicknessResistenceEffect(Duration.ofSeconds(100), 1.25);
-        reproductionRange = EFFECT_FACTORY.reproductionRangeEffect(Duration.ofSeconds(100), 1.25);
-        fertility = EFFECT_FACTORY.fertilityEffect(Duration.ofSeconds(100), 1.25);
+    void inizializeValues() {
+        baseReproStrategy = REPRODUCTION_STRATEGY_FACTORY.maleReproStrategy(new Position(0, 0));
+        baseRadius = baseReproStrategy.getReproductionArea().getRadius();
+        stats = new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, baseReproStrategy);
+        speed = EFFECT_FACTORY.createEffect(EffectType.SPEED, EFFECT_DURATION, MULTIPLY_VALUE);
+        sicknessResistence = EFFECT_FACTORY.createEffect(EffectType.SICKNESS_RESISTENCE, EFFECT_DURATION, MULTIPLY_VALUE);
+        fertility = EFFECT_FACTORY.createEffect(EffectType.FERTILITY, EFFECT_DURATION, MULTIPLY_VALUE);
+        reproductionRange = EFFECT_FACTORY.createEffect(EffectType.REPRODUCTION_RANGE, EFFECT_DURATION, MULTIPLY_VALUE);
     }
 
     @Test
     void testInitialValues() {
-        assertEquals(1, stats.getSpeed());
-        assertEquals(1, stats.getSicknessResistence());
-        assertEquals(1, stats.getFertility());
-        assertEquals(16, stats.getReproductionAreaRadius().getRadius());
+        assertEquals(BASE_SPEED, stats.getSpeed());
+        assertEquals(BASE_SICKNESS_RESISTENCE, stats.getSicknessResistence());
+        assertEquals(BASE_FERTILITY, stats.getFertility());
+        assertEquals(baseRadius, stats.getReproductionAreaRadius().getRadius());
     }
 
     @Test
     void testApplyEffects() {
         stats.applyEffect(speed);
-        assertEquals(1.25, stats.getSpeed());
+        assertEquals(BASE_SPEED * speed.getMultiplyValue(), stats.getSpeed());
         stats.applyEffect(sicknessResistence);
-        assertEquals(1.25, stats.getSicknessResistence());
+        assertEquals(BASE_SICKNESS_RESISTENCE * sicknessResistence.getMultiplyValue(), stats.getSicknessResistence());
         stats.applyEffect(fertility);
-        assertEquals(1.25, stats.getFertility());
+        assertEquals(BASE_FERTILITY * fertility.getMultiplyValue(), stats.getFertility());
         stats.applyEffect(reproductionRange);
-        assertEquals(20, stats.getReproductionAreaRadius().getRadius());
+        assertEquals(baseRadius * reproductionRange.getMultiplyValue(), stats.getReproductionAreaRadius().getRadius());
     }
 
     @Test 
     void testResetEffects() {
         stats.applyEffect(speed);
         stats.resetEffect(speed);
-        assertEquals(1, stats.getSpeed());
+        assertEquals(BASE_SPEED, stats.getSpeed());
         stats.applyEffect(sicknessResistence);
         stats.resetEffect(sicknessResistence);
-        assertEquals(1, stats.getSicknessResistence());
-        stats.applyEffect(reproductionRange);
-        stats.resetEffect(reproductionRange);
-        assertEquals(16.0, stats.getReproductionAreaRadius().getRadius());
+        assertEquals(BASE_SICKNESS_RESISTENCE, stats.getSicknessResistence());
         stats.applyEffect(fertility);
         stats.resetEffect(fertility);
-        assertEquals(1, stats.getFertility());
+        assertEquals(BASE_FERTILITY, stats.getFertility());
+        stats.applyEffect(reproductionRange);
+        stats.resetEffect(reproductionRange);
+        assertEquals(baseRadius, stats.getReproductionAreaRadius().getRadius());
     }
 
     @Test
     void testResetAllEffects() {
         stats.applyEffect(speed);
         stats.applyEffect(sicknessResistence);
-        stats.applyEffect(reproductionRange);
         stats.applyEffect(fertility);
+        stats.applyEffect(reproductionRange);
         stats.resetAllEffect();
-        assertEquals(1, stats.getSpeed());
-        assertEquals(1, stats.getSicknessResistence());
-        assertEquals(16, stats.getReproductionAreaRadius().getRadius());
-        assertEquals(1, stats.getFertility());
+        assertEquals(BASE_SPEED, stats.getSpeed());
+        assertEquals(BASE_SICKNESS_RESISTENCE, stats.getSicknessResistence());
+        assertEquals(BASE_FERTILITY, stats.getFertility());
+        assertEquals(baseRadius, stats.getReproductionAreaRadius().getRadius());
     }
 
     @Test
@@ -96,18 +105,18 @@ public class HumanStatsTest {
         stats.increaseSicknessResistence();
         stats.increaseReproductionAreaRadius();
         stats.increaseFertility();
-        assertTrue(stats.getSpeed() > 1);
-        assertTrue(stats.getSicknessResistence() > 1);
-        assertTrue(stats.getReproductionAreaRadius().getRadius() > 16);
-        assertTrue(stats.getFertility() > 1);
+        assertTrue(stats.getSpeed() > BASE_SPEED);
+        assertTrue(stats.getSicknessResistence() > BASE_SICKNESS_RESISTENCE);
+        assertTrue(stats.getFertility() > BASE_FERTILITY);
+        assertTrue(stats.getReproductionAreaRadius().getRadius() > baseRadius);
     }
 
     @Test 
     void testBuilderWithUpgrade() {
-        stats = new HumanStatsImpl(1, 1, 1, reproStrategy, List.of(5, 5, 5, 5));
-        assertTrue(stats.getSpeed() > 1);
-        assertTrue(stats.getSicknessResistence() > 1);
-        assertTrue(stats.getReproductionAreaRadius().getRadius() > 16);
-        assertTrue(stats.getFertility() > 1);
+        stats = new HumanStatsImpl(BASE_SPEED, BASE_SICKNESS_RESISTENCE, BASE_FERTILITY, baseReproStrategy, UPGRADE);
+        assertTrue(stats.getSpeed() > BASE_SPEED);
+        assertTrue(stats.getSicknessResistence() > BASE_SICKNESS_RESISTENCE);
+        assertTrue(stats.getFertility() > BASE_FERTILITY);
+        assertTrue(stats.getReproductionAreaRadius().getRadius() > baseRadius);
     }
 }

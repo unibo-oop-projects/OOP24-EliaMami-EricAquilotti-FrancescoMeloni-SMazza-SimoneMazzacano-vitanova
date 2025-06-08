@@ -53,11 +53,6 @@ public interface Game {
     HumanStats getPlayerStats();
 
     /**
-     * Start the next chapter.
-     */
-    void startNextChapter();
-
-    /**
      * Set the next chapter.
      */
     void setNextChapter();
