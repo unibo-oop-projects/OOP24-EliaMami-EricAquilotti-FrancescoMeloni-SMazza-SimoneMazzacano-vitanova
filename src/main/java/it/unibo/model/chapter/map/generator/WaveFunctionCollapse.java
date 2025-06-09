@@ -15,7 +15,6 @@ import it.unibo.model.tile.wavefunction.WaveFunctionTileImpl;
 /**
  * Implementation of {@code MapGeneration} with the Wave Function Collapse Algorithm (Gumin's implementation).
  * @see MapGenerator
- * @see https://en.wikipedia.org/wiki/Model_synthesis (Wave Function Collapse Algorithm)
  */
 public final class WaveFunctionCollapse implements MapGenerator {
 

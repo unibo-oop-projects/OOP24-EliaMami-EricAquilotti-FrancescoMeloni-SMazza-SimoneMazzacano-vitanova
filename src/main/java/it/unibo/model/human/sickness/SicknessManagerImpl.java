@@ -62,9 +62,6 @@ public final class SicknessManagerImpl implements SicknessManager {
             effectFactory.createEffect(EffectType.SPEED, sicknessDuration, SICKNESS_MULTIPLIER),
             effectFactory.createEffect(EffectType.REPRODUCTION_RANGE, sicknessDuration, SICKNESS_MULTIPLIER),
             effectFactory.createEffect(EffectType.FERTILITY, sicknessDuration, SICKNESS_MULTIPLIER)
-            // effectFactory.speedEffect(sicknessDuration, SICKNESS_MULTIPLIER),
-            // effectFactory.reproductionRangeEffect(sicknessDuration, SICKNESS_MULTIPLIER),
-            // effectFactory.fertilityEffect(sicknessDuration, SICKNESS_MULTIPLIER)
         );
     }
 

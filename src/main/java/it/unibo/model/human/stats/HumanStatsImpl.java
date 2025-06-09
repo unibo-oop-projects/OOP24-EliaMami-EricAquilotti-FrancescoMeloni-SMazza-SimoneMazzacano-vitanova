@@ -12,7 +12,7 @@ import it.unibo.model.human.strategies.reproduction.ReproStrategy;
  * Implementation of human stats that handles all human's stats.
  */
 public final class HumanStatsImpl implements HumanStats {
-    private static final double SPEED_UPGRADE_VALUE = .05;
+    private static final double SPEED_UPGRADE_VALUE = .03;
     private static final double SICKNESS_RESISTENCE_UPGRADE_VALUE = .02;
     private static final double FERTILITY_UPGRADE_VALUE = .01;
     private static final double RADIUS_UPGRADE_VALUE = .2;

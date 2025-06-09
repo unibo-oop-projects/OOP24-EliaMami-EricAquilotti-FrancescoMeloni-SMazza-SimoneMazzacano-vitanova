@@ -33,8 +33,13 @@ import it.unibo.view.sprite.HumanType;
  */
 public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private static final int STARTING_POPULATION_GOAL = 5;
     private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(180);
+    // Coefficient used to calculate the PopulationGoal,
+    // the desired polynomial has the belowed coefficients that interpolates the points 
+    // {(1, 25), (10, 500), (30, 10000)} with a quadratic increase
+    private static final double A = 14.56;
+    private static final double B = 107.38;
+    private static final double C = 117.82;
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
@@ -110,6 +115,9 @@ public final class ChapterImpl implements Chapter {
             ? 1 - h.getStats().getFertility() 
             : MALE_SPAWNING_PROBABILITY; 
         }, map, humanFactory, sicknessManager);
+        if (getPlayer().getStats().isSick()) {
+            pickableManager.resetActivatedPickables();
+        }
         pickableManager.spawnPickable();
         pickableManager.solvePickableCollisions();
         pickableManager.resetExpiredEffects();
@@ -167,7 +175,7 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public int getPopulationGoal() {
-        return STARTING_POPULATION_GOAL * getChapterNumber();
+        return (int) Math.round(A * Math.pow(chapterNumber, 2.0) - B * chapterNumber + C);
     }
 
     @Override
