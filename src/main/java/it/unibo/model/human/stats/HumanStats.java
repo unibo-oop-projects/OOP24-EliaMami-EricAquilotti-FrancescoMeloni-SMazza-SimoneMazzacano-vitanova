@@ -30,7 +30,7 @@ public interface HumanStats {
      * Method that returns the current reproduction area.
      * @return the radius of the reproduction radius.
      */
-    Circle getReproductionAreaRadius();
+    Circle getReproductionCircle();
 
     /**
      * Method that returns the current radius of the reproduction area.

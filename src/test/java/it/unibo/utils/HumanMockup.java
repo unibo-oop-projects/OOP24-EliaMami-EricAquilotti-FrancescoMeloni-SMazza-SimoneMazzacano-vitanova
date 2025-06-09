@@ -76,7 +76,7 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public Circle getReproductionAreaRadius() {
+                    public Circle getReproductionCircle() {
                         return area;
                     }
 

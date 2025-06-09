@@ -234,8 +234,8 @@ public final class ScreenImpl extends JPanel implements Screen {
                 drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
 
                 bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                final Position screenPositionCircle = screenPosition(human.getStats().getReproductionAreaRadius().getCenter());
-                final double diam = 2.0 * human.getStats().getReproductionAreaRadius().getRadius() * getScale();
+                final Position screenPositionCircle = screenPosition(human.getStats().getReproductionCircle().getCenter());
+                final double diam = 2.0 * human.getStats().getReproductionCircle().getRadius() * getScale();
                 final Shape circle = new Ellipse2D.Double(
                     screenPositionCircle.x() - diam / 2,
                     screenPositionCircle.y() - diam / 2, diam,

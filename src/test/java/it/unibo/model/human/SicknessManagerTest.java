@@ -42,7 +42,7 @@ class SicknessManagerTest {
         assertTrue(male.getStats().getSpeed() < initialMaleStats.getSpeed(), "Player speed should have decreased");
         assertTrue(male.getStats().getFertility() < initialMaleStats.getFertility(), "Player fertility should have decreased");
         assertTrue(
-            male.getStats().getReproductionAreaRadius().getRadius() < initialMaleStats.getReproductionAreaRadius().getRadius(),
+            male.getStats().getReproductionCircle().getRadius() < initialMaleStats.getReproductionCircle().getRadius(),
             "Player reproduction area radius should have decreased"
         );
     }
@@ -90,7 +90,7 @@ class SicknessManagerTest {
         assertEquals(initialFemaleStats.getSpeed(), female.getStats().getSpeed(), "Female speed should be restored");
         assertEquals(initialFemaleStats.getFertility(), female.getStats().getFertility(), "Female fertility should be restored");
         assertEquals(
-            initialFemaleStats.getReproductionAreaRadius().getRadius(), female.getStats().getReproductionAreaRadius().getRadius(),
+            initialFemaleStats.getReproductionCircle().getRadius(), female.getStats().getReproductionCircle().getRadius(),
             "Female reproduction area radius should be restored"
         );
     }

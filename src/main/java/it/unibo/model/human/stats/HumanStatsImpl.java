@@ -64,7 +64,7 @@ public final class HumanStatsImpl implements HumanStats {
         setSicknessResistence(sicknessResistence + sicknessResistenceUpgrade * SICKNESS_RESISTENCE_UPGRADE_VALUE);
         setFertility(fertility + fertilityUpgrade * FERTILITY_UPGRADE_VALUE);
         setReproStrategy(reproStrategy);
-        setReproductionAreaRadius(getReproductionAreaRadius().getRadius() + reproductionRangeUpgrade * RADIUS_UPGRADE_VALUE);
+        setReproductionAreaRadius(getReproductionCircle().getRadius() + reproductionRangeUpgrade * RADIUS_UPGRADE_VALUE);
     }
 
     private void setSpeedUpgrade(final int value) {
@@ -104,7 +104,7 @@ public final class HumanStatsImpl implements HumanStats {
     }
 
     @Override
-    public Circle getReproductionAreaRadius() {
+    public Circle getReproductionCircle() {
         return new CircleImpl(
             getReproStrategy().getReproductionArea().getCenter().x(), 
             getReproStrategy().getReproductionArea().getCenter().y(), 

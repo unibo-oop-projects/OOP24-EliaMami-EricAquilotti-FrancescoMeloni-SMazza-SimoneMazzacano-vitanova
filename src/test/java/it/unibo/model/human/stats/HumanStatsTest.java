@@ -55,7 +55,7 @@ final class HumanStatsTest {
         assertEquals(BASE_SPEED, stats.getSpeed());
         assertEquals(BASE_SICKNESS_RESISTENCE, stats.getSicknessResistence());
         assertEquals(BASE_FERTILITY, stats.getFertility());
-        assertEquals(baseRadius, stats.getReproductionAreaRadius().getRadius());
+        assertEquals(baseRadius, stats.getReproductionCircle().getRadius());
     }
 
     @Test
@@ -67,7 +67,7 @@ final class HumanStatsTest {
         stats.applyEffect(fertility);
         assertEquals(BASE_FERTILITY * fertility.getMultiplyValue(), stats.getFertility());
         stats.applyEffect(reproductionRange);
-        assertEquals(baseRadius * reproductionRange.getMultiplyValue(), stats.getReproductionAreaRadius().getRadius());
+        assertEquals(baseRadius * reproductionRange.getMultiplyValue(), stats.getReproductionCircle().getRadius());
     }
 
     @Test 
@@ -83,7 +83,7 @@ final class HumanStatsTest {
         assertEquals(BASE_FERTILITY, stats.getFertility());
         stats.applyEffect(reproductionRange);
         stats.resetEffect(reproductionRange);
-        assertEquals(baseRadius, stats.getReproductionAreaRadius().getRadius());
+        assertEquals(baseRadius, stats.getReproductionCircle().getRadius());
     }
 
     @Test
@@ -96,7 +96,7 @@ final class HumanStatsTest {
         assertEquals(BASE_SPEED, stats.getSpeed());
         assertEquals(BASE_SICKNESS_RESISTENCE, stats.getSicknessResistence());
         assertEquals(BASE_FERTILITY, stats.getFertility());
-        assertEquals(baseRadius, stats.getReproductionAreaRadius().getRadius());
+        assertEquals(baseRadius, stats.getReproductionCircle().getRadius());
     }
 
     @Test
@@ -108,7 +108,7 @@ final class HumanStatsTest {
         assertTrue(stats.getSpeed() > BASE_SPEED);
         assertTrue(stats.getSicknessResistence() > BASE_SICKNESS_RESISTENCE);
         assertTrue(stats.getFertility() > BASE_FERTILITY);
-        assertTrue(stats.getReproductionAreaRadius().getRadius() > baseRadius);
+        assertTrue(stats.getReproductionCircle().getRadius() > baseRadius);
     }
 
     @Test 
@@ -117,6 +117,6 @@ final class HumanStatsTest {
         assertTrue(stats.getSpeed() > BASE_SPEED);
         assertTrue(stats.getSicknessResistence() > BASE_SICKNESS_RESISTENCE);
         assertTrue(stats.getFertility() > BASE_FERTILITY);
-        assertTrue(stats.getReproductionAreaRadius().getRadius() > baseRadius);
+        assertTrue(stats.getReproductionCircle().getRadius() > baseRadius);
     }
 }

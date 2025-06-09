@@ -48,7 +48,7 @@ public final class CollisionSolver {
         .filter(h -> h.getType() == HumanType.FEMALE)
         .forEach(female -> {
             final Position femalePosition = female.getPosition();
-            final Circle range = currentPopulation.get(0).getStats().getReproductionAreaRadius();
+            final Circle range = currentPopulation.get(0).getStats().getReproductionCircle();
             range.setRadius(range.getRadius() * 2);
             tree.query(range).stream()
             .map(Point::data)
@@ -82,7 +82,7 @@ public final class CollisionSolver {
     private static void fillTree(final QuadTree<Human> tree, final List<Human> currentPopulation) {
         currentPopulation.forEach(h -> {
             if (h.getType() == HumanType.MALE || h.getType() == HumanType.PLAYER) {
-                tree.insert(new Point<>(h.getStats().getReproductionAreaRadius().getCenter(), h));
+                tree.insert(new Point<>(h.getStats().getReproductionCircle().getCenter(), h));
             }
         });
     }

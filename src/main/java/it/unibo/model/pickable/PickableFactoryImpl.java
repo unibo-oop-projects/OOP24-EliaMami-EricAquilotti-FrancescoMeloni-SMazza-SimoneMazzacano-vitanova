@@ -16,10 +16,10 @@ import it.unibo.view.sprite.Sprite;
  * Pickable factory implementation.
  */
 public final class PickableFactoryImpl implements PickableFactory {
-    private final EffectFactory effectFactory;
     private static final double MULTIPLY_VALUE = 1.25;
     private static final Duration DURATION_EFFECT_VALUE = Duration.ofSeconds(5);
     private static final Random RANDOM = new Random();
+    private final EffectFactory effectFactory;
 
     /**
      * Constructor for pickable factory.

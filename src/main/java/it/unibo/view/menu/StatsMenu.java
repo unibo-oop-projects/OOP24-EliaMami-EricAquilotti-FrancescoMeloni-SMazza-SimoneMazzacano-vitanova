@@ -30,7 +30,7 @@ public final class StatsMenu extends AbstractMenu {
     private static String getStatsText(final HumanStats playerStats) {
         return "Speed: " + decimalFormat(playerStats.getSpeed()) + "\n"
         + "Sickness resistence: " + decimalFormat(playerStats.getSicknessResistence()) + "\n"
-        + "Reproduction range: " + decimalFormat(playerStats.getReproductionAreaRadius().getRadius()) + "\n"
+        + "Reproduction range: " + decimalFormat(playerStats.getReproductionCircle().getRadius()) + "\n"
         + "Fertility: " + decimalFormat(playerStats.getFertility());
     }
 
