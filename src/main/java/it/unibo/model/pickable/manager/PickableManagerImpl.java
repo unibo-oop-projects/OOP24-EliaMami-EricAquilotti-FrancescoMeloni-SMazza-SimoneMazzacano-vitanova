@@ -59,13 +59,13 @@ public final class PickableManagerImpl implements PickableManager {
         if (player.getStats().isSick()) {
             return;
         }
-        final Predicate<Pickable> ifCollide = p -> 
-                                Math.abs(player.getPosition().x() - p.getPosition().x()) <= MapImpl.TILE_SIZE / 2 
-                                 && Math.abs(player.getPosition().y() - p.getPosition().y()) <= MapImpl.TILE_SIZE / 2;
+        final Predicate<Pickable> ifCollide = pickable -> 
+                                Math.abs(player.getPosition().x() - pickable.getPosition().x()) <= MapImpl.TILE_SIZE / 2 
+                                 && Math.abs(player.getPosition().y() - pickable.getPosition().y()) <= MapImpl.TILE_SIZE / 2;
         pickables.stream()
         .filter(ifCollide)
-        .forEach(p -> {
-            checkAndActivate(p.getEffect()); 
+        .forEach(pickable -> {
+            checkAndActivate(pickable.getEffect()); 
         });
         pickables.removeIf(ifCollide);
     }
