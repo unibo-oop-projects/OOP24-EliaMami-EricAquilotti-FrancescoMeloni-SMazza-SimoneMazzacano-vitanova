@@ -1,4 +1,4 @@
-package it.unibo.model.savemanager;
+package it.unibo.model.saveobject;
 
 import java.util.List;
 
