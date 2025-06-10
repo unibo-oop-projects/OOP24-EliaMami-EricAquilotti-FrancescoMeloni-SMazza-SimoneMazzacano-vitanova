@@ -2,6 +2,7 @@ package it.unibo.model.pickable.manager;
 
 import java.util.List;
 
+import it.unibo.model.human.Human;
 import it.unibo.model.pickable.Pickable;
 
 /**
@@ -43,5 +44,11 @@ public interface PickableManager {
      * Set the spawnPickableRate to his default value.
      */
     void setSpawnPickableRate();
+
+    /**
+     * Set the new player to a new player.
+     * @param player the new player
+     */
+    void setPlayer(Human player);
 
 }

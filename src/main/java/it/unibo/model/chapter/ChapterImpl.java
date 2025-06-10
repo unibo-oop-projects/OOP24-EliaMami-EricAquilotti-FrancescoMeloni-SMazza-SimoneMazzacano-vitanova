@@ -33,13 +33,13 @@ import it.unibo.view.sprite.HumanType;
  */
 public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(180);
+    private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(30);
     // Coefficient used to calculate the PopulationGoal,
-    // the desired polynomial has the belowed coefficients that interpolates the points 
-    // {(1, 25), (10, 500), (30, 10000)} with a quadratic increase
-    private static final double A = 14.56;
-    private static final double B = 107.38;
-    private static final double C = 117.82;
+    // the desired function has the belowed coefficients that interpolates the points 
+    // {(1, ~25), (10, ~250), (30, ~10000)} with a exponential increase
+    private static final double A = 25;
+    private static final double B = 2;
+    private static final double C = .08;
     private final Map map;
     private final InputHandler inputHandler;
     private final HumanFactory humanFactory;
@@ -134,7 +134,8 @@ public final class ChapterImpl implements Chapter {
     private void spawnHumans(final InputHandler inputHandler, final Optional<HumanStats> playerStats, 
                                 final List<Integer> playerUpgrade) {
         spawnPlayer(inputHandler, playerStats, playerUpgrade);
-        for (int i = 0; i < getChapterNumber(); i++) {
+        final int femaleNumber = getChapterNumber() / 3 + 1;
+        for (int i = 0; i < femaleNumber; i++) {
             this.humans.add(humanFactory.female(Position.getRandomWalkablePosition(map), map));
         }
     }
@@ -175,7 +176,7 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public int getPopulationGoal() {
-        return (int) Math.abs(Math.round(A * Math.pow(chapterNumber, 2.0) - B * chapterNumber + C));
+        return (int) Math.round(A + Math.pow(chapterNumber, B) * Math.pow(Math.E, C * chapterNumber));
     }
 
     @Override
@@ -198,7 +199,9 @@ public final class ChapterImpl implements Chapter {
         this.humans.clear();
         pickableManager.resetPickables();
         pickableManager.resetActivatedPickables();
+        pickableManager.setSpawnPickableRate();
         spawnHumans(this.inputHandler, Optional.of(playerStats), List.of());
+        pickableManager.setPlayer(getPlayer());
         timer.reset();
     }
 

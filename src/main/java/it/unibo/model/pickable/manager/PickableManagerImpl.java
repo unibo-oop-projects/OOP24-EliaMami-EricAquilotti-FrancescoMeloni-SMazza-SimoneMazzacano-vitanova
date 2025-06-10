@@ -27,7 +27,7 @@ public final class PickableManagerImpl implements PickableManager {
     private final List<Effect> activatedEffects = new CopyOnWriteArrayList<>();
     private final PickableFactory pickableFactory;
     private CooldownGate spawnPickableRate;
-    private final Human player;
+    private Human player;
     private final Map map;
     private final Clock baseClock;
 
@@ -114,5 +114,10 @@ public final class PickableManagerImpl implements PickableManager {
     @Override
     public void setSpawnPickableRate() {
         this.spawnPickableRate = new CooldownGate(Duration.ofSeconds(SECONDS_TO_SPAWN), baseClock); 
+    }
+
+    @Override
+    public void setPlayer(final Human player) {
+        this.player = player;
     }
 }
