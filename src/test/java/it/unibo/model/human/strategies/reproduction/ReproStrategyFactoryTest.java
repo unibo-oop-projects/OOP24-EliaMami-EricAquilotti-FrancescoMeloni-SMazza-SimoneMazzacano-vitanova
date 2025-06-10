@@ -35,8 +35,10 @@ class ReproStrategyFactoryTest {
         final Circle area = female.getReproductionArea();
         final Human male = HumanMockup.createEmptyHuman(HumanType.MALE, area);
 
+        assertTrue(female.isOnCooldown());
         assertFalse(female.collide(male), "Cooldown has to pass");
         mutableClock.advance(Duration.ofSeconds(2));
+        assertFalse(female.isOnCooldown());
         assertTrue(female.collide(male), "Should reproduce after cooldown");
     }
 

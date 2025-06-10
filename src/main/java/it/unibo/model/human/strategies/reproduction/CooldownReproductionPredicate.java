@@ -31,4 +31,12 @@ public final class CooldownReproductionPredicate implements Predicate<Human> {
     public boolean test(final Human other) {
         return canReproduceWith.test(other) && gate.tryActivate();
     }
+
+    /**
+     * Method that tells if the reproduction is on cooldown.
+     * @return if the reproduction is on Cooldown.
+     */
+    public boolean isOnCooldown() {
+        return !this.gate.checkStatus();
+    }
 }

@@ -46,7 +46,7 @@ public final class CollisionSolver {
         final List<Human> generated = new ArrayList<>();
         final QuadTree<Human> tree = createTree(currentPopulation, map);
         currentPopulation.stream()
-        .filter(h -> h.getType() == HumanType.FEMALE)
+        .filter(h -> h.getType() == HumanType.FEMALE && h.canReproduce())
         .forEach(female -> {
             final Position femalePosition = female.getPosition();
             final Position rangeCenter = female.getStats().getReproductionCircle().getCenter();
@@ -60,7 +60,8 @@ public final class CollisionSolver {
             tree.query(range).stream()
             .map(Point::data)
             .filter(female::collide)
-            .forEach(male -> {
+            .findFirst()
+            .ifPresent(male -> {
                 if (male.getType() == HumanType.PLAYER) {
                     sicknessManager.applyToPlayer(male, currentPopulation.size() + generated.size());
                 }

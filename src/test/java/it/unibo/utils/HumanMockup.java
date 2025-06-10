@@ -139,6 +139,10 @@ public final class HumanMockup {
                     }
                 };
             }
+            @Override
+            public boolean canReproduce() {
+                return false;
+            }
         };
     }
 

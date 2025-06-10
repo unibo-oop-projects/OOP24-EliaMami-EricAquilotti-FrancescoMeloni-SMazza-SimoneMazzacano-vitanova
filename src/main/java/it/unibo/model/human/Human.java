@@ -53,4 +53,10 @@ public interface Human {
      * @return true if the collision happened.
      */
     boolean collide(Human other);
+
+    /**
+     * Method that returns if the human can reproduce i.e. if it's not on cooldown.
+     * @return true if the human reproduction is not on cooldown.
+     */
+    boolean canReproduce();
 }

@@ -180,6 +180,11 @@ public final class HumanFactoryImpl implements HumanFactory {
             public boolean collide(final Human other) {
                 return reproductionStrategy.collide(other);
             }
+
+            @Override
+            public boolean canReproduce() {
+                return !reproductionStrategy.isOnCooldown();
+            }
         };
     }
 
