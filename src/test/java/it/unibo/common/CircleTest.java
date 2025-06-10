@@ -1,14 +1,9 @@
-package it.unibo;
+package it.unibo.common;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
-import it.unibo.common.Circle;
-import it.unibo.common.CircleImpl;
-import it.unibo.common.Position;
-import it.unibo.common.RectangleImpl;
 
 /**
  * Class that tests the functionalities of the Circle class.

@@ -4,27 +4,22 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.common.Circle;
 import it.unibo.common.Position;
 import it.unibo.model.human.Human;
 import it.unibo.utils.HumanMockup;
+import it.unibo.utils.MutableClock;
 import it.unibo.view.sprite.HumanType;
 
 class ReproStrategyFactoryTest {
-    private ReproStrategyFactory factory;
-
-    @BeforeEach
-    void setup() {
-        final Clock clock = Clock.fixed(Instant.parse("2025-04-19T10:00:00Z"), ZoneOffset.UTC);
-        factory = new ReproStrategyFactoryImpl(clock);
-    }
+    private final MutableClock mutableClock = new MutableClock(Instant.now(), ZoneId.systemDefault());
+    private final ReproStrategyFactory factory = new ReproStrategyFactoryImpl(mutableClock);
 
     @Test
     void testMaleReproductionNeverCollides() {
@@ -40,8 +35,9 @@ class ReproStrategyFactoryTest {
         final Circle area = female.getReproductionArea();
         final Human male = HumanMockup.createEmptyHuman(HumanType.MALE, area);
 
-        assertTrue(female.collide(male));
-        assertFalse(female.collide(male), "Should be on cooldown after first reproduction");
+        assertFalse(female.collide(male), "Cooldown has to pass");
+        mutableClock.advance(Duration.ofSeconds(2));
+        assertTrue(female.collide(male), "Should be on cooldown after first reproduction");
     }
 
     @Test

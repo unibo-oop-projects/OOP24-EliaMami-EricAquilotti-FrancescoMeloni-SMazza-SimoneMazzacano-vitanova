@@ -1,4 +1,4 @@
-package it.unibo;
+package it.unibo.model.chapter.quadtree;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,9 +12,6 @@ import org.junit.jupiter.api.Test;
 import it.unibo.common.CircleImpl;
 import it.unibo.common.Position;
 import it.unibo.common.RectangleImpl;
-import it.unibo.model.chapter.quadtree.Point;
-import it.unibo.model.chapter.quadtree.QuadTree;
-import it.unibo.model.chapter.quadtree.QuadTreeImpl;
 
 class QuadTreeTest {
     @Test
