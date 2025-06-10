@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Interface that describe the object that i'm going to save.
+ * Class that describe the object that i'm going to save.
  */
 public final class SaveObjectImpl implements Serializable, SaveObject {
     private static final long serialVersionUID = 2L;
