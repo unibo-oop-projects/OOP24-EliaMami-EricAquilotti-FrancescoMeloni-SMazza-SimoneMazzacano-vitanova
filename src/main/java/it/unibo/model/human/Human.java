@@ -56,6 +56,8 @@ public interface Human {
 
     /**
      * Method that returns if the human can reproduce i.e. if it's not on cooldown.
+     * Used to optimize by a lot the performance by not checking all the females
+     * but only the ones that can reproduce when solving collisions.
      * @return true if the human reproduction is not on cooldown.
      */
     boolean canReproduce();
