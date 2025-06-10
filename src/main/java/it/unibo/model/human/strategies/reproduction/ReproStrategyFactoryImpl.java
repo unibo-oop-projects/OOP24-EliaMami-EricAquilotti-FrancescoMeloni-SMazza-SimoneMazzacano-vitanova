@@ -3,6 +3,7 @@ package it.unibo.model.human.strategies.reproduction;
 import java.time.Clock;
 import java.time.Duration;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import it.unibo.common.Circle;
 import it.unibo.common.CircleImpl;
@@ -33,18 +34,28 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
 
     @Override
     public ReproStrategy maleReproStrategy(final Position startingPosition) {
-        return generalised(h -> false, startingPosition);
+        return generalised(h -> false, startingPosition, () -> false);
     }
 
     @Override
     public ReproStrategy femaleReproStrategy(final Position startingPosition) {
+        final CooldownReproductionPredicate reproPredicate = new CooldownReproductionPredicate(
+            h -> h.getType() != HumanType.FEMALE,
+            Duration.ofSeconds(2),
+            clock
+        );
         return generalised(
-            new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, Duration.ofSeconds(2), clock),
-            startingPosition
+            reproPredicate,
+            startingPosition,
+            reproPredicate::isOnCooldown
         );
     }
 
-    private ReproStrategy generalised(final Predicate<Human> canReproduceWith, final Position startingPosition) {
+    private ReproStrategy generalised(
+        final Predicate<Human> canReproduceWith,
+        final Position startingPosition,
+        final Supplier<Boolean> isOnCooldown
+    ) {
         final Circle reproductionArea = new CircleImpl(
             startingPosition.x() + CIRCLE_X_OFFSET,
             startingPosition.y() + CIRCLE_Y_OFFSET,
@@ -74,6 +85,11 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
             @Override
             public void changeReproductionArea(final double changeValue) {
                 reproductionArea.setRadius(changeValue);
+            }
+
+            @Override
+            public boolean isOnCooldown() {
+                return isOnCooldown.get();
             }
         };
     }

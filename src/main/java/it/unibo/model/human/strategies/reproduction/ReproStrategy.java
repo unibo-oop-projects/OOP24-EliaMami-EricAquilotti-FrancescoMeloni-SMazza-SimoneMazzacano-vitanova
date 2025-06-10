@@ -35,4 +35,10 @@ public interface ReproStrategy {
      * @param changeValue is the new radius value.
      */
     void changeReproductionArea(double changeValue);
+
+    /**
+     * Method that returns if the reproduction is on cooldown.
+     * @return true if the reproduction is on cooldown.
+     */
+    boolean isOnCooldown();
 }

@@ -52,6 +52,10 @@ class CooldownPredicateTest {
             public HumanStats getStats() {
                 return null;
             }
+            @Override
+            public boolean canReproduce() {
+                return false;
+            }
         };
     }
 
