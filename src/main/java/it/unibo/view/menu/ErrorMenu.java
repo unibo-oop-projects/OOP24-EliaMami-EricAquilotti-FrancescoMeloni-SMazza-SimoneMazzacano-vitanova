@@ -17,8 +17,8 @@ public class ErrorMenu extends AbstractMenu {
      */ 
     public ErrorMenu(final InputHandler input, final Game game, final String subtitle) {
         super(input, game, List.of(MenuOption.of("New game", g -> {
-            g.setMenu(new PauseMenu(input, g));
             g.setFirstChapter();
+            g.setMenu(new PauseMenu(input, g));
             g.startGameplay();
         })), true, subtitle, "Error:");
     }

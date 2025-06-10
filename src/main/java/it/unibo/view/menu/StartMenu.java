@@ -22,8 +22,8 @@ public final class StartMenu extends AbstractMenu {
             g.startGameplay();
         }),
         MenuOption.of("New game", g -> {
-            g.setMenu(new PauseMenu(input, g));
             g.setFirstChapter();
+            g.setMenu(new PauseMenu(input, g));
             g.startGameplay();
         }),
         MenuOption.of("Help", g -> g.setMenu(new HelpMenu(input, game))),

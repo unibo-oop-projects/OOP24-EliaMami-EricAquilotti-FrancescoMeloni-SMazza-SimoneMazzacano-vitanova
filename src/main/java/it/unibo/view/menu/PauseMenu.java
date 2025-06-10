@@ -24,7 +24,7 @@ public final class PauseMenu extends AbstractMenu {
         MenuOption.home(input),
         MenuOption.of("New Map", g -> {
             g.setNewChapter();
-            g.setMenu(new StartMenu(input, g));
+            g.startGameplay();
         }),
         MenuOption.quit()),
         false, "", "Current chapter: " + game.getChapter().getChapterNumber());
