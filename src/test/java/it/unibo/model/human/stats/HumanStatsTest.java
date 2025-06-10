@@ -101,10 +101,10 @@ final class HumanStatsTest {
 
     @Test
     void testIncreaseStats() {
-        stats.increaseSpeed();
-        stats.increaseSicknessResistence();
-        stats.increaseReproductionAreaRadius();
-        stats.increaseFertility();
+        stats.increaseStat(StatType.SPEED);
+        stats.increaseStat(StatType.SICKNESS_RESISTENCE);
+        stats.increaseStat(StatType.FERTILITY);
+        stats.increaseStat(StatType.REPRODUCTION_RANGE);
         assertTrue(stats.getSpeed() > BASE_SPEED);
         assertTrue(stats.getSicknessResistence() > BASE_SICKNESS_RESISTENCE);
         assertTrue(stats.getFertility() > BASE_FERTILITY);

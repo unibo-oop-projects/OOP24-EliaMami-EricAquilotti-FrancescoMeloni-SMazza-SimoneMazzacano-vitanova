@@ -19,7 +19,7 @@ public interface SkillPoint {
     /**
      * This method update the variable skill point if skill point is greater than zero.
      */
-    void updateValue();
+    void decreaseValue();
 
     /**
      * This method resets skillPoint to empty.

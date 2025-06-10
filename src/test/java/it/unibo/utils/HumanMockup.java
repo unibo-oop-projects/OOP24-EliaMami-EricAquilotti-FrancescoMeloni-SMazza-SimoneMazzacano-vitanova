@@ -14,6 +14,7 @@ import it.unibo.model.human.Human;
 import it.unibo.model.human.HumanFactory;
 import it.unibo.model.human.HumanFactoryImpl;
 import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.human.stats.StatType;
 import it.unibo.model.human.strategies.reproduction.ReproStrategy;
 import it.unibo.view.sprite.HumanType;
 import it.unibo.view.sprite.Sprite;
@@ -67,10 +68,6 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public void increaseSpeed() {
-                    }
-
-                    @Override
                     public ReproStrategy getReproStrategy() {
                         return null;
                     }
@@ -81,16 +78,8 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public void increaseReproductionAreaRadius() {
-                    }
-
-                    @Override
                     public double getSicknessResistence() {
                         return 0;
-                    }
-
-                    @Override
-                    public void increaseSicknessResistence() {
                     }
 
                     @Override
@@ -99,7 +88,7 @@ public final class HumanMockup {
                     }
 
                     @Override
-                    public void increaseFertility() {
+                    public void increaseStat(final StatType type) {
                     }
 
                     @Override
@@ -147,11 +136,6 @@ public final class HumanMockup {
 
                     @Override
                     public void resetAllEffect() {
-                    }
-
-                    @Override
-                    public double getBaseRadius() {
-                        return 0;
                     }
                 };
             }

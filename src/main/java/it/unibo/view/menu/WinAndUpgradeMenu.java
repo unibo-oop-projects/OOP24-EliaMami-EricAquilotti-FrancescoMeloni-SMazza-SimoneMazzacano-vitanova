@@ -1,17 +1,16 @@
 package it.unibo.view.menu;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import it.unibo.controller.Game;
 import it.unibo.controller.InputHandler;
+import it.unibo.model.human.stats.StatType;
 
 /**
  * Class that handles the win menu options.
  */
 public final class WinAndUpgradeMenu extends AbstractMenu {
-
     private static final int TEXT_SIZE = 45;
 
     /**
@@ -22,21 +21,17 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     public WinAndUpgradeMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
             MenuOption.of(() -> "Speed: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getSpeedUpgrade(), game), g -> {
-                checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSpeed(), g);
-            }),
+            + updateUpgradeText(k -> k.getPlayerStats().getSpeedUpgrade(), game),
+                                g -> g.checkAndIncrease(StatType.SPEED)),
             MenuOption.of(() -> "Resistence: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getSicknessResistenceUpgrade(), game), g -> {
-                checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseSicknessResistence(), g);
-            }),
+            + updateUpgradeText(k -> k.getPlayerStats().getSicknessResistenceUpgrade(), game),
+                                g -> g.checkAndIncrease(StatType.SICKNESS_RESISTENCE)),
             MenuOption.of(() -> "Area: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getReproductionRangeUpgrade(), game), g -> {
-                checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseReproductionAreaRadius(), g);
-            }), 
+            + updateUpgradeText(k -> k.getPlayerStats().getReproductionRangeUpgrade(), game),
+                                g -> g.checkAndIncrease(StatType.REPRODUCTION_RANGE)), 
             MenuOption.of(() -> "Fertility: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getFertilityUpgrade(), game), g -> {
-                checkAndUpdateSkillPoint(k -> k.getPlayerStats().increaseFertility(), g);
-            }),
+            + updateUpgradeText(k -> k.getPlayerStats().getFertilityUpgrade(), game),
+                                g -> g.checkAndIncrease(StatType.FERTILITY)),
             MenuOption.nextChapter(input),
             MenuOption.of("Home", g -> {
                 g.setNextChapter();
@@ -51,13 +46,6 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
 
     private static int updateUpgradeText(final Function<Game, Integer> c, final Game g) {
         return c.apply(g);
-    }
-
-    private static void checkAndUpdateSkillPoint(final Consumer<Game> c, final Game g) {
-        if (g.getSkillPoint().getValue() > 0) {
-            c.accept(g);
-        }
-        g.getSkillPoint().updateValue();
     }
 
     @Override

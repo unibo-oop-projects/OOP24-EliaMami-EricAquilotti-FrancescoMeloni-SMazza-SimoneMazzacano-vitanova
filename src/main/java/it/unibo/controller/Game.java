@@ -2,6 +2,7 @@ package it.unibo.controller;
 
 import it.unibo.model.chapter.Chapter;
 import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.human.stats.StatType;
 import it.unibo.model.skillpoint.SkillPoint;
 import it.unibo.view.menu.Menu;
 
@@ -47,10 +48,16 @@ public interface Game {
     void clearScreen();
 
     /**
-     * This method gets player from all humans and return his stats.
+     * This method return player stats.
      * @return player's stats.
      */
     HumanStats getPlayerStats();
+
+    /**
+     * This method check if there are enough skill point to increase the selected stat, if that's true then increase the stat.
+     * @param stat the type of stat to increase.
+     */
+    void checkAndIncrease(StatType stat);
 
     /**
      * Set the next chapter.

@@ -14,6 +14,8 @@ import it.unibo.model.chapter.Chapter;
 import it.unibo.model.chapter.ChapterImpl;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.human.stats.HumanStats;
+import it.unibo.model.human.stats.HumanStatsImpl;
+import it.unibo.model.human.stats.StatType;
 import it.unibo.model.savemanager.SaveManager;
 import it.unibo.model.savemanager.SaveManagerImpl;
 import it.unibo.model.saveobject.SaveObject;
@@ -45,6 +47,7 @@ public final class GameImpl implements Runnable, Game {
     private final File saveFile = new File("chapterInfo.txt");
     private SaveManager saveManager;
     private final SkillPoint skillPoints = new SkillPointImpl(3);
+    private HumanStats playerStats;
 
     /**
      * Starts the game engine.
@@ -55,12 +58,15 @@ public final class GameImpl implements Runnable, Game {
             saveManager = new SaveManagerImpl();
             if (isNewFile) {
                 chapter = new ChapterImpl(1, inputHandler, baseClock);
+                playerStats = chapter.getPlayer().getStats();
             } else {
                 final SaveObject saved = (SaveObject) saveManager.readObj(saveFile);
                 chapter = new ChapterImpl(saved.getChapterNumber(), inputHandler, baseClock, saved.getPlayerUpgrade());
+                playerStats = chapter.getPlayer().getStats();
             }
         } catch (IOException | ClassNotFoundException e) {
             chapter = new ChapterImpl(1, inputHandler, baseClock);
+            playerStats = chapter.getPlayer().getStats();
             this.setMenu(errorMenuCall("Lettura del file di gioco andata male"));
         } finally {
             gameThread.start();
@@ -142,7 +148,7 @@ public final class GameImpl implements Runnable, Game {
 
     @Override
     public void exit() {
-        getPlayerStats().resetAllEffect();
+        playerStats.resetAllEffect();
         saveGame();
         System.exit(0);
     }
@@ -155,14 +161,15 @@ public final class GameImpl implements Runnable, Game {
     @Override
     public void setFirstChapter() {
         this.chapter = new ChapterImpl(1, inputHandler, baseClock);
+        playerStats = chapter.getPlayer().getStats();
         this.isGameplayStarted = false;
         clearScreen();
     }
 
     @Override
     public void setNewChapter() {
-        getPlayerStats().resetAllEffect();
-        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, getPlayerStats());
+        playerStats.resetAllEffect();
+        this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, playerStats);
         this.isGameplayStarted = false;
         clearScreen();
     }
@@ -177,15 +184,10 @@ public final class GameImpl implements Runnable, Game {
     }
 
     @Override
-    public HumanStats getPlayerStats() {
-        return chapter.getPlayer().getStats();
-    }
-
-    @Override
     public void setNextChapter() {
-        getPlayerStats().resetAllEffect();
+        playerStats.resetAllEffect();
         clearScreen();
-        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, getPlayerStats());
+        this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, playerStats);
         saveGame();
         this.isGameplayStarted = false;
         this.skillPoints.reset();
@@ -197,10 +199,10 @@ public final class GameImpl implements Runnable, Game {
             saveManager.saveObj(new SaveObjectImpl(
                 chapter.getChapterNumber(), 
                 List.of(
-                    getPlayerStats().getSpeedUpgrade(), 
-                    getPlayerStats().getSicknessResistenceUpgrade(),
-                    getPlayerStats().getReproductionRangeUpgrade(),
-                    getPlayerStats().getFertilityUpgrade()
+                    playerStats.getSpeedUpgrade(), 
+                    playerStats.getSicknessResistenceUpgrade(),
+                    playerStats.getReproductionRangeUpgrade(),
+                    playerStats.getFertilityUpgrade()
                     )
                 ), 
                 saveFile);
@@ -217,5 +219,18 @@ public final class GameImpl implements Runnable, Game {
     @Override
     public SkillPoint getSkillPoint() {
         return skillPoints;
+    }
+
+    @Override
+    public void checkAndIncrease(final StatType stat) {
+        if (skillPoints.getValue() > 0) {
+            playerStats.increaseStat(stat);
+        }
+        skillPoints.decreaseValue();
+    }
+
+    @Override
+    public HumanStats getPlayerStats() {
+        return new HumanStatsImpl(this.playerStats);
     }
 }

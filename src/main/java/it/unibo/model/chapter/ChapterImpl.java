@@ -175,7 +175,7 @@ public final class ChapterImpl implements Chapter {
 
     @Override
     public int getPopulationGoal() {
-        return (int) Math.round(A * Math.pow(chapterNumber, 2.0) - B * chapterNumber + C);
+        return (int) Math.abs(Math.round(A * Math.pow(chapterNumber, 2.0) - B * chapterNumber + C));
     }
 
     @Override

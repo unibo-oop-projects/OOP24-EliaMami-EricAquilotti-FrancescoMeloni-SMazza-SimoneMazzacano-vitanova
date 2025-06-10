@@ -16,11 +16,6 @@ public interface HumanStats {
     double getSpeed();
 
     /**
-     * Used to increase speed of a fixed value.
-     */
-    void increaseSpeed();
-
-    /**
      * Method that returns the current reprostrategy.
      * @return the reproStrategy.
      */
@@ -33,26 +28,10 @@ public interface HumanStats {
     Circle getReproductionCircle();
 
     /**
-     * Method that returns the current radius of the reproduction area.
-     * @return the radius of the reproduction radius.
-     */
-    double getBaseRadius();
-
-    /**
-     * Used to increase the reproduction area radius of a fixed value.
-     */
-    void increaseReproductionAreaRadius();
-
-    /**
      * Method that returns the sickness resistence.
      * @return the probability to resist sickness effect.
      */
     double getSicknessResistence();
-
-    /**
-     * Used to increase sickness resistence of a fixed value.
-     */
-    void increaseSicknessResistence();
 
     /**
      * Method that returns the fertility.
@@ -61,9 +40,10 @@ public interface HumanStats {
     double getFertility(); 
 
     /**
-     * Used to increase fertility of a fixed value.
+     * Used to increase a chosen stat of a fixed value.
+     * @param type the type stat you want to increase
      */
-    void increaseFertility();
+    void increaseStat(StatType type);
 
     /**
      * Apply the effect modifier to the stats based on the type effect activated.

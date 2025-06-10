@@ -29,6 +29,22 @@ public final class HumanStatsImpl implements HumanStats {
     private boolean isSick;
     private final List<Effect> activatedEffects = new CopyOnWriteArrayList<>();
 
+
+    /**
+     * Construcotr for human stats.
+     * @param humanStats the stats you want to copy.
+     */
+    public HumanStatsImpl(final HumanStats humanStats) {
+        setSpeed(humanStats.getSpeed());
+        setSicknessResistence(humanStats.getSicknessResistence());
+        setFertility(humanStats.getFertility());
+        setReproStrategy(humanStats.getReproStrategy()); 
+        setSpeedUpgrade(humanStats.getSpeedUpgrade());
+        setSicknessResistenceUpgrade(humanStats.getSicknessResistenceUpgrade());
+        setReproductionRangeUpgrade(humanStats.getReproductionRangeUpgrade());
+        setFertilityUpgrade(humanStats.getFertilityUpgrade());
+    }
+
     /**
      * Constructor for human stats.
      * @param speed to inizialize speed value.
@@ -92,8 +108,7 @@ public final class HumanStatsImpl implements HumanStats {
         this.speed = newSpeed;
     }
 
-    @Override
-    public void increaseSpeed() {
+    private void increaseSpeed() {
         setSpeed(this.speed + SPEED_UPGRADE_VALUE);
         this.speedUpgrade += 1;
     }
@@ -112,11 +127,6 @@ public final class HumanStatsImpl implements HumanStats {
         );
     }
 
-    @Override
-    public double getBaseRadius() {
-        return this.reproductionRadius;
-    }
-
     private void setReproStrategy(final ReproStrategy newReproStrategy) {
         this.reproStrategy = newReproStrategy;
         this.reproductionRadius = reproStrategy.getReproductionArea().getRadius();
@@ -127,8 +137,7 @@ public final class HumanStatsImpl implements HumanStats {
         this.reproductionRadius = reproStrategy.getReproductionArea().getRadius();
     }
 
-    @Override
-    public void increaseReproductionAreaRadius() {
+    private void increaseReproductionAreaRadius() {
         setReproductionAreaRadius(getReproStrategy().getReproductionArea().getRadius() + RADIUS_UPGRADE_VALUE);
         this.reproductionRangeUpgrade += 1;
     }
@@ -142,8 +151,7 @@ public final class HumanStatsImpl implements HumanStats {
         this.sicknessResistence = newSicknessResistence;
     }
 
-    @Override
-    public void increaseSicknessResistence() {
+    private void increaseSicknessResistence() {
         setSicknessResistence(this.sicknessResistence + SICKNESS_RESISTENCE_UPGRADE_VALUE);
         this.sicknessResistenceUpgrade += 1;
     }
@@ -157,10 +165,27 @@ public final class HumanStatsImpl implements HumanStats {
         this.fertility = newFertility;
     }
 
-    @Override
-    public void increaseFertility() {
+    private void increaseFertility() {
         setFertility(this.fertility + FERTILITY_UPGRADE_VALUE);
         this.fertilityUpgrade += 1;
+    }
+
+    @Override
+    public void increaseStat(final StatType type) {
+        switch (type) {
+            case SPEED:
+                increaseSpeed();
+                break;
+            case SICKNESS_RESISTENCE:
+                increaseSicknessResistence();
+                break;
+            case FERTILITY:
+                increaseFertility();
+                break;
+            default:
+                increaseReproductionAreaRadius();
+                break;
+        }
     }
 
     @Override

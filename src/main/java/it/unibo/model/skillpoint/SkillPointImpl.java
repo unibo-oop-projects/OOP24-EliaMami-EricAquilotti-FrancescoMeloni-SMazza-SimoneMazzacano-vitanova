@@ -29,7 +29,7 @@ public final class SkillPointImpl implements SkillPoint {
     }
 
     @Override
-    public void updateValue() {
+    public void decreaseValue() {
         if (actualValue.get() > 0) {
             actualValue = Optional.of((Integer) (actualValue.get() - 1));
         }
