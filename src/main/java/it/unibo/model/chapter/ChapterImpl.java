@@ -33,7 +33,7 @@ import it.unibo.view.sprite.HumanType;
  */
 public final class ChapterImpl implements Chapter {
     private static final double MALE_SPAWNING_PROBABILITY = .9;
-    private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(30);
+    private static final Duration STARTING_TIMER_VALUE = Duration.ofSeconds(180);
     // Coefficient used to calculate the PopulationGoal,
     // the desired function has the belowed coefficients that interpolates the points 
     // {(1, ~25), (10, ~250), (30, ~10000)} with a exponential increase
