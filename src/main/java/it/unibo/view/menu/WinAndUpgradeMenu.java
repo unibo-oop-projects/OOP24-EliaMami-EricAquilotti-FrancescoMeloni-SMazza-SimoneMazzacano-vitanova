@@ -21,17 +21,17 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
     public WinAndUpgradeMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
             MenuOption.of(() -> "Speed: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getSpeedUpgrade(), game),
-                                g -> g.checkAndIncrease(StatType.SPEED)),
+                + updateUpgradeText(k -> k.getPlayerStats().getSpeedUpgrade(), game),
+                g -> g.checkAndIncreaseStats(StatType.SPEED)),
             MenuOption.of(() -> "Resistence: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getSicknessResistenceUpgrade(), game),
-                                g -> g.checkAndIncrease(StatType.SICKNESS_RESISTENCE)),
+                + updateUpgradeText(k -> k.getPlayerStats().getSicknessResistenceUpgrade(), game),
+                g -> g.checkAndIncreaseStats(StatType.SICKNESS_RESISTENCE)),
             MenuOption.of(() -> "Area: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getReproductionRangeUpgrade(), game),
-                                g -> g.checkAndIncrease(StatType.REPRODUCTION_RANGE)), 
+                + updateUpgradeText(k -> k.getPlayerStats().getReproductionRangeUpgrade(), game),
+                g -> g.checkAndIncreaseStats(StatType.REPRODUCTION_RANGE)), 
             MenuOption.of(() -> "Fertility: " 
-            + updateUpgradeText(k -> k.getPlayerStats().getFertilityUpgrade(), game),
-                                g -> g.checkAndIncrease(StatType.FERTILITY)),
+                + updateUpgradeText(k -> k.getPlayerStats().getFertilityUpgrade(), game),
+                g -> g.checkAndIncreaseStats(StatType.FERTILITY)),
             MenuOption.nextChapter(input),
             MenuOption.of("Home", g -> {
                 g.setNextChapter();
@@ -40,7 +40,7 @@ public final class WinAndUpgradeMenu extends AbstractMenu {
         ), 
         true,
         () -> "You have " + game.getSkillPoint().getValue() + " skill point.",
-        "You won the Chapter! Upgrade your skills."
+        "You won the " + game.getChapter().getChapterNumber() + " Chapter! Upgrade your skills."
         );
     }
 

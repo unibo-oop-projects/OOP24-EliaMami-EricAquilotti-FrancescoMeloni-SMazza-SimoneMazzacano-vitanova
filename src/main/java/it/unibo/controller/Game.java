@@ -57,7 +57,7 @@ public interface Game {
      * This method check if there are enough skill point to increase the selected stat, if that's true then increase the stat.
      * @param stat the type of stat to increase.
      */
-    void checkAndIncrease(StatType stat);
+    void checkAndIncreaseStats(StatType stat);
 
     /**
      * Set the next chapter.

@@ -222,7 +222,7 @@ public final class GameImpl implements Runnable, Game {
     }
 
     @Override
-    public void checkAndIncrease(final StatType stat) {
+    public void checkAndIncreaseStats(final StatType stat) {
         if (skillPoints.getValue() > 0) {
             playerStats.increaseStat(stat);
         }
