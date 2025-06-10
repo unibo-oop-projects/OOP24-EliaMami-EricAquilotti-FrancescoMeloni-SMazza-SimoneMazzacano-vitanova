@@ -94,18 +94,20 @@ public final class GameImpl implements Runnable, Game {
     private void update() {
         if (!isGameplayPaused) {
             if (chapter.getState() == ChapterState.PLAYER_WON) {
+                stopGameplay();
                 skillPoints.resetToBaseValue();
                 this.setMenu(new WinAndUpgradeMenu(inputHandler, this));
             } else if (chapter.getState() == ChapterState.PLAYER_LOST) {
+                stopGameplay();
                 this.setMenu(new GameOverMenu(inputHandler, this));
             }
         }
         if (isGameplayStarted && !isGameplayPaused) {
             chapter.update();
+            final Position playerPosition = chapter.getPlayer().getPosition();
+            screen.setOffset((int) playerPosition.x(), (int) playerPosition.y());
         }
         menu.update();
-        final Position playerPosition = chapter.getPlayer().getPosition();
-        screen.setOffset((int) playerPosition.x(), (int) playerPosition.y());
     }
 
     private void draw() {
@@ -129,6 +131,10 @@ public final class GameImpl implements Runnable, Game {
     @Override
     public void startGameplay() {
         this.isGameplayStarted = true;
+    }
+
+    private void stopGameplay() {
+        this.isGameplayStarted = false;
     }
 
     @Override
@@ -162,7 +168,7 @@ public final class GameImpl implements Runnable, Game {
     public void setFirstChapter() {
         this.chapter = new ChapterImpl(1, inputHandler, baseClock);
         playerStats = chapter.getPlayer().getStats();
-        this.isGameplayStarted = false;
+        stopGameplay();
         clearScreen();
     }
 
@@ -170,7 +176,7 @@ public final class GameImpl implements Runnable, Game {
     public void setNewChapter() {
         playerStats.resetAllEffect();
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, playerStats);
-        this.isGameplayStarted = false;
+        stopGameplay();
         clearScreen();
     }
 
@@ -189,7 +195,7 @@ public final class GameImpl implements Runnable, Game {
         clearScreen();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, playerStats);
         saveGame();
-        this.isGameplayStarted = false;
+        stopGameplay();
         this.skillPoints.reset();
     }
 
