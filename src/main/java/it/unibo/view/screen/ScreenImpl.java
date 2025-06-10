@@ -19,6 +19,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import it.unibo.common.Position;
@@ -227,28 +228,31 @@ public final class ScreenImpl extends JPanel implements Screen {
             drawImage(bufferGraphics, pickable.getSprite().getImage(), screenPosition(pickable.getPosition()));
         }
 
+        Optional<Human> player = Optional.empty();
         for (final Human human : humansToDraw) {
-                final Position screenPosition = (human.getType() == HumanType.PLAYER)
-                    ? new Position(centerX, centerY)
-                    : screenPosition(human.getPosition());
-                drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
-
-                bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                final Position screenPositionCircle = screenPosition(human.getStats().getReproductionCircle().getCenter());
-                final double diam = 2.0 * human.getStats().getReproductionCircle().getRadius() * getScale();
-                final Shape circle = new Ellipse2D.Double(
-                    screenPositionCircle.x() - diam / 2,
-                    screenPositionCircle.y() - diam / 2, diam,
-                    diam
-                );
-                if (human.getStats().isSick()) {
-                    bufferGraphics.setColor(Color.GREEN);
-                } else {
-                    bufferGraphics.setColor(Color.RED);
-                }
-                bufferGraphics.draw(circle);
+            if (human.getType() == HumanType.PLAYER) {
+                player = Optional.of(human);
+                continue;
+            }
+            final Position screenPosition = screenPosition(human.getPosition());
+            drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
+            bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            final Position screenPositionCircle = screenPosition(human.getStats().getReproductionCircle().getCenter());
+            final double diam = 2.0 * human.getStats().getReproductionCircle().getRadius() * getScale();
+            final Shape circle = new Ellipse2D.Double(
+                screenPositionCircle.x() - diam / 2,
+                screenPositionCircle.y() - diam / 2, diam,
+                diam
+            );
+            if (human.getStats().isSick()) {
+                bufferGraphics.setColor(Color.GREEN);
+            } else {
+                bufferGraphics.setColor(Color.RED);
+            }
+            bufferGraphics.draw(circle);
         }
-
+        // Draw the human last
+        player.ifPresent(p -> drawImage(bufferGraphics, p.getSprite().getImage(), new Position(centerX, centerY)));
         drawText(textToDraw);
     }
 
@@ -281,8 +285,8 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private void drawImage(final Graphics2D g2, final BufferedImage image, final Position position) {
-        final int scale = getScale();
         if (validScreenPosition(position)) {
+            final int scale = getScale();
             g2.drawImage(
                 image,
                 (int) Math.round(position.x()),
