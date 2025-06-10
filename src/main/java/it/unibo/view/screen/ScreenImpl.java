@@ -5,13 +5,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.geom.Ellipse2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -236,20 +233,11 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
             final Position screenPosition = screenPosition(human.getPosition());
             drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
-            bufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            final Position screenPositionCircle = screenPosition(human.getStats().getReproductionCircle().getCenter());
-            final double diam = 2.0 * human.getStats().getReproductionCircle().getRadius() * getScale();
-            final Shape circle = new Ellipse2D.Double(
-                screenPositionCircle.x() - diam / 2,
-                screenPositionCircle.y() - diam / 2, diam,
-                diam
-            );
             if (human.getStats().isSick()) {
                 bufferGraphics.setColor(Color.GREEN);
             } else {
                 bufferGraphics.setColor(Color.RED);
             }
-            bufferGraphics.draw(circle);
         }
         // Draw the human last
         player.ifPresent(p -> drawImage(bufferGraphics, p.getSprite().getImage(), new Position(centerX, centerY)));
