@@ -23,7 +23,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     private static final double CIRCLE_RADIUS = MapImpl.TILE_SIZE / 5.0;
     private static final long MIN_COOLDOWN_MILLIS = 1000;
     private static final long MAX_COOLDOWN_MILLIS = 4000;
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     private final Clock clock;
 
@@ -45,7 +45,7 @@ public final class ReproStrategyFactoryImpl implements ReproStrategyFactory {
     public ReproStrategy femaleReproStrategy(final Position startingPosition) {
         final CooldownReproductionPredicate reproPredicate = new CooldownReproductionPredicate(
             h -> h.getType() != HumanType.FEMALE,
-            Duration.ofMillis(random.nextLong(MIN_COOLDOWN_MILLIS, MAX_COOLDOWN_MILLIS)),
+            () -> Duration.ofMillis(RANDOM.nextLong(MIN_COOLDOWN_MILLIS, MAX_COOLDOWN_MILLIS)),
             clock
         );
         return generalised(

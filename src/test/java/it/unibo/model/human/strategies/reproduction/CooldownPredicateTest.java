@@ -60,7 +60,7 @@ class CooldownPredicateTest {
     }
 
     private CooldownReproductionPredicate noFemalePredicate(final Clock clock) {
-        return new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, COOLDOWN, clock);
+        return new CooldownReproductionPredicate(h -> h.getType() != HumanType.FEMALE, () -> COOLDOWN, clock);
     }
 
     @Test
