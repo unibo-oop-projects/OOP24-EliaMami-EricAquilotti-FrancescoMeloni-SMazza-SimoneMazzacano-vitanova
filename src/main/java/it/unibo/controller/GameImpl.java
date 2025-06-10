@@ -79,7 +79,7 @@ public final class GameImpl implements Runnable, Game {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-        while (gameThread != null) {
+        while (true) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
