@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 import it.unibo.common.Circle;
+import it.unibo.common.CircleImpl;
 import it.unibo.common.Position;
 import it.unibo.common.RectangleImpl;
 import it.unibo.model.chapter.map.Map;
@@ -48,8 +49,14 @@ public final class CollisionSolver {
         .filter(h -> h.getType() == HumanType.FEMALE)
         .forEach(female -> {
             final Position femalePosition = female.getPosition();
-            final Circle range = currentPopulation.get(0).getStats().getReproductionCircle();
-            range.setRadius(range.getRadius() * 2);
+            final Position rangeCenter = female.getStats().getReproductionCircle().getCenter();
+            final Circle range = new CircleImpl(
+                rangeCenter.x(),
+                rangeCenter.y(),
+                currentPopulation.stream()
+                    .map(h -> h.getStats().getReproductionCircle().getRadius())
+                    .max(Double::compareTo).get() * 2
+            );
             tree.query(range).stream()
             .map(Point::data)
             .filter(female::collide)
@@ -71,8 +78,8 @@ public final class CollisionSolver {
         final QuadTree<Human> tree = new QuadTreeImpl<>(
             new RectangleImpl(
                 new Position(0, 0),
-                map.getRows() * MapImpl.TILE_SIZE,
-                map.getColoumns() * MapImpl.TILE_SIZE
+                map.getColoumns() * MapImpl.TILE_SIZE,
+                map.getRows() * MapImpl.TILE_SIZE
             )
         );
         fillTree(tree, currentPopulation);

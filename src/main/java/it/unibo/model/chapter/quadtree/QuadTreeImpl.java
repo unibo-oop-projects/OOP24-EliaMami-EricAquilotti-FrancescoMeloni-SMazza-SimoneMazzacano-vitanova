@@ -72,11 +72,7 @@ public final class QuadTreeImpl<T> implements QuadTree<T> {
         if (!range.intersects(this.boundary)) {
             return found;
         }
-        for (final Point<T> point : this.points) {
-            if (range.contains(point.position())) {
-                found.add(point);
-            }
-        }
+        found.addAll(this.points.stream().filter(p -> range.contains(p.position())).toList());
         if (isDivided) {
             found.addAll(northWest.query(range));
             found.addAll(northEast.query(range));
