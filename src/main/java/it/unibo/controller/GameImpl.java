@@ -96,9 +96,13 @@ public final class GameImpl implements Runnable, Game {
             if (chapter.getState() == ChapterState.PLAYER_WON) {
                 stopGameplay();
                 skillPoints.resetToBaseValue();
+                resetCurrentChapter();
+                clearScreen();
                 this.setMenu(new WinAndUpgradeMenu(inputHandler, this));
             } else if (chapter.getState() == ChapterState.PLAYER_LOST) {
                 stopGameplay();
+                resetCurrentChapter();
+                clearScreen();
                 this.setMenu(new GameOverMenu(inputHandler, this));
             }
         }
@@ -160,8 +164,8 @@ public final class GameImpl implements Runnable, Game {
     }
 
     @Override
-    public void restartCurrentChapter() {
-        chapter.restart();
+    public void resetCurrentChapter() {
+        chapter.reset();
     }
 
     @Override
@@ -170,6 +174,7 @@ public final class GameImpl implements Runnable, Game {
         playerStats = chapter.getPlayer().getStats();
         stopGameplay();
         clearScreen();
+        this.skillPoints.reset();
     }
 
     @Override
@@ -178,11 +183,11 @@ public final class GameImpl implements Runnable, Game {
         this.chapter = new ChapterImpl(chapter.getChapterNumber(), inputHandler, baseClock, playerStats);
         stopGameplay();
         clearScreen();
+        this.skillPoints.reset();
     }
 
     @Override
     public void clearScreen() {
-        this.skillPoints.reset();
         this.screen.loadHumans(Collections.emptyList());
         this.screen.loadTimer(Optional.empty());
         this.screen.loadPickable(Collections.emptyList());
@@ -193,10 +198,10 @@ public final class GameImpl implements Runnable, Game {
     public void setNextChapter() {
         playerStats.resetAllEffect();
         clearScreen();
+        this.skillPoints.reset();
         this.chapter = new ChapterImpl(chapter.getChapterNumber() + 1, inputHandler, baseClock, playerStats);
         saveGame();
         stopGameplay();
-        this.skillPoints.reset();
     }
 
     @Override

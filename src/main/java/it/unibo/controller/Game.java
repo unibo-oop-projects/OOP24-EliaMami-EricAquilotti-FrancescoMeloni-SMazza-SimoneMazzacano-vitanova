@@ -35,7 +35,7 @@ public interface Game {
     /**
      * Restarts the current chapter.
      */
-    void restartCurrentChapter();
+    void resetCurrentChapter();
 
     /**
      * Sets the new chapter and clears the screen.

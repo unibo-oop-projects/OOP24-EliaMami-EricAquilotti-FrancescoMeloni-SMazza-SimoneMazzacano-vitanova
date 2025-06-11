@@ -193,7 +193,7 @@ public final class ChapterImpl implements Chapter {
     }
 
     @Override
-    public void restart() {
+    public void reset() {
         getPlayer().getStats().resetAllEffect();
         final HumanStats playerStats = getPlayer().getStats();
         this.humans.clear();

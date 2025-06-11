@@ -18,8 +18,9 @@ public final class GameOverMenu extends AbstractMenu {
     public GameOverMenu(final InputHandler input, final Game game) {
         super(input, game, List.of(
             MenuOption.of("Retry", g -> {
-                g.restartCurrentChapter();
+                g.resetCurrentChapter();
                 g.setMenu(new PauseMenu(input, g));
+                g.startGameplay();
             }),
             MenuOption.home(input),
             MenuOption.quit()

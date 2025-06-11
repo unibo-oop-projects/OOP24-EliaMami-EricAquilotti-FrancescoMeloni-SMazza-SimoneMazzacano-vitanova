@@ -64,7 +64,7 @@ public interface Chapter {
     /**
      * Brings back the chapter to its initial state.
      */
-    void restart();
+    void reset();
 
     /**
      * Method that returns the remaining timer value.
