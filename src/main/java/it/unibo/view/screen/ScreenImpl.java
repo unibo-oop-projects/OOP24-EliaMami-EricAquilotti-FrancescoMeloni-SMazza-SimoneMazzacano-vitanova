@@ -181,10 +181,10 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private int getScale() {
-        return (int) Math.round(BASE_SCALE * Math.min(
+        return (int) Math.max(1.0, Math.round(BASE_SCALE * Math.min(
             window.getHeight() / SCALE_HEIGHT_FACTOR,
             window.getWidth() / SCALE_WIDTH_FACTOR
-        ));
+        )));
     }
 
     private void updateCenter() {
