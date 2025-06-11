@@ -40,14 +40,13 @@ class SolidCollisionsTest {
     }
 
     private Optional<Position> getWalkablePosition(final BiPredicate<Integer, Integer> biPredicate) {
-        final double offsetPosition = MapImpl.TILE_SIZE / 2;
         return IntStream.range(0, map.getRows())
             .boxed()
             .flatMap(y -> IntStream.range(0, map.getColoumns())
                 .filter(x -> biPredicate.test(x, y))
-                .mapToObj(x -> new Position(x * MapImpl.TILE_SIZE + offsetPosition,
-                                            y * MapImpl.TILE_SIZE + offsetPosition)))
-            .findFirst();
+                .mapToObj(x -> new Position(x * MapImpl.TILE_SIZE,
+                                            y * MapImpl.TILE_SIZE)))
+            .findAny();
     }
 
 }

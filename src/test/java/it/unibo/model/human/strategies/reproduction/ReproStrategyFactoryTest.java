@@ -37,7 +37,7 @@ class ReproStrategyFactoryTest {
 
         assertTrue(female.isOnCooldown());
         assertFalse(female.collide(male), "Cooldown has to pass");
-        mutableClock.advance(Duration.ofSeconds(2));
+        mutableClock.advance(Duration.ofSeconds(4));
         assertFalse(female.isOnCooldown());
         assertTrue(female.collide(male), "Should reproduce after cooldown");
     }

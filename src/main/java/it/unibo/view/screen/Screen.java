@@ -1,11 +1,9 @@
 package it.unibo.view.screen;
 
-import java.awt.Color;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.common.Position;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
 import it.unibo.model.human.Human;
@@ -16,16 +14,6 @@ import it.unibo.model.pickable.Pickable;
  * Models an Object that can render things on the screen.
  */
 public interface Screen {
-    /**
-     * Loads a text that will appear on the screen.
-     * 
-     * @param text the string to show.
-     * @param position the position on the screen.
-     * @param color the color of the text.
-     * @param size the size of the text.
-     */
-    void loadText(String text, Position position, Color color, int size);
-
     /**
      * Loads a menu that will be shown into the screen.
      * 

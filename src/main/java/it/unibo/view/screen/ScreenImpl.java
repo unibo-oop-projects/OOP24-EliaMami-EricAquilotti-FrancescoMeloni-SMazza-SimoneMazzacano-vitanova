@@ -2,7 +2,6 @@ package it.unibo.view.screen;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Graphics;
@@ -20,7 +19,6 @@ import java.util.Optional;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import it.unibo.common.Position;
-import it.unibo.common.Text;
 import it.unibo.controller.InputHandler;
 import it.unibo.model.chapter.PopulationCounter;
 import it.unibo.model.chapter.map.Map;
@@ -53,7 +51,6 @@ public final class ScreenImpl extends JPanel implements Screen {
     private transient double xOffset;
     private transient double yOffset;
     private final transient JFrame window = new JFrame();
-    private final transient List<Text> textToDraw = new ArrayList<>();
     private transient List<Human> humansToDraw = new ArrayList<>();
     private transient List<Pickable> pickableToDraw = new ArrayList<>();
     private transient Optional<Map> mapToDraw = Optional.empty();
@@ -142,17 +139,6 @@ public final class ScreenImpl extends JPanel implements Screen {
         pickableToDraw = pickables.stream().toList();
     }
 
-    private void removeTextByPosition(final Text text) {
-        textToDraw.removeIf(toDrawTxt -> toDrawTxt.position().equals(text.position()));
-    }
-
-    @Override
-    public void loadText(final String text, final Position position, final Color color, final int size) {
-        final Text txt = new Text(text, position, color, size);
-        removeTextByPosition(txt);
-        textToDraw.add(txt);
-    }
-
     @Override
     public void loadMenu(final MenuContent content) {
         if (menuContent.equals(content)) {
@@ -181,27 +167,16 @@ public final class ScreenImpl extends JPanel implements Screen {
     }
 
     private int getScale() {
-        return (int) Math.round(BASE_SCALE * Math.min(
+        return (int) Math.max(1.0, Math.round(BASE_SCALE * Math.min(
             window.getHeight() / SCALE_HEIGHT_FACTOR,
             window.getWidth() / SCALE_WIDTH_FACTOR
-        ));
+        )));
     }
 
     private void updateCenter() {
         final int scale = getScale();
         centerX = window.getWidth() / 2 - MapImpl.TILE_SIZE * scale / 2;
         centerY = window.getHeight() / 2 - MapImpl.TILE_SIZE * scale / 2;
-    }
-
-    private void drawText(final List<Text> texts) {
-        final List<Text> copyTexts = texts.stream().toList(); // to avoid concurrent modifications on iterated list
-        copyTexts.forEach(text -> {
-            final Font f = new Font("Verdana", Font.BOLD, text.size());
-            bufferGraphics.setColor(text.color());
-            bufferGraphics.setFont(f);
-            bufferGraphics.drawString(text.content(), (int) text.position().x(), 
-            (int) text.position().y());
-        });
     }
 
     private void redrawBuffer() {
@@ -233,15 +208,9 @@ public final class ScreenImpl extends JPanel implements Screen {
             }
             final Position screenPosition = screenPosition(human.getPosition());
             drawImage(bufferGraphics, human.getSprite().getImage(), screenPosition);
-            if (human.getStats().isSick()) {
-                bufferGraphics.setColor(Color.GREEN);
-            } else {
-                bufferGraphics.setColor(Color.RED);
-            }
         }
         // Draw the human last
         player.ifPresent(p -> drawImage(bufferGraphics, p.getSprite().getImage(), new Position(centerX, centerY)));
-        drawText(textToDraw);
     }
 
     private Position screenPosition(final Position position) {
